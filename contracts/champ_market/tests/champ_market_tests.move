@@ -1,18 +1,45 @@
-/*
-#[test_only]
-module champ_market::champ_market_tests;
-// uncomment this line to import the module
-// use champ_market::champ_market;
+module champ_market::test_cpmm;
 
-const ENotImplemented: u64 = 0;
+use sui::coin;
+use sui::sui::SUI;
+use sui::test_scenario::{Self as test, ctx};
+
+const ALICE: address = @0xA11CE;
+const BOB: address = @0xB0B;
+const INIT_X: u64 = 1_000_000;
+const INIT_Y: u64 = 2_000_000;
+const SWAP_IN_AMOUNT: u64 = 10_000;
 
 #[test]
-fun test_champ_market() {
-    // pass
-}
+fun test_cpmm_swap_flow() {
+    let mut scenario = test::begin(@0x1);
+    let test = &mut scenario;
 
-#[test, expected_failure(abort_code = ::champ_market::champ_market_tests::ENotImplemented)]
-fun test_champ_market_fail() {
-    abort ENotImplemented
+    // === Step 0: Setup initial Pool ===
+    test.next_tx(ALICE); {
+        let coin_x = coin::mint_for_testing<SUI>(INIT_X, test.ctx());
+        let coin_y = coin::mint_for_testing<SUI>(INIT_Y, test.ctx());
+        champ_market::cpmm::create_pool(coin_x, coin_y, test.ctx());
+    };
+
+    // === Step 1: BOB does swap_x_to_y ===
+    test.next_tx(BOB); {
+        let mut pool = test.take_shared<champ_market::cpmm::Pool<SUI, SUI>>();
+        let coin_in = coin::mint_for_testing<SUI>(SWAP_IN_AMOUNT, test.ctx());
+
+        // let coin_out = (&mut pool).swap_x_to_y(coin_in, test.ctx());
+        let coin_out = champ_market::cpmm::swap_x_to_y(&mut pool, coin_in, test.ctx());
+
+        let amount_out = coin_out.value();
+
+        let k_new = pool.reserve_amount_x() * pool.reserve_amount_y();
+        let expected_k = (INIT_X + SWAP_IN_AMOUNT) * (INIT_Y - amount_out);
+        assert!(k_new <= expected_k, 0);
+        assert!(amount_out > 0, 1);
+
+        transfer::public_transfer(coin_out, BOB);
+        test::return_shared(pool);
+    };
+
+    test::end(scenario);
 }
-*/

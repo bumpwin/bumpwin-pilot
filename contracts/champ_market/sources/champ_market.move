@@ -1,8 +1,11 @@
 module champ_market::cpmm;
 
-use sui::coin::{Self, Coin};
-use sui::balance::{Self, Balance};
+use sui::{balance::Balance, coin::Coin};
 use sui::event;
+
+/// Error codes
+const ERR_ZERO_INPUT: u64 = 0;
+const ERR_ZERO_OUTPUT: u64 = 1;
 
 public struct Pool<phantom X, phantom Y> has key, store {
     id: UID,
@@ -12,21 +15,45 @@ public struct Pool<phantom X, phantom Y> has key, store {
 
 public struct SwapEvent has copy, drop, store {
     sender: address,
-    direction: bool,
+    is_x_to_y: bool,
     amount_in: u64,
     amount_out: u64,
 }
 
-public fun new_pool<X, Y>(
-    init_x: Balance<X>,
-    init_y: Balance<Y>,
+public fun create_pool<X, Y>(
+    coin_x: Coin<X>,
+    coin_y: Coin<Y>,
     ctx: &mut TxContext
-): Pool<X, Y> {
-    Pool {
+) {
+    let pool = Pool {
         id: object::new(ctx),
-        reserve_x: init_x,
-        reserve_y: init_y,
-    }
+        reserve_x: coin_x.into_balance(),
+        reserve_y: coin_y.into_balance(),
+    };
+
+    transfer::public_share_object(pool);
+}
+
+public fun reserve_amount_x<X, Y>(pool: &Pool<X, Y>): u64 {
+    pool.reserve_x.value()
+}
+
+public fun reserve_amount_y<X, Y>(pool: &Pool<X, Y>): u64 {
+    pool.reserve_y.value()
+}
+
+
+fun compute_swap_amount<In, Out>(
+    reserve_in: &Balance<In>,
+    reserve_out: &Balance<Out>,
+    amount_in: u64
+): u64 {
+    let k = reserve_in.value() * reserve_out.value();
+    let new_reserve_in = reserve_in.value() + amount_in;
+    let new_reserve_out = k / new_reserve_in;
+    let amount_out = reserve_out.value() - new_reserve_out;
+    assert!(amount_out > 0, ERR_ZERO_OUTPUT);
+    amount_out
 }
 
 public fun swap_x_to_y<X, Y>(
@@ -34,22 +61,16 @@ public fun swap_x_to_y<X, Y>(
     coin_in: Coin<X>,
     ctx: &mut TxContext
 ): Coin<Y> {
-    let sender = ctx.sender();
     let amount_in = coin_in.value();
-    assert!(amount_in > 0, 0);
+    assert!(amount_in > 0, ERR_ZERO_INPUT);
 
     pool.reserve_x.join(coin_in.into_balance());
-    let k = balance::value(&pool.reserve_x) * balance::value(&pool.reserve_y);
-    let new_reserve_x = balance::value(&pool.reserve_x);
-    let new_reserve_y = k / new_reserve_x;
-    let amount_out = balance::value(&pool.reserve_y) - new_reserve_y;
-    assert!(amount_out > 0, 1);
-
+    let amount_out = compute_swap_amount(&pool.reserve_x, &pool.reserve_y, amount_in);
     let coin_out = pool.reserve_y.split(amount_out).into_coin(ctx);
 
     event::emit(SwapEvent {
-        sender,
-        direction: true,
+        sender: ctx.sender(),
+        is_x_to_y: true,
         amount_in,
         amount_out,
     });
@@ -62,23 +83,16 @@ public fun swap_y_to_x<X, Y>(
     coin_in: Coin<Y>,
     ctx: &mut TxContext
 ): Coin<X> {
-    let sender = ctx.sender();
     let amount_in = coin_in.value();
-    assert!(amount_in > 0, 0);
+    assert!(amount_in > 0, ERR_ZERO_INPUT);
 
     pool.reserve_y.join(coin_in.into_balance());
-
-    let k = pool.reserve_x.value() * pool.reserve_y.value();
-    let new_reserve_y = pool.reserve_y.value();
-    let new_reserve_x = k / new_reserve_y;
-    let amount_out = pool.reserve_x.value() - new_reserve_x;
-    assert!(amount_out > 0, 1);
-
+    let amount_out = compute_swap_amount(&pool.reserve_y, &pool.reserve_x, amount_in);
     let coin_out = pool.reserve_x.split(amount_out).into_coin(ctx);
 
     event::emit(SwapEvent {
-        sender,
-        direction: false,
+        sender: ctx.sender(),
+        is_x_to_y: false,
         amount_in,
         amount_out,
     });
