@@ -1,4 +1,3 @@
-
 module justchat::messaging;
 
 use sui::tx_context::TxContext;
@@ -35,7 +34,6 @@ public fun new_config(
         message_fee,
     }
 }
-
 
 public fun send_message(
     msg: Message,
