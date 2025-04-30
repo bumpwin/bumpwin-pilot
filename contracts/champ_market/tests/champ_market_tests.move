@@ -27,11 +27,9 @@ fun test_cpmm_swap_flow() {
         let mut pool = test.take_shared<champ_market::cpmm::Pool<SUI, SUI>>();
         let coin_in = coin::mint_for_testing<SUI>(SWAP_IN_AMOUNT, test.ctx());
 
-        // let coin_out = (&mut pool).swap_x_to_y(coin_in, test.ctx());
-        let coin_out = champ_market::cpmm::swap_x_to_y(&mut pool, coin_in, test.ctx());
+        let coin_out = pool.swap_x_to_y(coin_in, test.ctx());
 
         let amount_out = coin_out.value();
-
         let k_new = pool.reserve_amount_x() * pool.reserve_amount_y();
         let expected_k = (INIT_X + SWAP_IN_AMOUNT) * (INIT_Y - amount_out);
         assert!(k_new <= expected_k, 0);
