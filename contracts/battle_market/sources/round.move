@@ -1,3 +1,4 @@
+#[allow(unused_use)]
 module battle_market::round;
 
 use std::string;
@@ -7,13 +8,15 @@ use sui::transfer;
 use sui::object::{Self, UID};
 use sui::table::{Self, Table};
 use sui::url;
-use sui::clock::{Self, Clock};
+use sui::clock::Clock;
 
 use battle_market::root;
 
 public struct Round has key, store {
     id: UID,
     round_number: u64,
+    start_timestamp_ms: u64,
+    end_timestamp_ms: u64,
     memes_table: Table<ID, CoinMetadata>,
 }
 
@@ -30,10 +33,13 @@ public fun new(
     root: &mut root::Root,
     clock: &Clock,
     ctx: &mut TxContext,
-    ) {
+) {
+    let round_number = root.current_round_number() + 1;
     let round = Round {
         id: object::new(ctx),
-        round_number: root.current_round_number() + 1,
+        round_number,
+        start_timestamp_ms: root.nth_round_start_timestamp_ms(round_number),
+        end_timestamp_ms: root.nth_round_end_timestamp_ms(round_number),
         memes_table: table::new(ctx),
     };
 
@@ -59,4 +65,15 @@ public fun register_meme(
     };
 
     round.memes_table.add(metadata.id.uid_to_inner(), metadata);
+}
+
+#[test_only]
+public fun init_for_testing(ctx: &mut TxContext): Round {
+    Round {
+        id: object::new(ctx),
+        round_number: 1,
+        start_timestamp_ms: 1748736000000,
+        end_timestamp_ms: 1748736000000 + 25 * 60 * 60 * 1000,
+        memes_table: table::new(ctx),
+    }
 }
