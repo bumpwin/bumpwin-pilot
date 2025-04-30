@@ -1,30 +1,44 @@
 module coin_launcher::launcher;
 
-use sui::coin::{Self, TreasuryCap};
-use sui::transfer::{public_transfer, public_freeze_object};
+use std::string::String;
+use sui::coin::{Self, TreasuryCap, CoinMetadata};
+use sui::url;
 
 public struct LAUNCHER has drop {}
 
 fun init(witness: LAUNCHER, ctx: &mut TxContext) {
     let (cap, metadata) = coin::create_currency(
         witness,
-        6,               // decimals
-        b"MY_COIN",      // name
-        b"", b"",        // icon, description
-        option::none(),  // optional metadata
+        6,                  // decimals
+        b"TBD_SYMBOL",      // symbol
+        b"TBD_NAME",        // name
+        b"TBD_DESCRIPTION", // description
+        option::none(),     // icon_url
         ctx
     );
 
-    public_freeze_object(metadata);
-    public_transfer(cap, ctx.sender())
+    transfer::public_transfer(metadata, ctx.sender());
+    transfer::public_transfer(cap, ctx.sender())
 }
 
-public entry fun mint(
+public fun set_and_freeze_metadata(
     cap: &mut TreasuryCap<LAUNCHER>,
-    amount: u64,
-    recipient: address,
-    ctx: &mut TxContext
+    metadata: CoinMetadata<LAUNCHER>,
+    name: String,
+    symbol: String,
+    description: String,
+    icon_url: url::Url,
 ) {
-    let coin = coin::mint(cap, amount, ctx);
-    public_transfer(coin, recipient)
+    let mut metadata = metadata;
+    cap.update_name(&mut metadata, name);
+    cap.update_symbol(&mut metadata, symbol.to_ascii());
+    cap.update_description(&mut metadata, description);
+    cap.update_icon_url(&mut metadata, icon_url.inner_url());
+
+    transfer::public_freeze_object(metadata);
+}
+
+#[test_only]
+public fun init_for_testing(ctx: &mut TxContext) {
+    init(LAUNCHER {}, ctx);
 }

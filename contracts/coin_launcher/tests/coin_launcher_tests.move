@@ -1,8 +1,7 @@
-/*
 #[test_only]
 module coin_launcher::coin_launcher_tests;
-// uncomment this line to import the module
-// use coin_launcher::coin_launcher;
+
+use coin_launcher::launcher;
 
 const ENotImplemented: u64 = 0;
 
@@ -15,4 +14,3 @@ fun test_coin_launcher() {
 fun test_coin_launcher_fail() {
     abort ENotImplemented
 }
-*/
