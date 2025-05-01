@@ -3,10 +3,9 @@ module e2e_test_cases::mint_ooze_fam_coin;
 
 use std::ascii;
 use std::string;
-use sui::coin::{Coin, TreasuryCap, CoinMetadata};
+use sui::coin::{TreasuryCap, CoinMetadata};
 use sui::test_scenario::{Self as test, ctx};
 use sui::url;
-use sui::transfer;
 
 use ooze_fam_factory::ooze_fam_factory;
 use ooze_fam_coin::ooze_fam_coin::{Self, OOZE_FAM_COIN};
@@ -29,7 +28,7 @@ fun test_mint_ooze_fam_coin() {
 
     // Alice creates a new ooze fam coin
     test.next_tx(ALICE); {
-        let mut cap = test.take_from_address<TreasuryCap<OOZE_FAM_COIN>>(ALICE);
+        let cap = test.take_from_address<TreasuryCap<OOZE_FAM_COIN>>(ALICE);
         let metadata = test.take_from_address<CoinMetadata<OOZE_FAM_COIN>>(ALICE);
 
         ooze_fam_factory::create_coin(

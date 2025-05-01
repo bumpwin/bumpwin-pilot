@@ -8,8 +8,6 @@ edition = "2024.beta"   # edition = "legacy" to use legacy (pre-2024) Move
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet", override = true }
 battle_market = { local = "../battle_market" }
 qmsr_amm = { local = "../qmsr_amm" }
-coin_launcher = { local = "../coin_launcher" }
-vault_center = { local = "../vault_center" }
 ooze_fam_factory = { local = "../ooze_fam_factory" }
 ooze_fam_coin = { local = "../ooze_fam_coin" }
 
