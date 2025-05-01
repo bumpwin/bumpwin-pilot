@@ -66,7 +66,7 @@ console.log('treasuryCapID', `https://suiscan.xyz/devnet/object/${treasuryCapID}
       coinMetadataID,
       name: 'Ooze Fam Coin',
       symbol: 'OFC',
-      description: 'Ooze Fam Coin',
+      description: "This is a test coin",
       iconUrl: 'https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png',
     },
   );
@@ -79,6 +79,10 @@ console.log('treasuryCapID', `https://suiscan.xyz/devnet/object/${treasuryCapID}
   });
 
   console.log(result);
+
+  const digest = result.digest;
+
+  console.log("digest", `https://suiscan.xyz/devnet/tx/${digest}`);
 
 }
 
