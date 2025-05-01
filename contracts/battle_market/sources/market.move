@@ -40,10 +40,6 @@ public struct Market has key {
 //     }
 // }
 
-/// Gets the current price of an outcome
-public fun price(market: &Market, outcome: ID): u64 {
-    qmsr_amm::price(&market.amm, outcome)
-}
 
 /// Settles the market with a winning outcome
 public fun settle(market: &mut Market, outcome: ID) {

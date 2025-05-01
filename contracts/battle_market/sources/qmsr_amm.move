@@ -1,5 +1,6 @@
 module battle_market::qmsr_amm;
 
+use std::u64;
 use std::option::{Self, Option};
 use sui::object::{Self, UID};
 use sui::transfer;
@@ -85,125 +86,66 @@ fun calculate_refund(
     q_i * delta_q - delta_q * delta_q / 2
 }
 
-/// Calculates the amount of shares to receive when switching outcomes
-fun calculate_switch_shares(
-    amm: &QMSR_AMM,
-    from: ID,
-    to: ID,
-    delta_q: u64
-): u64 {
-    let q_from = if (table::contains(&amm.bet_reserves, from)) {
-        balance::value(table::borrow(&amm.bet_reserves, from))
-    } else {
-        0
-    };
-    let q_to = if (table::contains(&amm.bet_reserves, to)) {
-        balance::value(table::borrow(&amm.bet_reserves, to))
-    } else {
-        0
-    };
-    let refund = q_from * delta_q - delta_q * delta_q / 2;
-    let x2 = q_to * q_to + 2 * refund;
-    let sqrt = math::sqrt(x2);
-    assert!(sqrt >= q_to, EInvalidSwitch);
-    sqrt - q_to
-}
-
-/// Updates the AMM state after a bet
-fun update_amm_state(
-    amm: &mut QMSR_AMM,
-    outcome: ID,
-    amount: u64
-) {
-    // Update reserves
-    if (!table::contains(&amm.bet_reserves, outcome)) {
-        let balance = balance::zero<BET_COIN>();
-        table::add(&mut amm.bet_reserves, outcome, balance);
-    };
-    let reserve = table::borrow_mut(&mut amm.bet_reserves, outcome);
-    let old_amount = balance::value(reserve);
-    balance::join(reserve, balance::zero<BET_COIN>());
-    update_sum_squares(amm, outcome, old_amount, old_amount + amount);
-}
-
-/// Handles coin operations for a bet
-fun handle_bet_payment(
-    amm: &mut QMSR_AMM,
-    coin_in: &mut Coin<SUI>,
-    cost: u64,
-    ctx: &mut TxContext
-): Coin<SUI> {
-    let (to_pay, change) = coin::split<SUI>(coin_in, cost, ctx);
-    balance::join(&mut amm.vault, coin::into_balance(to_pay));
-    change
-}
-
-/// Swaps quote (SUI) for outcome shares
-public fun swap_quote_to_X(
-    amm: &mut QMSR_AMM,
-    outcome: ID,
-    delta_q: u64,
-    coin_in: &mut Coin<SUI>,
-    user: address,
-    ctx: &mut TxContext
-): (Coin<SUI>, Balance<BET_COIN>) {
-    let cost = calculate_bet_cost(amm, outcome, delta_q);
-    let change = handle_bet_payment(amm, coin_in, cost, ctx);
-    update_amm_state(amm, outcome, delta_q);
-
-    // Create and send shares to user
-    let share_balance = balance::zero<BET_COIN>();
-    transfer::public_transfer(share_balance, user);
-
-    (change, share_balance)
-}
-
-/// Swaps outcome shares for quote (SUI)
-public fun swap_X_to_quote(
-    amm: &mut QMSR_AMM,
-    outcome: ID,
-    delta_q: u64,
-    share_balance: Balance<BET_COIN>,
-    ctx: &mut TxContext
-): Coin<SUI> {
-    let refund = calculate_refund(amm, outcome, delta_q);
-    update_amm_state(amm, outcome, delta_q);
-
-    // Destroy the shares
-    balance::destroy_zero(share_balance);
-
-    // Handle refund
-    let refund_balance = balance::split(&mut amm.vault, refund);
-    coin::from_balance(refund_balance, ctx)
-}
-
-/// Swaps shares from one outcome to another
-public fun swap_X_to_Y(
-    amm: &mut QMSR_AMM,
-    from: ID,
-    to: ID,
-    delta_q: u64,
-    from_share_balance: Balance<BET_COIN>,
-    user: address,
-    ctx: &mut TxContext
-): Balance<BET_COIN> {
-    let delta_x = calculate_switch_shares(amm, from, to, delta_q);
-    update_amm_state(amm, from, delta_q);
-    update_amm_state(amm, to, delta_x);
-
-    // Destroy old shares and create new ones
-    balance::destroy_zero(from_share_balance);
-    let to_share_balance = balance::zero<BET_COIN>();
-    transfer::public_transfer(to_share_balance, user);
-
-    to_share_balance
-}
-
-/// Gets the current price of an outcome
-public fun price(amm: &QMSR_AMM, outcome: ID): u64 {
-    if (table::contains(&amm.bet_reserves, outcome)) {
-        balance::value(table::borrow(&amm.bet_reserves, outcome))
+/// Gets the reserve value for an outcome
+fun reserve_x(amm: &QMSR_AMM, outcome: ID): u64 {
+    if (amm.bet_reserves.contains(outcome)) {
+        amm.bet_reserves.borrow(outcome).value()
     } else {
         0
     }
+}
+
+/// Calculates the amount of shares to receive when buying with quote
+/// coin_out = sqrt(reserves[X]^2 + 2*coin_in) - reserves[X]
+fun swap_rate_quote_to_bet_share(
+    amm: &QMSR_AMM,
+    outcome: ID,
+    amount_in: u64
+): u64 {
+    let reserve = amm.reserve_x(outcome);
+    (reserve * reserve + 2 * amount_in).sqrt() - reserve
+}
+
+/// Calculates the amount of quote to receive when selling shares
+/// coin_out = reserves[X]*coin_in - (1/2)*coin_in^2
+fun swap_rate_bet_share_to_quote(
+    amm: &QMSR_AMM,
+    outcome: ID,
+    amount_in: u64
+): u64 {
+    let reserve = amm.reserve_x(outcome);
+    reserve * amount_in - (amount_in * amount_in) / 2
+}
+
+fun deposit_bet_share(amm: &mut QMSR_AMM, outcome: ID, balance_in: Balance<BET_COIN>): u64 {
+    amm.bet_reserves.borrow_mut(outcome).join(balance_in)
+}
+
+fun withdraw_bet_share(amm: &mut QMSR_AMM, outcome: ID, amount_out: u64): Balance<BET_COIN> {
+    amm.bet_reserves.borrow_mut(outcome).split(amount_out)
+}
+
+/// Swaps quote (SUI) for outcome shares
+public fun swap_quote_to_bet_share(
+    amm: &mut QMSR_AMM,
+    outcome: ID,
+    coin_in: Coin<SUI>,
+    ctx: &mut TxContext
+): Coin<BET_COIN> {
+    let amount_out = amm.swap_rate_quote_to_bet_share(outcome, coin_in.value());
+
+    amm.vault.join(coin_in.into_balance());
+    amm.withdraw_bet_share(outcome, amount_out).into_coin(ctx)
+}
+
+public fun swap_bet_share_to_quote(
+    amm: &mut QMSR_AMM,
+    outcome: ID,
+    coin_in: Coin<BET_COIN>,
+    ctx: &mut TxContext
+): Coin<SUI> {
+    let amount_out = amm.swap_rate_bet_share_to_quote(outcome, coin_in.value());
+
+    amm.deposit_bet_share(outcome, coin_in.into_balance());
+    amm.vault.split(amount_out).into_coin(ctx)
 }
