@@ -1,4 +1,3 @@
-#[allow(unused_use)]
 module battle_market::round;
 
 use std::string;

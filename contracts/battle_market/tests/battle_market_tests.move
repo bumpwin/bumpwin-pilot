@@ -47,6 +47,7 @@ fun test_root_initialization() {
 fun test_round_creation() {
     let mut scenario = test::begin(@0x1);
     let test = &mut scenario;
+
     clock::create_for_testing(test.ctx()).share_for_testing();
 
     // Step 1: Initialize root
