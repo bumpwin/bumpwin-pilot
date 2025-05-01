@@ -9,10 +9,19 @@ install-sui-client-gen:
     cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 
 
-# Set up Testnet Environment
 setup-testnet-env:
     sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
     sui client switch --env testnet
+
+setup-devnet-env:
+    sui client new-env --alias devnet --rpc https://fullnode.devnet.sui.io:443
+    sui client switch --env devnet
+
+faucet-devnet:
+    sui client switch --env devnet
+    sui client faucet
+    sui client balance
+
 
 # Create New Address
 create-new-address:
