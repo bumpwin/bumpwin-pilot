@@ -1,17 +1,11 @@
 [package]
-name = "e2e_test_cases"
-edition = "2024.beta"   # edition = "legacy" to use legacy (pre-2024) Move
+name = "ooze_fam_coin"
+edition = "2024.beta"  # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet", override = true }
-battle_market = { local = "../battle_market" }
-qmsr_amm = { local = "../qmsr_amm" }
-coin_launcher = { local = "../coin_launcher" }
-vault_center = { local = "../vault_center" }
-ooze_fam_factory = { local = "../ooze_fam_factory" }
-ooze_fam_coin = { local = "../ooze_fam_coin" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.
@@ -25,7 +19,7 @@ ooze_fam_coin = { local = "../ooze_fam_coin" }
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-e2e_test_cases = "0x0"
+ooze_fam_coin = "0x0"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.

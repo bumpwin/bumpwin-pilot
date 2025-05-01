@@ -2,11 +2,10 @@
 
 [move]
 version = 3
-manifest_digest = "D2732C22700C7656D3BEB05C93EEACDB01B27BBAE95E5FF3F96153BD871BE28D"
-deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
+manifest_digest = "0A22481A2E430027C877AE773757169E719AA6D58C94FA0E90104FCD9F8F49E5"
+deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
 dependencies = [
   { id = "Sui", name = "Sui" },
-  { id = "vault_center", name = "vault_center" },
 ]
 
 [[move.package]]
@@ -21,14 +20,6 @@ dependencies = [
   { id = "MoveStdlib", name = "MoveStdlib" },
 ]
 
-[[move.package]]
-id = "vault_center"
-source = { local = "../vault_center" }
-
-dependencies = [
-  { id = "Sui", name = "Sui" },
-]
-
 [move.toolchain-version]
 compiler-version = "1.48.0"
 edition = "2024.beta"
@@ -38,6 +29,6 @@ flavor = "sui"
 
 [env.devnet]
 chain-id = "f12dda03"
-original-published-id = "0x73db9de7ad7edee7dc53570fd39b46715e240e6332c231ab105060e6d972b752"
-latest-published-id = "0x73db9de7ad7edee7dc53570fd39b46715e240e6332c231ab105060e6d972b752"
+original-published-id = "0xb6deee960b27e3531c16a69c16b364c1fd8709a4fe8af37ace9e9f3238bf96ff"
+latest-published-id = "0xb6deee960b27e3531c16a69c16b364c1fd8709a4fe8af37ace9e9f3238bf96ff"
 published-version = "1"
