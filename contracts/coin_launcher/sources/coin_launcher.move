@@ -1,15 +1,14 @@
 module coin_launcher::launcher;
 
-use std::string::String;
-
+use std::ascii;
+use std::string;
 use sui::coin::{Self, TreasuryCap, CoinMetadata};
 use sui::url;
 
-use vault_center::meme_vault::MemeVault;
+use vault_center::meme_vault;
 
 const AMOUNT: u64 = 1_000_000_000_000_000; // 1 billion coins (10^9), with 6 decimals → 10^(9+6) base units
 const DECIMALS: u8 = 6; // Number of decimal places (1 coin = 10^6 base units)
-
 
 public struct LAUNCHER has drop {}
 
@@ -44,17 +43,17 @@ fun init(witness: LAUNCHER, ctx: &mut TxContext) {
 
 public fun create_coin(
     launch_cap: LaunchCap<LAUNCHER>,
-    vault: &mut MemeVault<LAUNCHER>,
-    name: String,
-    symbol: String,
-    description: String,
+    name: string::String,
+    symbol: ascii::String,
+    description: string::String,
     icon_url: url::Url,
     ctx: &mut TxContext,
 ) {
     let mut launch_cap = launch_cap;
     launch_cap.set_and_freeze_metadata(name, symbol, description, icon_url);
     let coins = launch_cap.treasury_cap.mint(AMOUNT, ctx);
-    vault.deposit(coins);
+
+    meme_vault::create<LAUNCHER>(coins, ctx);
 
     let LaunchCap { id, treasury_cap, metadata, creator: _ } = launch_cap;
     transfer::public_freeze_object(metadata);
@@ -64,14 +63,14 @@ public fun create_coin(
 
 fun set_and_freeze_metadata(
     launch_cap: &mut LaunchCap<LAUNCHER>,
-    name: String,
-    symbol: String,
-    description: String,
+    name: string::String,
+    symbol: ascii::String,
+    description: string::String,
     icon_url: url::Url,
 ) {
     let metadata = &mut launch_cap.metadata;
     launch_cap.treasury_cap.update_name(metadata, name);
-    launch_cap.treasury_cap.update_symbol(metadata, symbol.to_ascii());
+    launch_cap.treasury_cap.update_symbol(metadata, symbol);
     launch_cap.treasury_cap.update_description(metadata, description);
     launch_cap.treasury_cap.update_icon_url(metadata, icon_url.inner_url());
 }

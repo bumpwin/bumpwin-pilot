@@ -9,6 +9,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 battle_market = { local = "../battle_market" }
 qmsr_amm = { local = "../qmsr_amm" }
 coin_launcher = { local = "../coin_launcher" }
+vault_center = { local = "../vault_center" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.
