@@ -1,4 +1,4 @@
-import { MoveBytecode } from '../types';
+import type { MoveBytecode } from '../types';
 
 export const OOZE_FAM_COIN_MOVE_BYTECODE: MoveBytecode = {
   modules: [

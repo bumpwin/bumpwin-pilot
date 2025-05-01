@@ -1,8 +1,8 @@
-import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
-import { getFaucetHost } from '@mysten/sui.js/faucet';
-import { getFullnodeUrl } from '@mysten/sui.js/client';
-import { SuiClient } from '@mysten/sui.js/client';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { getFullnodeUrl } from '@mysten/sui/client';
+import { SuiClient } from '@mysten/sui/client';
+import { getFaucetHost } from '@mysten/sui/faucet';
+import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Transaction } from '@mysten/sui/transactions';
 
 // Base64 encoded bytecode
 const bytecode = {
@@ -51,11 +51,11 @@ if (!faucetData.coins_sent || faucetData.coins_sent.length === 0) {
   throw new Error('Failed to get gas objects from faucet response');
 }
 
-await client.waitForTransactionBlock({ digest: faucetData.coins_sent[0].transferTxDigest });
+await client.waitForTransaction({ digest: faucetData.coins_sent[0].transferTxDigest });
 console.log('✅ Faucet funded');
 
 // Build transaction
-const tx = new TransactionBlock();
+const tx = new Transaction();
 tx.setSender(address);
 const modules = bytecode.modules.map(toBytes);
 const dependencies = [...bytecode.dependencies];
@@ -66,7 +66,7 @@ tx.transferObjects([upgradeCap], address);
 tx.setGasBudget(1_000_000_000);
 
 // Execute
-const signature = await keypair.signTransactionBlock(await tx.build({ client }));
+const signature = await keypair.signTransaction(await tx.build({ client }));
 const result = await client.executeTransactionBlock({
   transactionBlock: await tx.build({ client }),
   signature: signature.signature,

@@ -1,33 +1,13 @@
 {
   "name": "oozefun-sdk",
   "version": "0.0.1",
-  "description": "SDK for OozeFun",
-  "type": "module",
+  "author": "ooze.fu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fuyutarow/ooze-pilot.git"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "files": ["dist"],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest",
-    "prepare": "tsup",
-    "suigen:devnet": "rm -rf src/libs/moveCall && sui-client-gen -m ../suigen-configs/devnet.toml -o src/libs/moveCall && bun format",
-    "publish-oozefamcoin-devnet": "bunx tsx scripts/publish-oozefamcoin-devnet.ts",
-    "lint": "bunx @biomejs/biome check --fix .",
-    "format": "bunx @biomejs/biome format --write ."
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "devDependencies": {
     "@biomejs/biome": "latest",
     "@types/bun": "latest",
@@ -38,14 +18,34 @@
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": ["sui", "sdk", "typescript"],
-  "author": "ooze.fu",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fuyutarow/ooze-pilot.git"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   },
+  "description": "SDK for OozeFun",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": ["dist"],
+  "keywords": ["sui", "sdk", "typescript"],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "prepare": "tsup",
+    "suigen:devnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
+    "publish-oozefamcoin-devnet": "bunx tsx scripts/publish-oozefamcoin-devnet.ts",
+    "lint": "bunx @biomejs/biome check --fix .",
+    "format": "bunx @biomejs/biome format --write ."
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "dependencies": {
-    "@mysten/sui.js": "^0.54.1"
+    "@mysten/sui": "^1.29.0"
   }
 }
