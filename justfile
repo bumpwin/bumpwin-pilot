@@ -56,3 +56,6 @@ dev:
 # Build dApp for Deployment
 build:
     bun run build
+
+build-move-famcoin:
+    cd contracts/ooze_fam_coin && sui move build --dump-bytecode-as-base64

@@ -7,9 +7,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -22,6 +20,7 @@
     "dev": "tsup --watch",
     "test": "vitest",
     "prepare": "tsup",
+    "suigen:devnet": "rm -rf src/libs/moveCall && sui-client-gen -m ../suigen-configs/devnet.toml -o src/libs/moveCall && bun format",
     "lint": "bunx @biomejs/biome check --fix .",
     "format": "bunx @biomejs/biome format --write ."
   },
@@ -37,15 +36,11 @@
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ],
+  "keywords": ["sui", "sdk", "typescript"],
   "author": "ooze.fu",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/ooze-pilot.git"
+    "url": "https://github.com/fuyutarow/ooze-pilot.git"
   }
 }

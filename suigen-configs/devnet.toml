@@ -1,0 +1,8 @@
+
+[config]
+# rpc = "https://fullnode.testnet.sui.io:443"
+rpc = "https://fullnode.devnet.sui.io:443"
+# rpc = "http://127.0.0.1:9000"
+
+[packages]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "devnet" }

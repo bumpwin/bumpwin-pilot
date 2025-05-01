@@ -69,10 +69,10 @@ fun test_mint_before_create_coin() {
         ooze_fam_factory::create_coin(
             cap,
             metadata,
-            string::utf8(b"TBD_NAME"),
-            ascii::string(b"TBD_SYMBOL"),
-            string::utf8(b"TBD_DESCRIPTION"),
-            url::new_unsafe_from_bytes(b"TBD_ICON_URL"),
+            string::utf8(b"Sui Doge"),
+            ascii::string(b"SDOGE"),
+            string::utf8(b"Sui Doge is a meme coin"),
+            url::new_unsafe_from_bytes(b"https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png"),
             test.ctx(),
         );
     };
