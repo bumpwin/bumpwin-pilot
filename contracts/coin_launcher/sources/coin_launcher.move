@@ -5,19 +5,25 @@ use std::string::String;
 use sui::coin::{Self, TreasuryCap, CoinMetadata};
 use sui::url;
 
-use battle_market::meme_treasury::MemeTreasury;
+use vault_center::meme_vault::MemeVault;
 
 const AMOUNT: u64 = 1_000_000_000_000_000; // 1 billion coins (10^9), with 6 decimals → 10^(9+6) base units
 const DECIMALS: u8 = 6; // Number of decimal places (1 coin = 10^6 base units)
 
 
-
 public struct LAUNCHER has drop {}
 
+public struct LaunchCap<phantom LAUNCHER> has key, store {
+    id: UID,
+    treasury_cap: TreasuryCap<LAUNCHER>,
+    metadata: CoinMetadata<LAUNCHER>,
+    creator: address,
+}
+
 fun init(witness: LAUNCHER, ctx: &mut TxContext) {
-    let (cap, metadata) = coin::create_currency(
+    let (treasury_cap, metadata) = coin::create_currency<LAUNCHER>(
         witness,
-        DECIMALS,                  // decimals
+        DECIMALS,           // decimals
         b"TBD_SYMBOL",      // symbol
         b"TBD_NAME",        // name
         b"TBD_DESCRIPTION", // description
@@ -25,50 +31,49 @@ fun init(witness: LAUNCHER, ctx: &mut TxContext) {
         ctx
     );
 
-    transfer::public_transfer(metadata, ctx.sender());
-    transfer::public_transfer(cap, ctx.sender())
+    let launch_cap = LaunchCap<LAUNCHER> {
+        id: object::new(ctx),
+        treasury_cap,
+        metadata,
+        creator: ctx.sender(),
+    };
+
+    transfer::public_share_object(launch_cap);
 }
 
+
 public fun create_coin(
-    cap: &mut TreasuryCap<LAUNCHER>,
-    treasury: &mut MemeTreasury<LAUNCHER>,
-    metadata: CoinMetadata<LAUNCHER>,
+    launch_cap: LaunchCap<LAUNCHER>,
+    vault: &mut MemeVault<LAUNCHER>,
     name: String,
     symbol: String,
     description: String,
     icon_url: url::Url,
     ctx: &mut TxContext,
 ) {
-    set_and_freeze_metadata(cap, metadata, name, symbol, description, icon_url);
-    mint_to_treasury(cap, treasury, AMOUNT, ctx);
+    let mut launch_cap = launch_cap;
+    launch_cap.set_and_freeze_metadata(name, symbol, description, icon_url);
+    let coins = launch_cap.treasury_cap.mint(AMOUNT, ctx);
+    vault.deposit(coins);
+
+    let LaunchCap { id, treasury_cap, metadata, creator: _ } = launch_cap;
+    transfer::public_freeze_object(metadata);
+    transfer::public_freeze_object(treasury_cap);
+    object::delete(id);
 }
 
 fun set_and_freeze_metadata(
-    cap: &TreasuryCap<LAUNCHER>,
-    metadata: CoinMetadata<LAUNCHER>,
+    launch_cap: &mut LaunchCap<LAUNCHER>,
     name: String,
     symbol: String,
     description: String,
     icon_url: url::Url,
 ) {
-    let mut metadata = metadata;
-    cap.update_name(&mut metadata, name);
-    cap.update_symbol(&mut metadata, symbol.to_ascii());
-    cap.update_description(&mut metadata, description);
-    cap.update_icon_url(&mut metadata, icon_url.inner_url());
-
-    transfer::public_freeze_object(metadata);
-}
-
-
-fun mint_to_treasury(
-    cap: &mut TreasuryCap<LAUNCHER>,
-    treasury: &mut MemeTreasury<LAUNCHER>,
-    amount: u64,
-    ctx: &mut TxContext,
-) {
-    let coins = cap.mint(amount, ctx);
-    treasury.deposit(coins);
+    let metadata = &mut launch_cap.metadata;
+    launch_cap.treasury_cap.update_name(metadata, name);
+    launch_cap.treasury_cap.update_symbol(metadata, symbol.to_ascii());
+    launch_cap.treasury_cap.update_description(metadata, description);
+    launch_cap.treasury_cap.update_icon_url(metadata, icon_url.inner_url());
 }
 
 

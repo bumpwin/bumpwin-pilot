@@ -1,10 +1,11 @@
 #[test_only]
 module battle_market::battle_market_tests;
 
+use std::ascii;
+use std::string;
+
 use sui::test_scenario::{Self as test, ctx};
 use sui::clock;
-use std::string;
-use std::ascii;
 use sui::url;
 
 use battle_market::root;

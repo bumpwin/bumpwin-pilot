@@ -2,11 +2,13 @@
 
 [move]
 version = 3
-manifest_digest = "D2732C22700C7656D3BEB05C93EEACDB01B27BBAE95E5FF3F96153BD871BE28D"
-deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
+manifest_digest = "6E613C4B84C229B2B0745D5F8A9FC82708C19425C3DA88CCA08847B4F29E8C62"
+deps_digest = "F9B494B64F0615AED0E98FC12A85B85ECD2BC5185C22D30E7F67786BB52E507C"
 dependencies = [
   { id = "Sui", name = "Sui" },
-  { id = "vault_center", name = "vault_center" },
+  { id = "battle_market", name = "battle_market" },
+  { id = "coin_launcher", name = "coin_launcher" },
+  { id = "qmsr_amm", name = "qmsr_amm" },
 ]
 
 [[move.package]]
@@ -22,8 +24,25 @@ dependencies = [
 ]
 
 [[move.package]]
-id = "vault_center"
-source = { local = "../vault_center" }
+id = "battle_market"
+source = { local = "../battle_market" }
+
+dependencies = [
+  { id = "Sui", name = "Sui" },
+]
+
+[[move.package]]
+id = "coin_launcher"
+source = { local = "../coin_launcher" }
+
+dependencies = [
+  { id = "Sui", name = "Sui" },
+  { id = "battle_market", name = "battle_market" },
+]
+
+[[move.package]]
+id = "qmsr_amm"
+source = { local = "../qmsr_amm" }
 
 dependencies = [
   { id = "Sui", name = "Sui" },

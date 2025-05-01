@@ -1,4 +1,4 @@
-module battle_market::qmsr_amm;
+module qmsr_amm::qmsr_amm;
 
 use sui::coin::{Coin};
 use sui::balance::{Self, Balance};
