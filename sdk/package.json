@@ -21,6 +21,7 @@
     "test": "vitest",
     "prepare": "tsup",
     "suigen:devnet": "rm -rf src/libs/moveCall && sui-client-gen -m ../suigen-configs/devnet.toml -o src/libs/moveCall && bun format",
+    "publish-oozefamcoin-devnet": "bunx tsx scripts/publish-oozefamcoin-devnet.ts",
     "lint": "bunx @biomejs/biome check --fix .",
     "format": "bunx @biomejs/biome format --write ."
   },
@@ -28,10 +29,11 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "latest",
     "@types/bun": "latest",
+    "@types/node": "^22.15.3",
     "tsup": "^8.4.0",
-    "vitest": "^3.1.2",
-    "@biomejs/biome": "latest"
+    "vitest": "^3.1.2"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
@@ -42,5 +44,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/fuyutarow/ooze-pilot.git"
+  },
+  "dependencies": {
+    "@mysten/sui.js": "^0.54.1"
   }
 }

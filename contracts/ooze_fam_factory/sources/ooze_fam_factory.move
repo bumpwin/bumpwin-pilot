@@ -3,7 +3,7 @@ module ooze_fam_factory::ooze_fam_factory;
 use std::ascii;
 use std::string;
 use sui::balance::{Self, Balance};
-use sui::coin::{Coin, TreasuryCap, CoinMetadata};
+use sui::coin::{TreasuryCap, CoinMetadata};
 use sui::url;
 
 const AMOUNT: u64 = 1_000_000_000_000_000; // 1 billion coins (10^9), with 6 decimals → 10^(9+6) base units
