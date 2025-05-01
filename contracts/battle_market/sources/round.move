@@ -3,11 +3,9 @@ module battle_market::round;
 use std::string;
 use std::ascii;
 
-use sui::transfer;
-use sui::object::{Self, UID};
+use sui::clock::Clock;
 use sui::table::{Self, Table};
 use sui::url;
-use sui::clock::Clock;
 
 use battle_market::root;
 

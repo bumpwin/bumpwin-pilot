@@ -2,7 +2,7 @@
 module battle_market::meme_treasury;
 
 use sui::balance::{Self, Balance};
-use sui::coin::{Self, Coin};
+use sui::coin::Coin;
 
 public struct MemeTreasury<phantom CoinT> has key, store {
     id: UID,
