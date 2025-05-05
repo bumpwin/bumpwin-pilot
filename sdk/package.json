@@ -29,8 +29,14 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "files": ["dist"],
-  "keywords": ["sui", "sdk", "typescript"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "sui",
+    "sdk",
+    "typescript"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "tsup",

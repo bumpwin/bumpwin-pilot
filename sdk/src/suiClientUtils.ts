@@ -1,7 +1,7 @@
 import { Transaction } from '@mysten/sui/transactions';
 import { SuiClient } from '@mysten/sui/client';
 import { getFaucetHost } from '@mysten/sui/faucet';
-import type { MoveBytecode } from './types';
+import type { MoveBytecode, FaucetResponse } from './types';
 
 const toBytes = (b64: string) => {
   const binary = atob(b64);
@@ -22,7 +22,7 @@ export const publish = (
   tx.transferObjects([upgradeCap], args.sender);
 };
 
-export const faucetDevnet = async (client: SuiClient, address: string): Promise<void> => {
+export const faucetDevnet = async (client: SuiClient, address: string): Promise<FaucetResponse> => {
   console.log('⛲ Requesting SUI from faucet...');
   const faucetUrl = `${getFaucetHost('devnet')}/v2/gas`;
   const faucetResponse = await fetch(faucetUrl, {
@@ -50,4 +50,5 @@ export const faucetDevnet = async (client: SuiClient, address: string): Promise<
 
   await client.waitForTransaction({ digest: faucetData.coins_sent[0].transferTxDigest });
   console.log('✅ Faucet funded');
+  return faucetData;
 };
