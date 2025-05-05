@@ -51,12 +51,9 @@ request-sui ADDRESS:
     --header 'Content-Type: application/json' \
     --data-raw '{ "FixedAmountRequest": { "recipient": "{{ADDRESS}}" } }'
 
-publish-move PKG="justchat":
-    cd contracts/{{PKG}} && sui client publish --gas-budget 100000000
-
-publish-move-famfactory NETWORK="testnet":
+publish-move PKG="justchat" NETWORK="testnet":
     sui client switch --env {{NETWORK}}
-    cd contracts/bump_fam_factory && sui client publish
+    cd contracts/{{PKG}} && sui client publish
 
 build-move-famcoin:
     cd contracts/bump_fam_coin && sui move build --dump-bytecode-as-base64

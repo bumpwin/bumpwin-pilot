@@ -1,23 +1,13 @@
 module justchat::messaging;
 
-use sui::tx_context::TxContext;
 use sui::coin::{Self, Coin};
-use sui::balance::{Self, Balance};
+use sui::event;
 use sui::sui::SUI;
-use sui::transfer::public_transfer;
-use sui::event::emit;
 use std::string::String;
 
-public struct MessagingConfig has key, store {
-    id: object::UID,
-    message_fee: u64,
-}
+use justchat::cap;
 
-public struct Message has drop {
-    recipient: address,
-    text: String,
-}
-
+/// Event emitted when a message is received
 public struct MessageReceivedEvent has copy, drop, store {
     sender: address,
     recipient: address,
@@ -25,42 +15,28 @@ public struct MessageReceivedEvent has copy, drop, store {
     amount: u64,
 }
 
-public fun new_config(
-    message_fee: u64,
-    ctx: &mut TxContext
-): MessagingConfig {
-    MessagingConfig {
-        id: object::new(ctx),
-        message_fee,
-    }
-}
 
+/// Send a message with payment
 public fun send_message(
-    msg: Message,
-    payment: Balance<SUI>,
-    config: &MessagingConfig,
+    cap: &cap::MessageFeeCap,
+    text: String,
+    mut payment: Coin<SUI>,
     ctx: &mut TxContext
 ): Coin<SUI> {
-    let recipient = msg.recipient;
-    let sender = ctx.sender();
+    assert!(payment.value() >= cap.message_fee(), 0);
 
-    assert!(sender == recipient, 1);
-    assert!(&payment.value() == config.message_fee, 0);
+    let to_keep = coin::split(&mut payment, cap.message_fee(), ctx);
 
-    emit(
+    event::emit(
         MessageReceivedEvent {
-            sender,
-            recipient,
-            text: msg.text,
+            sender: ctx.sender(),
+            recipient: cap.recipient(),
+            text,
             amount: payment.value(),
         }
     );
 
-
-    let mut to_pay = payment.into_coin(ctx);
-    let to_keep = to_pay.split(config.message_fee, ctx);
-
-    public_transfer(to_pay, recipient);
+    transfer::public_transfer(payment, cap.recipient());
 
     to_keep
 }
