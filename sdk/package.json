@@ -52,6 +52,7 @@
   "type": "module",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@mysten/sui": "^1.29.0"
+    "@mysten/sui": "^1.29.1",
+    "@mysten/walrus": "^0.0.21"
   }
 }
