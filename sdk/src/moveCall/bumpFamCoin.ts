@@ -1,5 +1,5 @@
 import { Transaction } from '@mysten/sui/transactions';
-import { createCoin } from '@/suigen/ooze_fam_factory/ooze-fam-factory/functions';
+import { createCoin } from '@/suigen/bump_fam_factory/bump-fam-factory/functions';
 import { publish } from '@/suiClientUtils';
 import { BUMP_FAM_COIN_MOVE_BYTECODE } from '@/moveBytecodes/bumpFamCoin';
 import { newUnsafe } from '@/suigen/sui/url/functions';
