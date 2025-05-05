@@ -8,8 +8,8 @@ edition = "2024.beta"   # edition = "legacy" to use legacy (pre-2024) Move
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet", override = true }
 battle_market = { local = "../battle_market" }
 qmsr_amm = { local = "../qmsr_amm" }
-ooze_fam_factory = { local = "../ooze_fam_factory" }
-ooze_fam_coin = { local = "../ooze_fam_coin" }
+bump_fam_factory = { local = "../bump_fam_factory" }
+bump_fam_coin = { local = "../bump_fam_coin" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.

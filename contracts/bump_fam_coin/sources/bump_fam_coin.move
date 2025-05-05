@@ -1,14 +1,14 @@
-module ooze_fam_coin::ooze_fam_coin;
+module bump_fam_coin::bump_fam_coin;
 
 use sui::coin;
 
 const DECIMALS: u8 = 6; // Number of decimal places (1 coin = 10^6 base units)
 
-public struct OOZE_FAM_COIN has drop {}
+public struct BUMP_FAM_COIN has drop {}
 
 
-fun init(witness: OOZE_FAM_COIN, ctx: &mut TxContext) {
-    let (treasury_cap, metadata) = coin::create_currency<OOZE_FAM_COIN>(
+fun init(witness: BUMP_FAM_COIN, ctx: &mut TxContext) {
+    let (treasury_cap, metadata) = coin::create_currency<BUMP_FAM_COIN>(
         witness,
         DECIMALS,           // decimals
         b"TBD_SYMBOL",      // symbol
@@ -25,5 +25,5 @@ fun init(witness: OOZE_FAM_COIN, ctx: &mut TxContext) {
 
 #[test_only]
 public fun init_for_testing(ctx: &mut TxContext) {
-    init(OOZE_FAM_COIN {}, ctx);
+    init(BUMP_FAM_COIN {}, ctx);
 }

@@ -2,10 +2,9 @@
 
 [move]
 version = 3
-manifest_digest = "BBB3772675B4A33ED3DECCDFCACF5CB5D62822B2693AEAC36E175C2FC94CA046"
-deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
+manifest_digest = "3EA93FB7A6D573542344107D4AA126E547C45132335A4655E421D3DEA3FFC48F"
+deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
 dependencies = [
-  { id = "MoveStdlib", name = "MoveStdlib" },
   { id = "Sui", name = "Sui" },
 ]
 
@@ -25,11 +24,3 @@ dependencies = [
 compiler-version = "1.48.0"
 edition = "2024.beta"
 flavor = "sui"
-
-[env]
-
-[env.devnet]
-chain-id = "f12dda03"
-original-published-id = "0x0ecce1d586efcab4a00e4a41ca40dd19c4e1d0363f2d62c332cc96801821e575"
-latest-published-id = "0x0ecce1d586efcab4a00e4a41ca40dd19c4e1d0363f2d62c332cc96801821e575"
-published-version = "1"
