@@ -10,4 +10,4 @@ export interface FaucetResponse {
 export type MoveBytecode = {
   modules: string[];
   dependencies: string[];
-}; 
+};

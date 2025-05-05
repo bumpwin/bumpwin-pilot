@@ -1,13 +1,43 @@
 {
-  "name": "oozefun-sdk",
-  "version": "0.0.1",
-  "author": "ooze.fu",
+  "name": "bumpwin-sdk",
+  "version": "0.202505.0",
+  "description": "SDK for BUMP.WIN",
+  "author": "BUMP.WIN",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fuyutarow/ooze-pilot.git"
+    "url": "https://github.com/fuyutarow/bumpwin-pilot.git"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "prepare": "tsup",
+    "suigen:devnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
+    "suigen:testnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/testnet.toml -o src/suigen && bun format",
+    "lint": "bunx @biomejs/biome check --fix .",
+    "format": "bunx @biomejs/biome format --write ."
+  },
+  "dependencies": {
+    "@mysten/sui": "^1.29.1",
+    "@mysten/walrus": "^0.0.21"
+  },
   "devDependencies": {
     "@biomejs/biome": "latest",
     "@types/bun": "latest",
@@ -18,41 +48,5 @@
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "description": "SDK for OozeFun",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ],
-  "license": "MIT",
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest",
-    "prepare": "tsup",
-    "suigen:devnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
-    "publish-oozefamcoin-devnet": "bunx tsx scripts/publish-oozefamcoin-devnet.ts",
-    "lint": "bunx @biomejs/biome check --fix .",
-    "format": "bunx @biomejs/biome format --write ."
-  },
-  "sideEffects": false,
-  "type": "module",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@mysten/sui": "^1.29.1",
-    "@mysten/walrus": "^0.0.21"
-  }
+  "keywords": ["sui", "sdk", "typescript"]
 }

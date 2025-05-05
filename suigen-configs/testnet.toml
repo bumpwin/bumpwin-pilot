@@ -1,0 +1,6 @@
+[config]
+rpc = "https://fullnode.testnet.sui.io:443"
+
+[packages]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
+bump_fam_factory = { id = "0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058" }

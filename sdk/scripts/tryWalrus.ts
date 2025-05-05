@@ -19,18 +19,18 @@ const main = async () => {
   const walrusClient = new WalrusClient({
     network: 'testnet',
     suiClient,
-  })
+  });
 
-  const blobData = new TextEncoder().encode('Hello, Walrus from Testnet!')
+  const blobData = new TextEncoder().encode('Hello, Walrus from Testnet!');
 
   const { blobId } = await walrusClient.writeBlob({
     blob: blobData,
     signer: keypair,
     deletable: false,
     epochs: 3,
-  })
+  });
 
-  console.log('✅ Uploaded blobId:', blobId)
-}
+  console.log('✅ Uploaded blobId:', blobId);
+};
 
-main()
+main();

@@ -1,19 +1,18 @@
 import { Transaction } from '@mysten/sui/transactions';
-import { createCoin } from '../suigen/ooze_fam_factory/ooze-fam-factory/functions';
-import { publish } from '../suiClientUtils';
-import { OOZE_FAM_COIN_MOVE_BYTECODE } from '../moveBytecodes/ooze_fam_coin';
-import { newUnsafe } from '../suigen/sui/url/functions';
+import { createCoin } from '@/suigen/ooze_fam_factory/ooze-fam-factory/functions';
+import { publish } from '@/suiClientUtils';
+import { BUMP_FAM_COIN_MOVE_BYTECODE } from '@/moveBytecodes/bumpFamCoin';
+import { newUnsafe } from '@/suigen/sui/url/functions';
 
-
-export class OozeFamCoin {
-  static publishOozeFamCoinPackage(
+export class BumpFamCoin {
+  static publishBumpFamCoinPackage(
     tx: Transaction,
     args: {
       sender: string;
     }
   ) {
     publish(tx, {
-      moveBytecode: OOZE_FAM_COIN_MOVE_BYTECODE,
+      moveBytecode: BUMP_FAM_COIN_MOVE_BYTECODE,
       sender: args.sender,
     });
   }
@@ -30,15 +29,13 @@ export class OozeFamCoin {
       iconUrl: string | null;
     }
   ) {
-
-
     createCoin(tx, typeArg, {
       treasuryCap: args.treasuryCapID,
       coinMetadata: args.coinMetadataID,
       string1: args.name,
       string2: args.symbol,
       string3: args.description,
-      url: newUnsafe(tx, args.iconUrl ?? ""),
+      url: newUnsafe(tx, args.iconUrl ?? ''),
     });
   }
 }

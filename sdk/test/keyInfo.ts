@@ -26,7 +26,7 @@ export const getKeyInfoFromAlias = (alias: string): KeyInfo | null => {
   const aliases: KeyAlias[] = JSON.parse(aliasesContent);
 
   // Find the alias
-  const keyAlias = aliases.find(a => a.alias === alias);
+  const keyAlias = aliases.find((a) => a.alias === alias);
   if (!keyAlias) {
     console.error(`❌ Alias "${alias}" not found`);
     return null;
@@ -58,6 +58,6 @@ export const getKeyInfoFromAlias = (alias: string): KeyInfo | null => {
   return {
     address,
     publicKey: keyAlias.public_key_base64,
-    privateKey: keystore[keyIndex]
+    privateKey: keystore[keyIndex],
   };
 };

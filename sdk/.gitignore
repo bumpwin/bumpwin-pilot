@@ -1,5 +1,12 @@
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb
+bun.lock
+
 # dependencies (bun install)
 node_modules
+
 
 # output
 out

@@ -52,4 +52,3 @@ const treasuryCapID = result.objectChanges?.find(
 )?.objectId;
 console.log('Treasury Cap:', treasuryCapID);
 console.log('🔍 View on SuiScan:', `https://suiscan.xyz/devnet/object/${treasuryCapID}`);
-

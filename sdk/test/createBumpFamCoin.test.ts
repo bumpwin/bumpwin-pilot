@@ -32,15 +32,16 @@ describe('OozeFamCoin Creation Tests', () => {
 
     expect(result1.effects?.status.status).toBe('success');
 
-    const packageId = (result1.objectChanges?.find(
-      (c) => c.type === 'published'
-    ) as any)?.packageId;
-    const coinMetadataID = (result1.objectChanges?.find(
-      (c) => c.type === 'created' && isCoinMetadata(c.objectType)
-    ) as any)?.objectId;
-    const treasuryCapID = (result1.objectChanges?.find(
-      (c) => c.type === 'created' && isTreasuryCap(c.objectType)
-    ) as any)?.objectId;
+    const packageId = (result1.objectChanges?.find((c) => c.type === 'published') as any)
+      ?.packageId;
+    const coinMetadataID = (
+      result1.objectChanges?.find(
+        (c) => c.type === 'created' && isCoinMetadata(c.objectType)
+      ) as any
+    )?.objectId;
+    const treasuryCapID = (
+      result1.objectChanges?.find((c) => c.type === 'created' && isTreasuryCap(c.objectType)) as any
+    )?.objectId;
 
     expect(packageId).toBeDefined();
     expect(coinMetadataID).toBeDefined();
@@ -51,18 +52,14 @@ describe('OozeFamCoin Creation Tests', () => {
     tx2.setSender(address);
     tx2.setGasBudget(1_000_000_000);
 
-    OozeFamCoin.createCoin(
-      tx2,
-      `${packageId}::ooze_fam_coin::OOZE_FAM_COIN`,
-      {
-        treasuryCapID,
-        coinMetadataID,
-        name: 'Ooze Fam Coin',
-        symbol: 'OFC',
-        description: "This is a test coin",
-        iconUrl: 'https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png',
-      },
-    );
+    OozeFamCoin.createCoin(tx2, `${packageId}::ooze_fam_coin::OOZE_FAM_COIN`, {
+      treasuryCapID,
+      coinMetadataID,
+      name: 'Ooze Fam Coin',
+      symbol: 'OFC',
+      description: 'This is a test coin',
+      iconUrl: 'https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png',
+    });
 
     const signature2 = await keypair.signTransaction(await tx2.build({ client }));
     const result2 = await client.executeTransactionBlock({
@@ -74,4 +71,4 @@ describe('OozeFamCoin Creation Tests', () => {
     expect(result2.effects?.status.status).toBe('success');
     expect(result2.digest).toBeDefined();
   });
-}); 
+});

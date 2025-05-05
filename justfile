@@ -54,8 +54,13 @@ request-sui ADDRESS:
 publish-move PKG="justchat":
     cd contracts/{{PKG}} && sui client publish --gas-budget 100000000
 
-publish-counter:
-    cd move/counter && sui client publish --gas-budget 100000000
+publish-move-famfactory NETWORK="testnet":
+    sui client switch --env {{NETWORK}}
+    cd contracts/bump_fam_factory && sui client publish
+
+build-move-famcoin:
+    cd contracts/bump_fam_coin && sui move build --dump-bytecode-as-base64
+
 
 # Install Dependencies
 install-dependencies:
@@ -68,9 +73,6 @@ dev:
 # Build dApp for Deployment
 build:
     bun run build
-
-build-move-famcoin:
-    cd contracts/ooze_fam_coin && sui move build --dump-bytecode-as-base64
 
 script-createOozeFamCoin:
     cd sdk && bunx tsx scripts/createOozeFamCoin.ts
