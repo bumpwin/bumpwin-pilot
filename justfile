@@ -1,13 +1,20 @@
 # Install Sui CLI
-install-sui-cli:
-    # Follow the Sui installation instructions
-    # Example command for macOS using Homebrew
-    brew install mystenlabs/tap/sui
+install-cli:
+    # Install Suim to install Sui CLI
+    curl -o- https://raw.githubusercontent.com/nextuser/suim/refs/heads/main/install.sh | bash	# Ref. https://github.com/nextuser/suim
 
+    # Install Walrus CLI
+    curl -sSf https://docs.wal.app/setup/walrus-install.sh | sh -s -- -n testnet
 
-install-sui-client-gen:
+    # Install sui-client-gen
     cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 
+
+switch-testnet:
+    sui client switch --env testnet
+
+switch-devnet:
+    sui client switch --env devnet
 
 setup-testnet-env:
     sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
@@ -16,6 +23,11 @@ setup-testnet-env:
 setup-devnet-env:
     sui client new-env --alias devnet --rpc https://fullnode.devnet.sui.io:443
     sui client switch --env devnet
+
+
+test-move:
+    cd contracts/e2e_test_cases && sui move test
+
 
 faucet-devnet:
     sui client switch --env devnet
@@ -59,3 +71,6 @@ build:
 
 build-move-famcoin:
     cd contracts/ooze_fam_coin && sui move build --dump-bytecode-as-base64
+
+script-createOozeFamCoin:
+    cd sdk && bunx tsx scripts/createOozeFamCoin.ts
