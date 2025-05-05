@@ -1,17 +1,34 @@
-<p align="center">
-  <h3>Bump. Survive. Win.</h3>
-</p>
+<div align="center">
+  <p>Bump. Survive. Win.</p>
+</div>
 
-## Setup
+
+## 🚀 Overview
+
+Bump Fam is a revolutionary gaming platform built on the Sui blockchain, where players compete in intense battles using their unique NFT characters. The platform combines the thrill of competitive gaming with the power of blockchain technology.
+
+### Key Features
+
+- 🎮 Real-time competitive gameplay
+- 💎 Unique NFT characters with special abilities
+- 🏆 Competitive leaderboard system
+- 💰 Play-to-earn mechanics
+- 🔒 Secure and transparent on-chain transactions
+
+## 🛠️ Tech Stack
+
+- **Blockchain**: Sui
+- **Smart Contracts**: Move
+- **Frontend**: TypeScript, React
+- **SDK**: TypeScript
+- **Testing**: Vitest
+
+## 📦 Installation
 
 1. Clone the repository with submodules:
 ```bash
-git clone --recurse-submodules https://github.com/your-org/bump-fam-sdk.git
-```
-
-If you've already cloned the repository without submodules, you can initialize them with:
-```bash
-git submodule update --init --recursive
+git clone --recurse-submodules https://github.com/fuyutarow/bumpwin-pilot.git
+cd bumpwin-pilot
 ```
 
 2. Install dependencies:
@@ -24,7 +41,7 @@ npm install
 npm run build
 ```
 
-## Development
+## 🧪 Development
 
 ### Running Tests
 ```bash
@@ -36,15 +53,22 @@ npm test
 npm run build
 ```
 
-## Project Structure
+## 📁 Project Structure
 
-- `contracts/` - Move contracts (git submodule)
-- `sdk/` - TypeScript SDK
-  - `src/` - Source code
-  - `test/` - Test files
-  - `dist/` - Build output (not in git)
+```
+bumpwin-pilot/
+├── contracts/          # Move smart contracts
+├── sdk/               # TypeScript SDK
+│   ├── src/          # Source code
+│   ├── test/         # Test files
+│   └── dist/         # Build output
+├── suigen-configs/   # SuiGen configurations
+└── data/            # Mock data and assets
+```
 
-## Contributing
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
 
 1. Make sure submodules are up to date:
 ```bash
