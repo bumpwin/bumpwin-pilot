@@ -30,7 +30,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
-    "prepare": "tsup",
+    "prepare": "bunx tsup",
     "suigen:devnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
     "suigen:testnet": "rm -rf src/suigen && sui-client-gen -m ../suigen-configs/testnet.toml -o src/suigen && bun format",
     "lint": "bunx @biomejs/biome check --fix .",
