@@ -5,6 +5,10 @@ on:
     branches:
       - alpha
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -28,6 +32,10 @@ jobs:
         working-directory: ./sdk
         run: bun install
 
+      - name: Run tests
+        working-directory: ./sdk
+        run: bun test
+
       - name: Increment patch version
         working-directory: ./sdk
         run: |
@@ -35,12 +43,18 @@ jobs:
           NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
           npm version $NEW_VERSION --no-git-tag-version
 
-      # - name: Run tests
-      #   working-directory: ./sdk
-      #   run: bun test
+      - name: Commit version bump
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add sdk/package.json
+          git commit -m "chore: bump version [skip ci]"
+          git push || exit 1
 
       - name: Publish to npm
         working-directory: ./sdk
-        run: bun publish
+        run: |
+          bunx npm login --registry=https://registry.npmjs.org/ --always-auth
+          bun publish || exit 1
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
