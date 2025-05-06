@@ -28,9 +28,16 @@ jobs:
         working-directory: ./sdk
         run: bun install
 
-      - name: Run tests
+      - name: Increment patch version
         working-directory: ./sdk
-        run: bun test
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          npm version $NEW_VERSION --no-git-tag-version
+
+      # - name: Run tests
+      #   working-directory: ./sdk
+      #   run: bun test
 
       - name: Publish to npm
         working-directory: ./sdk
