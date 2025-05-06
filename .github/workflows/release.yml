@@ -1,0 +1,39 @@
+name: Release and Publish
+
+on:
+  push:
+    branches:
+      - alpha
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./sdk
+        run: bun install
+
+      - name: Run tests
+        working-directory: ./sdk
+        run: bun test
+
+      - name: Publish to npm
+        working-directory: ./sdk
+        run: bun publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
