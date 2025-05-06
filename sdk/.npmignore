@@ -1,0 +1,38 @@
+# Development sources
+src/
+test/
+scripts/
+
+# Dependencies
+node_modules/
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb
+bun.lock
+
+# Output (dist is explicitly included in files, so no need to exclude)
+out/
+*.tgz
+
+# Coverage
+coverage/
+*.lcov
+
+# Logs
+logs/
+*.log
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Environment files
+.env
+.env.*
+.cache
+.eslintcache
+*.tsbuildinfo
+
+# IDE/OS specific
+.idea/
+.DS_Store

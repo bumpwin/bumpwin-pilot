@@ -73,3 +73,6 @@ build:
 
 script-createOozeFamCoin:
     cd sdk && bunx tsx scripts/createOozeFamCoin.ts
+
+publish-npm:
+    cd sdk && npm publish --dry-run
