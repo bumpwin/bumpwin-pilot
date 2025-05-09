@@ -23,9 +23,7 @@
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -43,16 +41,12 @@
   "devDependencies": {
     "@biomejs/biome": "latest",
     "@types/bun": "latest",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.15.17",
     "tsup": "^8.4.0",
     "vitest": "^3.1.2"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ]
+  "keywords": ["sui", "sdk", "typescript"]
 }

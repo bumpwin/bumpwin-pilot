@@ -6,16 +6,20 @@ ws.on('open', () => {
   console.log('🟢 Connected to Sui WebSocket');
 
   // イベント購読のリクエストを送信
-  ws.send(JSON.stringify({
-    jsonrpc: '2.0',
-    id: 1,
-    method: 'sui_subscribeEvent',
-    params: [{
-      filter: {
-        MoveEventType: 'justchat::messaging::MessageReceivedEvent',
-      },
-    }],
-  }));
+  ws.send(
+    JSON.stringify({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'sui_subscribeEvent',
+      params: [
+        {
+          filter: {
+            MoveEventType: 'justchat::messaging::MessageReceivedEvent',
+          },
+        },
+      ],
+    })
+  );
 });
 
 ws.on('message', (data) => {

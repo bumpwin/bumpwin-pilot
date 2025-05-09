@@ -9,6 +9,9 @@ install-cli:
     # Install sui-client-gen
     cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 
+# Generate Sui client code for testnet
+suigen-testnet:
+    cd sdk && bun run suigen:testnet
 
 switch-testnet:
     sui client switch --env testnet
@@ -100,3 +103,6 @@ send-message NETWORK="testnet":
       '"Hello, World!"' \
       fee_coin \
       --gas-budget 100000000
+
+poll-justchat-events:
+    cd sdk && bunx tsx scripts/listenChatEvent.ts
