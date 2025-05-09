@@ -1,11 +1,13 @@
 module justchat::messaging;
 
-use sui::coin::{Self, Coin};
+use sui::coin::{Coin};
 use sui::event;
 use sui::sui::SUI;
 use std::string::String;
 
 use justchat::cap;
+
+const EWrongAmount: u64 = 0;
 
 /// Event emitted when a message is received
 public struct MessageReceivedEvent has copy, drop, store {
@@ -20,12 +22,12 @@ public struct MessageReceivedEvent has copy, drop, store {
 public fun send_message(
     cap: &cap::MessageFeeCap,
     text: String,
-    mut payment: Coin<SUI>,
+    payment: Coin<SUI>,
     ctx: &mut TxContext
-): Coin<SUI> {
-    assert!(payment.value() >= cap.message_fee(), 0);
+) {
+    assert!(payment.value() == cap.message_fee(), EWrongAmount);
 
-    let to_keep = coin::split(&mut payment, cap.message_fee(), ctx);
+    // let to_keep = coin::split(&mut payment, cap.message_fee(), ctx);
 
     event::emit(
         MessageReceivedEvent {
@@ -38,5 +40,5 @@ public fun send_message(
 
     transfer::public_transfer(payment, cap.recipient());
 
-    to_keep
+    // to_keep
 }
