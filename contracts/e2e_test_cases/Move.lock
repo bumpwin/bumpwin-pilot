@@ -8,7 +8,7 @@ dependencies = [
   { id = "Sui", name = "Sui" },
   { id = "battle_market", name = "battle_market" },
   { id = "coin_launcher", name = "coin_launcher" },
-  { id = "qmsr_amm", name = "qmsr_amm" },
+  { id = "msr_amm", name = "msr_amm" },
 ]
 
 [[move.package]]
@@ -41,8 +41,8 @@ dependencies = [
 ]
 
 [[move.package]]
-id = "qmsr_amm"
-source = { local = "../qmsr_amm" }
+id = "msr_amm"
+source = { local = "../msr_amm" }
 
 dependencies = [
   { id = "Sui", name = "Sui" },
