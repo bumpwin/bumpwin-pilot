@@ -9,6 +9,9 @@ install-cli:
     # Install sui-client-gen
     cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 
+# Generate Sui client code for testnet
+suigen-testnet:
+    cd sdk && bun run suigen:testnet
 
 switch-testnet:
     sui client switch --env testnet
@@ -51,9 +54,6 @@ request-sui ADDRESS:
     --header 'Content-Type: application/json' \
     --data-raw '{ "FixedAmountRequest": { "recipient": "{{ADDRESS}}" } }'
 
-publish-move PKG="justchat" NETWORK="testnet":
-    sui client switch --env {{NETWORK}}
-    cd contracts/{{PKG}} && sui client publish
 
 build-move-famcoin:
     cd contracts/bump_fam_coin && sui move build --dump-bytecode-as-base64
@@ -76,3 +76,33 @@ script-createOozeFamCoin:
 
 publish-npm:
     cd sdk && npm publish --dry-run
+
+
+
+# JustChat
+
+build-move-justchat PKG="justchat" NETWORK="testnet":
+    sui client switch --env {{NETWORK}}
+    cd contracts/{{PKG}} && sui move build
+
+publish-move-justchat PKG="justchat" NETWORK="testnet":
+    sui client switch --env {{NETWORK}}
+    cd contracts/{{PKG}} && sui client publish
+
+
+MESSAGING_PACKAGE_ID := "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3"
+FEE_CAP_ID := "0xd5c0f61d9c02a72ce8af482d1dcb9e47ead607d9ae23904ebb0c1696852e684f"
+
+send-message NETWORK="testnet":
+    sui client switch --env {{NETWORK}}
+    sui client ptb \
+      --split-coins gas '[1000]' \
+      --assign fee_coin \
+      --move-call {{MESSAGING_PACKAGE_ID}}::messaging::send_message \
+      @{{FEE_CAP_ID}} \
+      '"Hello, suisui!"' \
+      fee_coin \
+      --gas-budget 100000000
+
+poll-justchat-events:
+    cd sdk && bunx tsx scripts/listenChatEvent.ts

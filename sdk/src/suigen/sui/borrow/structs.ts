@@ -1,12 +1,15 @@
+import { type BcsType, bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeArgument,
-  ToTypeStr,
-  TypeArgument,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeArgument,
+  type ToTypeStr,
+  type TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -18,22 +21,19 @@ import {
   toBcs,
 } from '../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../_framework/util';
-import { PKG_V29 } from '../index';
+import { PKG_V30 } from '../index';
 import { ID } from '../object/structs';
-import { BcsType, bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== Referent =============================== */
 
 export function isReferent(type: string): boolean {
   type = compressSuiType(type);
-  return type.startsWith(`${PKG_V29}::borrow::Referent` + '<');
+  return type.startsWith(`${PKG_V30}::borrow::Referent` + '<');
 }
 
 export interface ReferentFields<T extends TypeArgument> {
@@ -46,12 +46,12 @@ export type ReferentReified<T extends TypeArgument> = Reified<Referent<T>, Refer
 export class Referent<T extends TypeArgument> implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::borrow::Referent`;
+  static readonly $typeName = `${PKG_V30}::borrow::Referent`;
   static readonly $numTypeParams = 1;
   static readonly $isPhantom = [false] as const;
 
   readonly $typeName = Referent.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::borrow::Referent<${ToTypeStr<T>}>`;
+  readonly $fullTypeName: `${typeof PKG_V30}::borrow::Referent<${ToTypeStr<T>}>`;
   readonly $typeArgs: [ToTypeStr<T>];
   readonly $isPhantom = Referent.$isPhantom;
 
@@ -62,7 +62,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
     this.$fullTypeName = composeSuiType(
       Referent.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::borrow::Referent<${ToTypeStr<T>}>`;
+    ) as `${typeof PKG_V30}::borrow::Referent<${ToTypeStr<T>}>`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -75,7 +75,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
       fullTypeName: composeSuiType(
         Referent.$typeName,
         ...[extractType(T)]
-      ) as `${typeof PKG_V29}::borrow::Referent<${ToTypeStr<ToTypeArgument<T>>}>`,
+      ) as `${typeof PKG_V30}::borrow::Referent<${ToTypeStr<ToTypeArgument<T>>}>`,
       typeArgs: [extractType(T)] as [ToTypeStr<ToTypeArgument<T>>],
       isPhantom: Referent.$isPhantom,
       reifiedTypeArgs: [T],
@@ -111,12 +111,10 @@ export class Referent<T extends TypeArgument> implements StructClass {
   static get bcs() {
     return <T extends BcsType<any>>(T: T) =>
       bcs.struct(`Referent<${T.name}>`, {
-        id: bcs
-          .bytes(32)
-          .transform({
-            input: (val: string) => fromHEX(val),
-            output: (val: Uint8Array) => toHEX(val),
-          }),
+        id: bcs.bytes(32).transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
         value: Option.bcs(T),
       });
   }
@@ -259,7 +257,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
 
 export function isBorrow(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::borrow::Borrow`;
+  return type === `${PKG_V30}::borrow::Borrow`;
 }
 
 export interface BorrowFields {
@@ -272,12 +270,12 @@ export type BorrowReified = Reified<Borrow, BorrowFields>;
 export class Borrow implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::borrow::Borrow`;
+  static readonly $typeName = `${PKG_V30}::borrow::Borrow`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = Borrow.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::borrow::Borrow`;
+  readonly $fullTypeName: `${typeof PKG_V30}::borrow::Borrow`;
   readonly $typeArgs: [];
   readonly $isPhantom = Borrow.$isPhantom;
 
@@ -288,7 +286,7 @@ export class Borrow implements StructClass {
     this.$fullTypeName = composeSuiType(
       Borrow.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::borrow::Borrow`;
+    ) as `${typeof PKG_V30}::borrow::Borrow`;
     this.$typeArgs = typeArgs;
 
     this.ref = fields.ref;
@@ -298,7 +296,7 @@ export class Borrow implements StructClass {
   static reified(): BorrowReified {
     return {
       typeName: Borrow.$typeName,
-      fullTypeName: composeSuiType(Borrow.$typeName, ...[]) as `${typeof PKG_V29}::borrow::Borrow`,
+      fullTypeName: composeSuiType(Borrow.$typeName, ...[]) as `${typeof PKG_V30}::borrow::Borrow`,
       typeArgs: [] as [],
       isPhantom: Borrow.$isPhantom,
       reifiedTypeArgs: [],
@@ -331,12 +329,10 @@ export class Borrow implements StructClass {
 
   static get bcs() {
     return bcs.struct('Borrow', {
-      ref: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      ref: bcs.bytes(32).transform({
+        input: (val: string) => fromHEX(val),
+        output: (val: Uint8Array) => toHEX(val),
+      }),
       obj: ID.bcs,
     });
   }

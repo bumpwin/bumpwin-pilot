@@ -1,27 +1,27 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { String } from '../../_dependencies/source/0x1/string/structs';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   phantom,
 } from '../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
-import { PKG_V29 } from '../index';
+import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== VerifiedID =============================== */
 
 export function isVerifiedID(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::zklogin_verified_id::VerifiedID`;
+  return type === `${PKG_V30}::zklogin_verified_id::VerifiedID`;
 }
 
 export interface VerifiedIDFields {
@@ -38,12 +38,12 @@ export type VerifiedIDReified = Reified<VerifiedID, VerifiedIDFields>;
 export class VerifiedID implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::zklogin_verified_id::VerifiedID`;
+  static readonly $typeName = `${PKG_V30}::zklogin_verified_id::VerifiedID`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = VerifiedID.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::zklogin_verified_id::VerifiedID`;
+  readonly $fullTypeName: `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`;
   readonly $typeArgs: [];
   readonly $isPhantom = VerifiedID.$isPhantom;
 
@@ -58,7 +58,7 @@ export class VerifiedID implements StructClass {
     this.$fullTypeName = composeSuiType(
       VerifiedID.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::zklogin_verified_id::VerifiedID`;
+    ) as `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -75,7 +75,7 @@ export class VerifiedID implements StructClass {
       fullTypeName: composeSuiType(
         VerifiedID.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::zklogin_verified_id::VerifiedID`,
+      ) as `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`,
       typeArgs: [] as [],
       isPhantom: VerifiedID.$isPhantom,
       reifiedTypeArgs: [],
@@ -109,12 +109,10 @@ export class VerifiedID implements StructClass {
   static get bcs() {
     return bcs.struct('VerifiedID', {
       id: UID.bcs,
-      owner: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      owner: bcs.bytes(32).transform({
+        input: (val: string) => fromHEX(val),
+        output: (val: Uint8Array) => toHEX(val),
+      }),
       key_claim_name: String.bcs,
       key_claim_value: String.bcs,
       issuer: String.bcs,

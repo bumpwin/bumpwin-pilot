@@ -1,6 +1,6 @@
 {
   "name": "bumpwin",
-  "version": "0.202505.5",
+  "version": "0.202505.6",
   "description": "SDK for BUMP.WIN",
   "author": "BUMP.WIN",
   "license": "MIT",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@biomejs/biome": "latest",
     "@types/bun": "latest",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.15.17",
     "tsup": "^8.4.0",
     "vitest": "^3.1.2"
   },

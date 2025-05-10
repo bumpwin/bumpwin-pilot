@@ -1,3 +1,4 @@
+import type { StructClassLoader } from '../../../_framework/loader';
 import * as ascii from './ascii/structs';
 import * as bitVector from './bit-vector/structs';
 import * as fixedPoint32 from './fixed-point32/structs';
@@ -6,7 +7,6 @@ import * as string from './string/structs';
 import * as typeName from './type-name/structs';
 import * as uq3232 from './uq32-32/structs';
 import * as uq6464 from './uq64-64/structs';
-import { StructClassLoader } from '../../../_framework/loader';
 
 export function registerClasses(loader: StructClassLoader) {
   loader.register(ascii.String);

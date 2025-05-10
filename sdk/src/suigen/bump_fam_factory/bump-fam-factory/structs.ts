@@ -1,15 +1,18 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import { String as String1 } from '../../_dependencies/onchain/0x1/ascii/structs';
 import { String } from '../../_dependencies/onchain/0x1/string/structs';
 import { Url } from '../../_dependencies/onchain/0x2/url/structs';
 import {
-  PhantomReified,
-  PhantomToTypeStr,
-  PhantomTypeArgument,
-  Reified,
-  StructClass,
-  ToField,
-  ToPhantomTypeArgument,
-  ToTypeStr,
+  type PhantomReified,
+  type PhantomToTypeStr,
+  type PhantomTypeArgument,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToPhantomTypeArgument,
+  type ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -19,15 +22,12 @@ import {
   phantom,
 } from '../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../_framework/util';
 import { PKG_V1 } from '../index';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== CreateCoinEvent =============================== */
 

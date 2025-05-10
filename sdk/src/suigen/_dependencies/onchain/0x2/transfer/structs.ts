@@ -1,12 +1,15 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import {
-  PhantomReified,
-  PhantomToTypeStr,
-  PhantomTypeArgument,
-  Reified,
-  StructClass,
-  ToField,
-  ToPhantomTypeArgument,
-  ToTypeStr,
+  type PhantomReified,
+  type PhantomToTypeStr,
+  type PhantomTypeArgument,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToPhantomTypeArgument,
+  type ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -16,22 +19,19 @@ import {
   phantom,
 } from '../../../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../../../_framework/util';
-import { PKG_V29 } from '../index';
+import { PKG_V30 } from '../index';
 import { ID } from '../object/structs';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== Receiving =============================== */
 
 export function isReceiving(type: string): boolean {
   type = compressSuiType(type);
-  return type.startsWith(`${PKG_V29}::transfer::Receiving` + '<');
+  return type.startsWith(`${PKG_V30}::transfer::Receiving` + '<');
 }
 
 export interface ReceivingFields<T0 extends PhantomTypeArgument> {
@@ -47,12 +47,12 @@ export type ReceivingReified<T0 extends PhantomTypeArgument> = Reified<
 export class Receiving<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::transfer::Receiving`;
+  static readonly $typeName = `${PKG_V30}::transfer::Receiving`;
   static readonly $numTypeParams = 1;
   static readonly $isPhantom = [true] as const;
 
   readonly $typeName = Receiving.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::transfer::Receiving<${PhantomToTypeStr<T0>}>`;
+  readonly $fullTypeName: `${typeof PKG_V30}::transfer::Receiving<${PhantomToTypeStr<T0>}>`;
   readonly $typeArgs: [PhantomToTypeStr<T0>];
   readonly $isPhantom = Receiving.$isPhantom;
 
@@ -63,7 +63,7 @@ export class Receiving<T0 extends PhantomTypeArgument> implements StructClass {
     this.$fullTypeName = composeSuiType(
       Receiving.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::transfer::Receiving<${PhantomToTypeStr<T0>}>`;
+    ) as `${typeof PKG_V30}::transfer::Receiving<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -78,7 +78,7 @@ export class Receiving<T0 extends PhantomTypeArgument> implements StructClass {
       fullTypeName: composeSuiType(
         Receiving.$typeName,
         ...[extractType(T0)]
-      ) as `${typeof PKG_V29}::transfer::Receiving<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
+      ) as `${typeof PKG_V30}::transfer::Receiving<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: Receiving.$isPhantom,
       reifiedTypeArgs: [T0],

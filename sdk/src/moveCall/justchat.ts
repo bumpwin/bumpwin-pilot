@@ -1,5 +1,5 @@
-import { Transaction } from '@mysten/sui/transactions';
 import { sendMessage } from '@/suigen/justchat/messaging/functions';
+import type { Transaction } from '@mysten/sui/transactions';
 
 const FEE_CAP_ID = {
   mainnet: 'NOT_IMPLEMENTED',

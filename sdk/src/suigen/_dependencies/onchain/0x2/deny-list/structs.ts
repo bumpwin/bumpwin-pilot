@@ -1,33 +1,33 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import * as reified from '../../../../_framework/reified';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeStr as ToPhantom,
+  type ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   fieldToJSON,
   phantom,
-  ToTypeStr as ToPhantom,
 } from '../../../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
-import { Vector } from '../../../../_framework/vector';
+import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
+import type { Vector } from '../../../../_framework/vector';
 import { Bag } from '../bag/structs';
-import { PKG_V29 } from '../index';
+import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { Table } from '../table/structs';
 import { VecSet } from '../vec-set/structs';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== DenyList =============================== */
 
 export function isDenyList(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::DenyList`;
+  return type === `${PKG_V30}::deny_list::DenyList`;
 }
 
 export interface DenyListFields {
@@ -40,12 +40,12 @@ export type DenyListReified = Reified<DenyList, DenyListFields>;
 export class DenyList implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::DenyList`;
+  static readonly $typeName = `${PKG_V30}::deny_list::DenyList`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = DenyList.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::DenyList`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::DenyList`;
   readonly $typeArgs: [];
   readonly $isPhantom = DenyList.$isPhantom;
 
@@ -56,7 +56,7 @@ export class DenyList implements StructClass {
     this.$fullTypeName = composeSuiType(
       DenyList.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::DenyList`;
+    ) as `${typeof PKG_V30}::deny_list::DenyList`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -69,7 +69,7 @@ export class DenyList implements StructClass {
       fullTypeName: composeSuiType(
         DenyList.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::DenyList`,
+      ) as `${typeof PKG_V30}::deny_list::DenyList`,
       typeArgs: [] as [],
       isPhantom: DenyList.$isPhantom,
       reifiedTypeArgs: [],
@@ -198,7 +198,7 @@ export class DenyList implements StructClass {
 
 export function isConfigWriteCap(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::ConfigWriteCap`;
+  return type === `${PKG_V30}::deny_list::ConfigWriteCap`;
 }
 
 export interface ConfigWriteCapFields {
@@ -210,12 +210,12 @@ export type ConfigWriteCapReified = Reified<ConfigWriteCap, ConfigWriteCapFields
 export class ConfigWriteCap implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::ConfigWriteCap`;
+  static readonly $typeName = `${PKG_V30}::deny_list::ConfigWriteCap`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = ConfigWriteCap.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::ConfigWriteCap`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::ConfigWriteCap`;
   readonly $typeArgs: [];
   readonly $isPhantom = ConfigWriteCap.$isPhantom;
 
@@ -225,7 +225,7 @@ export class ConfigWriteCap implements StructClass {
     this.$fullTypeName = composeSuiType(
       ConfigWriteCap.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::ConfigWriteCap`;
+    ) as `${typeof PKG_V30}::deny_list::ConfigWriteCap`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -237,7 +237,7 @@ export class ConfigWriteCap implements StructClass {
       fullTypeName: composeSuiType(
         ConfigWriteCap.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::ConfigWriteCap`,
+      ) as `${typeof PKG_V30}::deny_list::ConfigWriteCap`,
       typeArgs: [] as [],
       isPhantom: ConfigWriteCap.$isPhantom,
       reifiedTypeArgs: [],
@@ -361,7 +361,7 @@ export class ConfigWriteCap implements StructClass {
 
 export function isConfigKey(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::ConfigKey`;
+  return type === `${PKG_V30}::deny_list::ConfigKey`;
 }
 
 export interface ConfigKeyFields {
@@ -374,12 +374,12 @@ export type ConfigKeyReified = Reified<ConfigKey, ConfigKeyFields>;
 export class ConfigKey implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::ConfigKey`;
+  static readonly $typeName = `${PKG_V30}::deny_list::ConfigKey`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = ConfigKey.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::ConfigKey`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::ConfigKey`;
   readonly $typeArgs: [];
   readonly $isPhantom = ConfigKey.$isPhantom;
 
@@ -390,7 +390,7 @@ export class ConfigKey implements StructClass {
     this.$fullTypeName = composeSuiType(
       ConfigKey.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::ConfigKey`;
+    ) as `${typeof PKG_V30}::deny_list::ConfigKey`;
     this.$typeArgs = typeArgs;
 
     this.perTypeIndex = fields.perTypeIndex;
@@ -403,7 +403,7 @@ export class ConfigKey implements StructClass {
       fullTypeName: composeSuiType(
         ConfigKey.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::ConfigKey`,
+      ) as `${typeof PKG_V30}::deny_list::ConfigKey`,
       typeArgs: [] as [],
       isPhantom: ConfigKey.$isPhantom,
       reifiedTypeArgs: [],
@@ -532,7 +532,7 @@ export class ConfigKey implements StructClass {
 
 export function isAddressKey(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::AddressKey`;
+  return type === `${PKG_V30}::deny_list::AddressKey`;
 }
 
 export interface AddressKeyFields {
@@ -544,12 +544,12 @@ export type AddressKeyReified = Reified<AddressKey, AddressKeyFields>;
 export class AddressKey implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::AddressKey`;
+  static readonly $typeName = `${PKG_V30}::deny_list::AddressKey`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = AddressKey.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::AddressKey`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::AddressKey`;
   readonly $typeArgs: [];
   readonly $isPhantom = AddressKey.$isPhantom;
 
@@ -559,7 +559,7 @@ export class AddressKey implements StructClass {
     this.$fullTypeName = composeSuiType(
       AddressKey.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::AddressKey`;
+    ) as `${typeof PKG_V30}::deny_list::AddressKey`;
     this.$typeArgs = typeArgs;
 
     this.pos0 = fields.pos0;
@@ -571,7 +571,7 @@ export class AddressKey implements StructClass {
       fullTypeName: composeSuiType(
         AddressKey.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::AddressKey`,
+      ) as `${typeof PKG_V30}::deny_list::AddressKey`,
       typeArgs: [] as [],
       isPhantom: AddressKey.$isPhantom,
       reifiedTypeArgs: [],
@@ -604,12 +604,10 @@ export class AddressKey implements StructClass {
 
   static get bcs() {
     return bcs.struct('AddressKey', {
-      pos0: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      pos0: bcs.bytes(32).transform({
+        input: (val: string) => fromHEX(val),
+        output: (val: Uint8Array) => toHEX(val),
+      }),
     });
   }
 
@@ -696,7 +694,7 @@ export class AddressKey implements StructClass {
 
 export function isGlobalPauseKey(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::GlobalPauseKey`;
+  return type === `${PKG_V30}::deny_list::GlobalPauseKey`;
 }
 
 export interface GlobalPauseKeyFields {
@@ -708,12 +706,12 @@ export type GlobalPauseKeyReified = Reified<GlobalPauseKey, GlobalPauseKeyFields
 export class GlobalPauseKey implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::GlobalPauseKey`;
+  static readonly $typeName = `${PKG_V30}::deny_list::GlobalPauseKey`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = GlobalPauseKey.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::GlobalPauseKey`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::GlobalPauseKey`;
   readonly $typeArgs: [];
   readonly $isPhantom = GlobalPauseKey.$isPhantom;
 
@@ -723,7 +721,7 @@ export class GlobalPauseKey implements StructClass {
     this.$fullTypeName = composeSuiType(
       GlobalPauseKey.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::GlobalPauseKey`;
+    ) as `${typeof PKG_V30}::deny_list::GlobalPauseKey`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -735,7 +733,7 @@ export class GlobalPauseKey implements StructClass {
       fullTypeName: composeSuiType(
         GlobalPauseKey.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::GlobalPauseKey`,
+      ) as `${typeof PKG_V30}::deny_list::GlobalPauseKey`,
       typeArgs: [] as [],
       isPhantom: GlobalPauseKey.$isPhantom,
       reifiedTypeArgs: [],
@@ -859,7 +857,7 @@ export class GlobalPauseKey implements StructClass {
 
 export function isPerTypeConfigCreated(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::PerTypeConfigCreated`;
+  return type === `${PKG_V30}::deny_list::PerTypeConfigCreated`;
 }
 
 export interface PerTypeConfigCreatedFields {
@@ -872,12 +870,12 @@ export type PerTypeConfigCreatedReified = Reified<PerTypeConfigCreated, PerTypeC
 export class PerTypeConfigCreated implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::PerTypeConfigCreated`;
+  static readonly $typeName = `${PKG_V30}::deny_list::PerTypeConfigCreated`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = PerTypeConfigCreated.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::PerTypeConfigCreated`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::PerTypeConfigCreated`;
   readonly $typeArgs: [];
   readonly $isPhantom = PerTypeConfigCreated.$isPhantom;
 
@@ -888,7 +886,7 @@ export class PerTypeConfigCreated implements StructClass {
     this.$fullTypeName = composeSuiType(
       PerTypeConfigCreated.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::PerTypeConfigCreated`;
+    ) as `${typeof PKG_V30}::deny_list::PerTypeConfigCreated`;
     this.$typeArgs = typeArgs;
 
     this.key = fields.key;
@@ -901,7 +899,7 @@ export class PerTypeConfigCreated implements StructClass {
       fullTypeName: composeSuiType(
         PerTypeConfigCreated.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::PerTypeConfigCreated`,
+      ) as `${typeof PKG_V30}::deny_list::PerTypeConfigCreated`,
       typeArgs: [] as [],
       isPhantom: PerTypeConfigCreated.$isPhantom,
       reifiedTypeArgs: [],
@@ -1035,7 +1033,7 @@ export class PerTypeConfigCreated implements StructClass {
 
 export function isPerTypeList(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::deny_list::PerTypeList`;
+  return type === `${PKG_V30}::deny_list::PerTypeList`;
 }
 
 export interface PerTypeListFields {
@@ -1049,12 +1047,12 @@ export type PerTypeListReified = Reified<PerTypeList, PerTypeListFields>;
 export class PerTypeList implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::deny_list::PerTypeList`;
+  static readonly $typeName = `${PKG_V30}::deny_list::PerTypeList`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = PerTypeList.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::deny_list::PerTypeList`;
+  readonly $fullTypeName: `${typeof PKG_V30}::deny_list::PerTypeList`;
   readonly $typeArgs: [];
   readonly $isPhantom = PerTypeList.$isPhantom;
 
@@ -1066,7 +1064,7 @@ export class PerTypeList implements StructClass {
     this.$fullTypeName = composeSuiType(
       PerTypeList.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::deny_list::PerTypeList`;
+    ) as `${typeof PKG_V30}::deny_list::PerTypeList`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -1080,7 +1078,7 @@ export class PerTypeList implements StructClass {
       fullTypeName: composeSuiType(
         PerTypeList.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::deny_list::PerTypeList`,
+      ) as `${typeof PKG_V30}::deny_list::PerTypeList`,
       typeArgs: [] as [],
       isPhantom: PerTypeList.$isPhantom,
       reifiedTypeArgs: [],

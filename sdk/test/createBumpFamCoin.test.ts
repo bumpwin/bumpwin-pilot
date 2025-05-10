@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import { BumpFamCoin } from '@/moveCall/bumpFamCoin';
+import { isCoinMetadata, isTreasuryCap } from '@/suigen/sui/coin/structs';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
-import { isCoinMetadata, isTreasuryCap } from '@/suigen/sui/coin/structs';
-import { BumpFamCoin } from '@/moveCall/bumpFamCoin';
+import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
 
 describe('BumpFamCoin Creation Tests', () => {
