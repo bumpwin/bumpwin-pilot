@@ -53,13 +53,10 @@
 
 module msr_amm::msr_math;
 
-use std::{u64, u128};
-use msr_amm::{u64_safe, u128_safe};
+use std::u128;
+use safemath::{u64_safe, u128_safe};
 
 const EInvalidMarket: u64 = 1;   // n == 0
-const EPriceRange: u64 = 2;     // price < 0 or > 1
-const EOverflow: u64 = 3;       // mul / add overflow
-const EDivZero: u64 = 4;        // divide‑by‑zero (a == 0)
 
 /// Computes total cost in numeraire to reach state x
 /// C(q) = (1/4) ∑ qᵢ² − (1/4n)(∑ qᵢ)² + (1/n) ∑ qᵢ

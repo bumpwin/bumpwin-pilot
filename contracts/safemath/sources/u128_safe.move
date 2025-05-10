@@ -1,4 +1,4 @@
-module msr_amm::u128_safe;
+module safemath::u128_safe;
 
 use std::{u128};
 

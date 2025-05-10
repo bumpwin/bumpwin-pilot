@@ -1,4 +1,4 @@
-module msr_amm::u64_safe;
+module safemath::u64_safe;
 
 use std::{u64};
 

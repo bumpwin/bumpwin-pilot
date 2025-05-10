@@ -2,10 +2,11 @@
 
 [move]
 version = 3
-manifest_digest = "4360F2292AA2B212B2FE35C4B17B8E5826E0CD4E00D82B59B24F445AE7D379C5"
-deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
+manifest_digest = "84916722020B0FBFC53EE2DEE93E059751F100A9A6CA79EDA591CD9904B7ED72"
+deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 dependencies = [
   { id = "Sui", name = "Sui" },
+  { id = "safemath", name = "safemath" },
 ]
 
 [[move.package]]
@@ -18,6 +19,14 @@ source = { git = "https://github.com/MystenLabs/sui.git", rev = "framework/mainn
 
 dependencies = [
   { id = "MoveStdlib", name = "MoveStdlib" },
+]
+
+[[move.package]]
+id = "safemath"
+source = { local = "../safemath" }
+
+dependencies = [
+  { id = "Sui", name = "Sui" },
 ]
 
 [move.toolchain-version]
