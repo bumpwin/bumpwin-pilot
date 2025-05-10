@@ -1,9 +1,12 @@
+
 module msr_amm::outcome_vault;
 
 use sui::balance::{Self, Balance, Supply};
 use sui::coin::{Self, Coin};
 use sui::object_bag::{Self, ObjectBag};
 
+
+use msr_amm::msr_math;
 
 /// Token representing ownership of a specific outcome
 public struct OutcomeShare<phantom CoinT> has drop {}
@@ -14,7 +17,6 @@ public struct OutcomeVault has key, store {
     supply_bag: ObjectBag,
     num_of_outcomes: u64,
     total_shares: u64,
-    total_share_squares: u64,
 }
 
 public struct OutcomeShareSupply<phantom CoinT> has key, store {
@@ -35,7 +37,6 @@ fun new(ctx: &mut TxContext): OutcomeVault {
         supply_bag: object_bag::new(ctx),
         num_of_outcomes: 0,
         total_shares: 0,
-        total_share_squares: 0,
     }
 }
 
@@ -73,6 +74,21 @@ public fun share_supply_value<CoinT>(self: &OutcomeVault): u64 {
 }
 
 
+fun get_outcome_probability<CoinT>(self: &OutcomeVault): u64 {
+    msr_math::price(
+        self.share_supply_value<CoinT>(),
+        self.total_shares,
+        self.num_of_outcomes
+    )
+}
+
+fun get_marginal_cost<CoinT>(self: &OutcomeVault): u64 {
+    msr_math::marginal_cost(
+        self.share_supply_value<CoinT>(),
+        self.total_shares,
+        self.num_of_outcomes
+    )
+}
 
 
 

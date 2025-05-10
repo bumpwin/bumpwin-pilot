@@ -41,44 +41,63 @@
 /// - xᵢ:   number of shares for outcome i (dimensionless)
 /// - pᵢ:   price in numeraire per share of outcome i
 /// - C(x): total numeraire committed at state x
-
+///
+/// Inversion Formulas:
+/// - Given Δz (budget), compute Δxᵢ to buy:
+///     Δxᵢ = [-b + sqrt(b² + 4aΔz)] / (2a)
+/// - Given Δxᵢ (share quantity), compute Δz to sell:
+///     Δz = b·Δxᵢ − a·Δxᵢ²
+///   where:
+///     - a = (n−1)/(4n)
+///     - b = (1/2)xᵢ − (1/2n)∑xⱼ + 1/n
 
 module msr_amm::msr_math;
 
-
 use std::{u64, u128};
+use msr_amm::{u64_safe, u128_safe};
 
-/// Scaling factor for fixed-point precision (6 decimals)
-const PRECISION: u64 = 1_000_000;
+const EInvalidMarket: u64 = 1;   // n == 0
+const EPriceRange: u64 = 2;     // price < 0 or > 1
+const EOverflow: u64 = 3;       // mul / add overflow
+const EDivZero: u64 = 4;        // divide‑by‑zero (a == 0)
 
-/// Computes the cost function:
+/// Computes total cost in numeraire to reach state x
 /// C(q) = (1/4) ∑ qᵢ² − (1/4n)(∑ qᵢ)² + (1/n) ∑ qᵢ
-/// Inputs are scaled by PRECISION
 public fun cost(
     sum_q: u64,
     sum_q_sq: u64,
     n: u64,
 ): u64 {
-    if (n == 0) return 0;
-    let term1 = (sum_q_sq * PRECISION) / 4;
-    let term2 = ((sum_q * sum_q) * PRECISION) / (4 * n);
-    let term3 = (sum_q * PRECISION) / n;
-    (term1 - term2 + term3) / PRECISION
+    assert!(n > 0, EInvalidMarket);
+
+    // Term1: (1/4) * sum_q_sq
+    let term1 = u64_safe::div(sum_q_sq, 4);
+
+    // Term2: (1/4n) * sum_q^2
+    let term2 = u64_safe::muldiv(sum_q, sum_q, 4 * n);
+
+    // Term3: (1/n) * sum_q
+    let term3 = u64_safe::div(sum_q, n);
+
+    // C(q) = term1 - term2 + term3
+    let result = u64_safe::sub(term1, term2);
+    u64_safe::add(result, term3)
 }
 
-/// Computes the price function for a given outcome:
+/// Computes the marginal price pᵢ(q) = ∂C/∂qᵢ
 /// pᵢ(q) = (1/8)(3qᵢ − ∑_{j≠i} qⱼ) + 1/4
-/// Returns value in [0, 1] scaled by PRECISION
+/// Output is unscaled numeraire units
 public fun price(
     sum_q: u64,
     qi: u64,
 ): u64 {
-    let sum_other = sum_q - qi;
-    let term1 = ((3 * qi - sum_other) * PRECISION) / 8;
-    let term2 = PRECISION / 4;
-    term1 + term2
-}
+    // Compute sum_other = sum_q - qi
+    let sum_other = u64_safe::sub(sum_q, qi);
 
+    u128::try_as_u64(
+        ((3 * qi as u128) - (sum_other as u128) + 2) / 8
+    ).extract()
+}
 
 /// Converts amount_in (Δz) to amount_out (Δxᵢ)
 /// Formula: Δxᵢ = [-b + sqrt(b² + 4aΔz)] / (2a)
@@ -89,31 +108,30 @@ public fun price(
 /// Δz = C(x₁, ..., xᵢ + Δxᵢ, ..., xₙ) - C(x)
 public fun swap_rate_z_to_xi(
     xi: u64,
-    sum_x: u64,
-    n: u64,
+    sum_x: u128,
     delta_z: u64,
+    num_outcomes: u64,
 ): u64 {
-    assert!(n > 0, 0);
+    assert!(num_outcomes > 1, EInvalidMarket);
 
-    let a_scaled = (PRECISION * (n - 1)) / (4 * n);
-    let b_scaled = (xi * PRECISION) / 2
-        - (sum_x * PRECISION) / (2 * n)
-        + PRECISION / n;
+    let n_u128 = num_outcomes as u128;
+    let xi_u128 = xi as u128;
 
-    let b_squared: u128 = u128::pow(b_scaled as u128, 2);
-    let az_scaled: u128 = 4 * (a_scaled as u128) * (delta_z as u128) * (PRECISION as u128);
+    // a = (n−1)/(4n)
+    let a = ((n_u128 - 1) / 4 / n_u128);
 
-    let discriminant: u128 = b_squared + az_scaled;
-    let sqrt_discriminant = u128::sqrt(discriminant);
+    // b = (xi/2) - (sum_x/2n) + (1/n)
+    let b = ((xi_u128 / 2) - (sum_x / 2 / n_u128) + (1 / n_u128));
 
-    assert!(sqrt_discriminant >= (b_scaled as u128), 1);
-    let numerator = sqrt_discriminant - (b_scaled as u128);
-    let denominator = 2 * (a_scaled as u128);
+    // sqrt_disc = sqrt(b^2 + 4aΔz)
+    let sqrt_disc = u128::sqrt(b * b + 4 * a * (delta_z as u128));
 
-    let result = numerator / denominator;
-    u128::try_as_u64(result).extract()
+    // (sqrt_disc - b) / 2a
+    (u128_safe::sub(sqrt_disc, b) / 2 / a).try_as_u64().extract()
 }
 
+
+/// Computes Δz required to sell Δxᵢ shares
 /// Converts amount_out (Δxᵢ) to amount_in (Δz)
 /// Formula: Δz = b Δxᵢ - a Δxᵢ²
 /// where:
@@ -124,22 +142,30 @@ public fun swap_rate_z_to_xi(
 ///    = b Δxᵢ - a Δxᵢ²
 public fun swap_rate_xi_to_z(
     xi: u64,
-    sum_x: u64,
-    n: u64,
+    sum_x: u128,
     delta_xi: u64,
+    num_outcomes: u64,
 ): u64 {
-    assert!(n > 0, 0);
+    assert!(num_outcomes > 1, EInvalidMarket);
 
-    let a_scaled = (PRECISION * (n - 1)) / (4 * n);
-    let b_scaled = (xi * PRECISION) / 2
-        - (sum_x * PRECISION) / (2 * n)
-        + PRECISION / n;
+    let n_u128 = num_outcomes as u128;
+    let xi_u128 = xi as u128;
+    let delta_xi_u128 = delta_xi as u128;
 
-    let term_bx: u128 = (b_scaled as u128) * (delta_xi as u128);
-    let term_ax2: u128 = (a_scaled as u128) * (delta_xi as u128) * (delta_xi as u128);
+    // a = (n−1)/(4n)
+    let a = ((n_u128 - 1) / 4 / n_u128);
 
-    let z_scaled = term_bx - term_ax2;
-    let result = z_scaled / (PRECISION as u128);
+    // b = (xi/2) - (sum_x/2n) + (1/n)
+    let b = ((xi_u128 / 2) - (sum_x / 2 / n_u128) + (1 / n_u128));
 
-    u128::try_as_u64(result).extract()
+    u128_safe::mul(
+        delta_xi_u128,
+        u128_safe::sub(
+            b,
+            u128_safe::mul(
+                a,
+                delta_xi_u128
+            ),
+        )
+    ).try_as_u64().extract()
 }
