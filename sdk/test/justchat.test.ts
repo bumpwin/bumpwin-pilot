@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import { Justchat } from '@/moveCall/justchat';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
-import { Justchat } from '@/moveCall/justchat';
+import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
 
 describe('Justchat Tests', () => {

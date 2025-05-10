@@ -1,6 +1,6 @@
+import type { StructClassLoader } from '../_framework/loader';
 import * as cap from './cap/structs';
 import * as messaging from './messaging/structs';
-import { StructClassLoader } from '../_framework/loader';
 
 export function registerClasses(loader: StructClassLoader) {
   loader.register(cap.MessageFeeCap);

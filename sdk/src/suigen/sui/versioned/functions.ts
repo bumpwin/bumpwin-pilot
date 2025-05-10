@@ -1,6 +1,10 @@
+import type {
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
+} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { GenericArg, generic, obj, pure } from '../../_framework/util';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
+import { type GenericArg, generic, obj, pure } from '../../_framework/util';
 
 export interface CreateArgs {
   initVersion: bigint | TransactionArgument;

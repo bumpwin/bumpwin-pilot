@@ -1,8 +1,8 @@
-import { Transaction } from '@mysten/sui/transactions';
-import { createCoin } from '@/suigen/bump_fam_factory/bump-fam-factory/functions';
-import { publish } from '@/suiClientUtils';
 import { BUMP_FAM_COIN_MOVE_BYTECODE } from '@/moveBytecodes/bumpFamCoin';
+import { publish } from '@/suiClientUtils';
+import { createCoin } from '@/suigen/bump_fam_factory/bump-fam-factory/functions';
 import { newUnsafe } from '@/suigen/sui/url/functions';
+import type { Transaction } from '@mysten/sui/transactions';
 
 export class BumpFamCoin {
   static publishBumpFamCoinPackage(

@@ -1,6 +1,6 @@
+import type { Transaction, TransactionArgument } from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { pure } from '../../_framework/util';
-import { Transaction, TransactionArgument } from '@mysten/sui/transactions';
 
 export function encode(
   tx: Transaction,

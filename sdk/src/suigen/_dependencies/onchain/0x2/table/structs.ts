@@ -1,12 +1,15 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import {
-  PhantomReified,
-  PhantomToTypeStr,
-  PhantomTypeArgument,
-  Reified,
-  StructClass,
-  ToField,
-  ToPhantomTypeArgument,
-  ToTypeStr,
+  type PhantomReified,
+  type PhantomToTypeStr,
+  type PhantomTypeArgument,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToPhantomTypeArgument,
+  type ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -16,22 +19,19 @@ import {
   phantom,
 } from '../../../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../../../_framework/util';
-import { PKG_V29 } from '../index';
+import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== Table =============================== */
 
 export function isTable(type: string): boolean {
   type = compressSuiType(type);
-  return type.startsWith(`${PKG_V29}::table::Table` + '<');
+  return type.startsWith(`${PKG_V30}::table::Table` + '<');
 }
 
 export interface TableFields<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgument> {
@@ -49,12 +49,12 @@ export class Table<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgumen
 {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::table::Table`;
+  static readonly $typeName = `${PKG_V30}::table::Table`;
   static readonly $numTypeParams = 2;
   static readonly $isPhantom = [true, true] as const;
 
   readonly $typeName = Table.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`;
+  readonly $fullTypeName: `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`;
   readonly $typeArgs: [PhantomToTypeStr<T0>, PhantomToTypeStr<T1>];
   readonly $isPhantom = Table.$isPhantom;
 
@@ -68,7 +68,7 @@ export class Table<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgumen
     this.$fullTypeName = composeSuiType(
       Table.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`;
+    ) as `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -84,7 +84,7 @@ export class Table<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgumen
       fullTypeName: composeSuiType(
         Table.$typeName,
         ...[extractType(T0), extractType(T1)]
-      ) as `${typeof PKG_V29}::table::Table<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<T1>>}>`,
+      ) as `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<T1>>}>`,
       typeArgs: [extractType(T0), extractType(T1)] as [
         PhantomToTypeStr<ToPhantomTypeArgument<T0>>,
         PhantomToTypeStr<ToPhantomTypeArgument<T1>>,

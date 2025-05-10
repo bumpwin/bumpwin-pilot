@@ -1,7 +1,11 @@
+import type {
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
+} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { obj, pure, vector } from '../../_framework/util';
 import { Element } from './structs';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function bytes(tx: Transaction, typeArg: string, e: TransactionObjectInput) {
   return tx.moveCall({

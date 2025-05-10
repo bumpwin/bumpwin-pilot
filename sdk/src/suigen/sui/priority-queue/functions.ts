@@ -1,7 +1,11 @@
+import type {
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
+} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { GenericArg, generic, obj, pure, vector } from '../../_framework/util';
+import { type GenericArg, generic, obj, pure, vector } from '../../_framework/util';
 import { Entry } from './structs';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(
   tx: Transaction,
