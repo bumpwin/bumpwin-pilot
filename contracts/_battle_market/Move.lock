@@ -2,11 +2,10 @@
 
 [move]
 version = 3
-manifest_digest = "84916722020B0FBFC53EE2DEE93E059751F100A9A6CA79EDA591CD9904B7ED72"
-deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
+manifest_digest = "89EBBA4C37E6FC3A3EE3819914843B326CD63B7E42B09FCCC44F44F03E2F33C3"
+deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
 dependencies = [
   { id = "Sui", name = "Sui" },
-  { id = "safemath", name = "safemath" },
 ]
 
 [[move.package]]
@@ -21,15 +20,7 @@ dependencies = [
   { id = "MoveStdlib", name = "MoveStdlib" },
 ]
 
-[[move.package]]
-id = "safemath"
-source = { local = "../safemath" }
-
-dependencies = [
-  { id = "Sui", name = "Sui" },
-]
-
 [move.toolchain-version]
-compiler-version = "1.48.0"
+compiler-version = "1.45.2"
 edition = "2024.beta"
 flavor = "sui"

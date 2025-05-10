@@ -51,7 +51,7 @@
 ///     - a = (n−1)/(4n)
 ///     - b = (1/2)xᵢ − (1/2n)∑xⱼ + 1/n
 
-module msr_amm::msr_math;
+module battle_market::market_math;
 
 use std::u128;
 use safemath::{u64_safe, u128_safe};

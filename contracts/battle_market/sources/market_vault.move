@@ -1,20 +1,18 @@
-module msr_amm::outcome_vault;
+module battle_market::market_vault;
 
 use sui::balance::{Self, Balance, Supply};
 use sui::coin::Coin;
 use sui::object_bag::{Self, ObjectBag};
 use sui::sui::SUI;
 
-
-use msr_amm::msr_math;
-
+use battle_market::market_math;
 use safemath::u128_safe;
 
-/// Token representing ownership of a specific outcome
-public struct OutcomeShare<phantom CoinT> has drop {}
+/// Token representing ownership of a specific market outcome
+public struct MarketToken<phantom CoinT> has drop {}
 
-/// Vault for outcome tokens of a specific outcome
-public struct OutcomeVault has key, store {
+/// Vault for market tokens of a specific outcome
+public struct MarketVault has key, store {
     id: UID,
     numeraire_reserve: Balance<SUI>,
     supply_bag: ObjectBag,
@@ -22,20 +20,20 @@ public struct OutcomeVault has key, store {
     total_shares: u128,
 }
 
-public struct OutcomeShareSupply<phantom CoinT> has key, store {
+public struct TokenSupply<phantom CoinT> has key, store {
     id: UID,
-    supply: Supply<OutcomeShare<CoinT>>
+    supply: Supply<MarketToken<CoinT>>
 }
 
-fun new_supply<CoinT>(ctx: &mut TxContext): OutcomeShareSupply<CoinT> {
-    OutcomeShareSupply {
+fun new_supply<CoinT>(ctx: &mut TxContext): TokenSupply<CoinT> {
+    TokenSupply {
         id: object::new(ctx),
-        supply: balance::create_supply(OutcomeShare<CoinT> {}),
+        supply: balance::create_supply(MarketToken<CoinT> {}),
     }
 }
 
-public fun new(ctx: &mut TxContext): OutcomeVault {
-    OutcomeVault {
+public fun new(ctx: &mut TxContext): MarketVault {
+    MarketVault {
         id: object::new(ctx),
         numeraire_reserve: balance::zero(),
         supply_bag: object_bag::new(ctx),
@@ -44,50 +42,50 @@ public fun new(ctx: &mut TxContext): OutcomeVault {
     }
 }
 
-public fun register_coin<CoinT>(self: &mut OutcomeVault, ctx: &mut TxContext) {
+public fun register_coin<CoinT>(self: &mut MarketVault, ctx: &mut TxContext) {
     let type_name = std::type_name::get<CoinT>();
     self.supply_bag.add(type_name, new_supply<CoinT>(ctx));
     self.num_of_outcomes = self.num_of_outcomes + 1;
 }
 
-fun deposit_numeraire(self: &mut OutcomeVault, balance: Balance<SUI>): u64 {
+fun deposit_numeraire(self: &mut MarketVault, balance: Balance<SUI>): u64 {
     self.numeraire_reserve.join(balance)
 }
 
-fun withdraw_numeraire(self: &mut OutcomeVault, amount: u64): Balance<SUI> {
+fun withdraw_numeraire(self: &mut MarketVault, amount: u64): Balance<SUI> {
     self.numeraire_reserve.split(amount)
 }
 
-fun mint_shares<CoinT>(self: &mut OutcomeVault, amount: u64): Balance<OutcomeShare<CoinT>> {
+fun mint_shares<CoinT>(self: &mut MarketVault, amount: u64): Balance<MarketToken<CoinT>> {
     let type_name = std::type_name::get<CoinT>();
-    let share_supply = self.supply_bag.borrow_mut<_, OutcomeShareSupply<CoinT>>(type_name);
+    let share_supply = self.supply_bag.borrow_mut<_, TokenSupply<CoinT>>(type_name);
     let balance = share_supply.supply.increase_supply(amount);
 
     self.total_shares = u128_safe::add(self.total_shares, amount as u128);
     balance
 }
 
-fun burn_shares<CoinT>(self: &mut OutcomeVault, balance: Balance<OutcomeShare<CoinT>>): u64 {
+fun burn_shares<CoinT>(self: &mut MarketVault, balance: Balance<MarketToken<CoinT>>): u64 {
     let type_name = std::type_name::get<CoinT>();
-    let share_supply = self.supply_bag.borrow_mut<_, OutcomeShareSupply<CoinT>>(type_name);
+    let share_supply = self.supply_bag.borrow_mut<_, TokenSupply<CoinT>>(type_name);
     let amount = balance.value();
 
     self.total_shares = u128_safe::sub(self.total_shares, amount as u128);
     share_supply.supply.decrease_supply(balance)
 }
 
-public fun share_supply_value<CoinT>(self: &OutcomeVault): u64 {
+public fun share_supply_value<CoinT>(self: &MarketVault): u64 {
     let type_name = std::type_name::get<CoinT>();
-    let share_supply = self.supply_bag.borrow<_, OutcomeShareSupply<CoinT>>(type_name);
+    let share_supply = self.supply_bag.borrow<_, TokenSupply<CoinT>>(type_name);
     share_supply.supply.supply_value()
 }
 
-public fun total_share_supply_value(self: &OutcomeVault): u128 {
+public fun total_share_supply_value(self: &MarketVault): u128 {
     self.total_shares
 }
 
-public fun buy_shares<CoinT>(self: &mut OutcomeVault, coin_in: Coin<SUI>, ctx: &mut TxContext): Coin<OutcomeShare<CoinT>> {
-    let amount_out = msr_math::swap_rate_z_to_xi(
+public fun buy_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<SUI>, ctx: &mut TxContext): Coin<MarketToken<CoinT>> {
+    let amount_out = market_math::swap_rate_z_to_xi(
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
@@ -100,8 +98,8 @@ public fun buy_shares<CoinT>(self: &mut OutcomeVault, coin_in: Coin<SUI>, ctx: &
     coin_out
 }
 
-public fun sell_shares<CoinT>(self: &mut OutcomeVault, coin_in: Coin<OutcomeShare<CoinT>>, ctx: &mut TxContext): Coin<SUI> {
-    let amount_out = msr_math::swap_rate_xi_to_z(
+public fun sell_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<MarketToken<CoinT>>, ctx: &mut TxContext): Coin<SUI> {
+    let amount_out = market_math::swap_rate_xi_to_z(
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
