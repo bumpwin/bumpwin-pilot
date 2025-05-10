@@ -104,5 +104,9 @@ send-message NETWORK="testnet":
       fee_coin \
       --gas-budget 100000000
 
+
+script-sendChat:
+    cd sdk && bunx tsx scripts/sendChat.ts
+
 poll-justchat-events:
     cd sdk && bunx tsx scripts/listenChatEvent.ts

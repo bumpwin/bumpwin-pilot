@@ -7,3 +7,4 @@ rpc = "https://fullnode.devnet.sui.io:443"
 [packages]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "devnet" }
 ooze_fam_factory = { id = "0x0ecce1d586efcab4a00e4a41ca40dd19c4e1d0363f2d62c332cc96801821e575" }
+justchat = { id = "0xf73a80c23419faf5a4ae031e0be2465493beba564016e20950fdfad26e755cef" }
