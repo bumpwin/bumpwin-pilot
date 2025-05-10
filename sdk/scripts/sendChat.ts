@@ -24,7 +24,7 @@ async function main() {
     console.log('💧 Requesting SUI from faucet...');
     await faucetDevnet(client, address);
     console.log('💰 SUI requested, waiting 5 seconds for confirmation...');
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
     // Create and send message
     await sendChatMessage(message, address);
@@ -65,7 +65,7 @@ async function sendChatMessage(text: string, sender: string) {
       options: {
         showEffects: true,
         showEvents: true,
-        showObjectChanges: true
+        showObjectChanges: true,
       },
     });
 
