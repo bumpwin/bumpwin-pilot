@@ -1,4 +1,4 @@
-/// Brier Score dual SCPM — Operational Definition (Structurally Concrete)
+/// Brier Score dual SCPM — Operational Definition
 /// ----------------------------------------------------------------------
 ///
 /// State Space:
@@ -53,8 +53,10 @@
 
 module battle_market::market_math;
 
-use std::u128;
-use safemath::{u64_safe, u128_safe};
+use std::uq64_64;
+
+
+use safemath::{u64_safe};
 
 const EInvalidMarket: u64 = 1;   // n == 0
 
@@ -62,23 +64,26 @@ const EInvalidMarket: u64 = 1;   // n == 0
 /// C(q) = (1/4) ∑ qᵢ² − (1/4n)(∑ qᵢ)² + (1/n) ∑ qᵢ
 public fun cost(
     sum_q: u64,
-    sum_q_sq: u64,
-    n: u64,
+    sum_q_sq: u128,
+    num_outcomes: u64,
 ): u64 {
-    assert!(n > 0, EInvalidMarket);
+    assert!(num_outcomes > 0, EInvalidMarket);
+
+    let sum_q = uq64_64::from_int(sum_q);
+    let n = uq64_64::from_int(num_outcomes);
 
     // Term1: (1/4) * sum_q_sq
-    let term1 = u64_safe::div(sum_q_sq, 4);
+    let term1 = uq64_64::from_quotient(sum_q_sq, 4);
 
     // Term2: (1/4n) * sum_q^2
-    let term2 = u64_safe::muldiv(sum_q, sum_q, 4 * n);
+    let term2 = sum_q.mul(sum_q).div(uq64_64::from_int(4)).div(n);
 
     // Term3: (1/n) * sum_q
-    let term3 = u64_safe::div(sum_q, n);
+    let term3 = sum_q.div(n);
 
     // C(q) = term1 - term2 + term3
-    let result = u64_safe::sub(term1, term2);
-    u64_safe::add(result, term3)
+    let cost = term1.sub(term2).add(term3);
+    cost.to_int()
 }
 
 /// Computes the marginal price pᵢ(q) = ∂C/∂qᵢ
@@ -91,9 +96,19 @@ public fun price(
     // Compute sum_other = sum_q - qi
     let sum_other = u64_safe::sub(sum_q, qi);
 
-    u128::try_as_u64(
-        ((3 * qi as u128) - (sum_other as u128) + 2) / 8
-    ).extract()
+    // price = (1/8)(3qi - sum_other) + 1/4
+    let price = uq64_64::from_quotient(3 * (qi as u128), 8)
+        .sub(uq64_64::from_quotient(sum_other as u128, 8))
+        .add(uq64_64::from_quotient(1, 4))
+    ;
+    price.to_int()
+}
+
+public fun sqrt_uq64_64(x: uq64_64::UQ64_64): uq64_64::UQ64_64 {
+    let x_raw: u128 = x.to_raw();                // x × 2⁶⁴
+    let sqrt_input: u128 = x_raw << 64;          // x × 2¹²⁸
+    let sqrt_raw: u128 = sqrt_input.sqrt(); // √(x × 2¹²⁸)
+    uq64_64::from_raw(sqrt_raw)            // = sqrt(x)
 }
 
 /// Converts amount_in (Δz) to amount_out (Δxᵢ)
@@ -111,20 +126,26 @@ public fun swap_rate_z_to_xi(
 ): u64 {
     assert!(num_outcomes > 1, EInvalidMarket);
 
-    let n_u128 = num_outcomes as u128;
-    let xi_u128 = xi as u128;
+    let n = num_outcomes as u128;
 
-    // a = (n−1)/(4n)
-    let a = ((n_u128 - 1) / 4 / n_u128);
+    // a = (n − 1) / (4n)
+    let a =  uq64_64::from_quotient(n - 1, 4 * n);
 
-    // b = (xi/2) - (sum_x/2n) + (1/n)
-    let b = ((xi_u128 / 2) - (sum_x / 2 / n_u128) + (1 / n_u128));
+    // b = (xi / 2) - (sum_x / 2n) + (1 / n)
+    let b = uq64_64::from_quotient(xi as u128, 2)
+        .sub(uq64_64::from_quotient(sum_x, 2 * (num_outcomes as u128)))
+        .add(uq64_64::from_quotient(1, n))
+    ;
 
     // sqrt_disc = sqrt(b^2 + 4aΔz)
-    let sqrt_disc = u128::sqrt(b * b + 4 * a * (delta_z as u128));
+    let disc = b.mul(b).add(a.mul(uq64_64::from_int(delta_z)));
+    let sqrt_disc = sqrt_uq64_64(disc);
+
 
     // (sqrt_disc - b) / 2a
-    (u128_safe::sub(sqrt_disc, b) / 2 / a).try_as_u64().extract()
+    let delta_xi = sqrt_disc.sub(b).div(uq64_64::from_int(2)).div(a);
+
+    delta_xi.to_int()
 }
 
 
@@ -145,24 +166,19 @@ public fun swap_rate_xi_to_z(
 ): u64 {
     assert!(num_outcomes > 1, EInvalidMarket);
 
-    let n_u128 = num_outcomes as u128;
-    let xi_u128 = xi as u128;
-    let delta_xi_u128 = delta_xi as u128;
+    let n = num_outcomes as u128;
 
-    // a = (n−1)/(4n)
-    let a = ((n_u128 - 1) / 4 / n_u128);
+    // a = (n − 1) / (4n)
+    let a =  uq64_64::from_quotient(n - 1, 4 * n);
 
-    // b = (xi/2) - (sum_x/2n) + (1/n)
-    let b = ((xi_u128 / 2) - (sum_x / 2 / n_u128) + (1 / n_u128));
+    // b = (xi / 2) - (sum_x / 2n) + (1 / n)
+    let b = uq64_64::from_quotient(xi as u128, 2)
+        .sub(uq64_64::from_quotient(sum_x, 2 * (num_outcomes as u128)))
+        .add(uq64_64::from_quotient(1, n))
+    ;
 
-    u128_safe::mul(
-        delta_xi_u128,
-        u128_safe::sub(
-            b,
-            u128_safe::mul(
-                a,
-                delta_xi_u128
-            ),
-        )
-    ).try_as_u64().extract()
+    // z = Δxi × (b − a × Δxi)
+    let delta_xi = uq64_64::from_int(delta_xi);
+    let delta_z = delta_xi.mul(b.sub(a.mul(delta_xi)));
+    delta_z.to_int()
 }

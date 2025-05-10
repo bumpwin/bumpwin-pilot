@@ -16,13 +16,17 @@ public struct MarketVault has key, store {
     id: UID,
     numeraire_reserve: Balance<SUI>,
     supply_bag: ObjectBag,
-    num_of_outcomes: u64,
+    num_outcomes: u64,
     total_shares: u128,
 }
 
 public struct TokenSupply<phantom CoinT> has key, store {
     id: UID,
     supply: Supply<MarketToken<CoinT>>
+}
+
+public fun num_outcomes(self: &MarketVault): u64 {
+    self.num_outcomes
 }
 
 fun new_supply<CoinT>(ctx: &mut TxContext): TokenSupply<CoinT> {
@@ -37,7 +41,7 @@ public fun new(ctx: &mut TxContext): MarketVault {
         id: object::new(ctx),
         numeraire_reserve: balance::zero(),
         supply_bag: object_bag::new(ctx),
-        num_of_outcomes: 0,
+        num_outcomes: 0,
         total_shares: 0,
     }
 }
@@ -45,7 +49,7 @@ public fun new(ctx: &mut TxContext): MarketVault {
 public fun register_coin<CoinT>(self: &mut MarketVault, ctx: &mut TxContext) {
     let type_name = std::type_name::get<CoinT>();
     self.supply_bag.add(type_name, new_supply<CoinT>(ctx));
-    self.num_of_outcomes = self.num_of_outcomes + 1;
+    self.num_outcomes = self.num_outcomes + 1;
 }
 
 fun deposit_numeraire(self: &mut MarketVault, balance: Balance<SUI>): u64 {
@@ -89,7 +93,7 @@ public fun buy_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<SUI>, ctx: &m
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
-        self.num_of_outcomes
+        self.num_outcomes
     );
 
     self.deposit_numeraire(coin_in.into_balance());
@@ -103,9 +107,19 @@ public fun sell_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<MarketToken<
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
-        self.num_of_outcomes
+        self.num_outcomes
     );
 
     self.burn_shares<CoinT>(coin_in.into_balance());
     self.withdraw_numeraire(amount_out).into_coin(ctx)
+}
+
+#[test_only]
+public(package) fun mint_shares_for_test<CoinT>(self: &mut MarketVault, amount: u64): Balance<MarketToken<CoinT>> {
+    mint_shares<CoinT>(self, amount)
+}
+
+#[test_only]
+public(package) fun burn_shares_for_test<CoinT>(self: &mut MarketVault, balance: Balance<MarketToken<CoinT>>): u64 {
+    burn_shares<CoinT>(self, balance)
 }
