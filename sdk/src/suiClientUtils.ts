@@ -1,7 +1,7 @@
-import { Transaction } from '@mysten/sui/transactions';
-import { SuiClient } from '@mysten/sui/client';
+import type { SuiClient } from '@mysten/sui/client';
 import { getFaucetHost } from '@mysten/sui/faucet';
-import type { MoveBytecode, FaucetResponse } from './types';
+import type { Transaction } from '@mysten/sui/transactions';
+import type { FaucetResponse, MoveBytecode } from './types';
 
 const toBytes = (b64: string) => {
   const binary = atob(b64);

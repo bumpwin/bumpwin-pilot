@@ -1,6 +1,10 @@
+import type {
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
+} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { GenericArg, obj, pure, vector } from '../../_framework/util';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
+import { type GenericArg, obj, pure, vector } from '../../_framework/util';
 
 export function create(tx: Transaction) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::random::create`, arguments: [] });

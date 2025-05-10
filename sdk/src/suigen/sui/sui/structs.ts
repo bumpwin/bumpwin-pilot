@@ -1,25 +1,25 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   phantom,
 } from '../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
-import { PKG_V29 } from '../index';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
+import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import { PKG_V30 } from '../index';
 
 /* ============================== SUI =============================== */
 
 export function isSUI(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::sui::SUI`;
+  return type === `${PKG_V30}::sui::SUI`;
 }
 
 export interface SUIFields {
@@ -31,12 +31,12 @@ export type SUIReified = Reified<SUI, SUIFields>;
 export class SUI implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::sui::SUI`;
+  static readonly $typeName = `${PKG_V30}::sui::SUI`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = SUI.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::sui::SUI`;
+  readonly $fullTypeName: `${typeof PKG_V30}::sui::SUI`;
   readonly $typeArgs: [];
   readonly $isPhantom = SUI.$isPhantom;
 
@@ -46,7 +46,7 @@ export class SUI implements StructClass {
     this.$fullTypeName = composeSuiType(
       SUI.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::sui::SUI`;
+    ) as `${typeof PKG_V30}::sui::SUI`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -55,7 +55,7 @@ export class SUI implements StructClass {
   static reified(): SUIReified {
     return {
       typeName: SUI.$typeName,
-      fullTypeName: composeSuiType(SUI.$typeName, ...[]) as `${typeof PKG_V29}::sui::SUI`,
+      fullTypeName: composeSuiType(SUI.$typeName, ...[]) as `${typeof PKG_V30}::sui::SUI`,
       typeArgs: [] as [],
       isPhantom: SUI.$isPhantom,
       reifiedTypeArgs: [],

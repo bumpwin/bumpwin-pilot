@@ -100,7 +100,7 @@ send-message NETWORK="testnet":
       --assign fee_coin \
       --move-call {{MESSAGING_PACKAGE_ID}}::messaging::send_message \
       @{{FEE_CAP_ID}} \
-      '"Hello, World!"' \
+      '"Hello, suisui!"' \
       fee_coin \
       --gas-budget 100000000
 

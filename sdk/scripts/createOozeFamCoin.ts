@@ -3,9 +3,9 @@ import { SuiClient } from '@mysten/sui/client';
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
 
-import { isCoinMetadata, isTreasuryCap } from '../src/suigen/sui/coin/structs';
-import { faucetDevnet } from '../src/suiClientUtils';
 import { OozeFamCoin } from '../src/moveCall/oozeFamCoin';
+import { faucetDevnet } from '../src/suiClientUtils';
+import { isCoinMetadata, isTreasuryCap } from '../src/suigen/sui/coin/structs';
 
 const client = new SuiClient({ url: getFullnodeUrl('devnet') });
 

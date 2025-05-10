@@ -1,18 +1,18 @@
-import { compressSuiType, parseTypeName } from './util';
+import { registerClasses } from './init-loader';
 import {
-  PhantomReified,
-  PhantomTypeArgument,
-  Primitive,
-  Reified,
-  StructClass,
-  StructClassReified,
-  TypeArgument,
-  VectorClass,
-  VectorClassReified,
+  type PhantomReified,
+  type PhantomTypeArgument,
+  type Primitive,
+  type Reified,
+  type StructClass,
+  type StructClassReified,
+  type TypeArgument,
+  type VectorClass,
+  type VectorClassReified,
   phantom,
   vector,
 } from './reified';
-import { registerClasses } from './init-loader';
+import { compressSuiType, parseTypeName } from './util';
 
 export type PrimitiveValue = string | number | boolean | bigint;
 

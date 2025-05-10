@@ -1,12 +1,15 @@
+import { type BcsType, bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import * as reified from '../../../../_framework/reified';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeArgument,
-  ToTypeStr,
-  TypeArgument,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeArgument,
+  type ToTypeStr,
+  type TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -18,22 +21,19 @@ import {
   toBcs,
 } from '../../../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../../../_framework/util';
-import { Vector } from '../../../../_framework/vector';
-import { PKG_V15 } from '../index';
-import { BcsType, bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
+import type { Vector } from '../../../../_framework/vector';
+import { PKG_V16 } from '../index';
 
 /* ============================== Option =============================== */
 
 export function isOption(type: string): boolean {
   type = compressSuiType(type);
-  return type.startsWith(`${PKG_V15}::option::Option` + '<');
+  return type.startsWith(`${PKG_V16}::option::Option` + '<');
 }
 
 export interface OptionFields<Element extends TypeArgument> {
@@ -48,14 +48,14 @@ export type OptionReified<Element extends TypeArgument> = Reified<
 export class Option<Element extends TypeArgument> implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V15}::option::Option`;
+  static readonly $typeName = `${PKG_V16}::option::Option`;
   static readonly $numTypeParams = 1;
   static readonly $isPhantom = [false] as const;
 
   __inner: Element = null as unknown as Element; // for type checking in reified.ts
 
   readonly $typeName = Option.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V15}::option::Option<${ToTypeStr<Element>}>`;
+  readonly $fullTypeName: `${typeof PKG_V16}::option::Option<${ToTypeStr<Element>}>`;
   readonly $typeArgs: [ToTypeStr<Element>];
   readonly $isPhantom = Option.$isPhantom;
 
@@ -65,7 +65,7 @@ export class Option<Element extends TypeArgument> implements StructClass {
     this.$fullTypeName = composeSuiType(
       Option.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V15}::option::Option<${ToTypeStr<Element>}>`;
+    ) as `${typeof PKG_V16}::option::Option<${ToTypeStr<Element>}>`;
     this.$typeArgs = typeArgs;
 
     this.vec = fields.vec;
@@ -79,7 +79,7 @@ export class Option<Element extends TypeArgument> implements StructClass {
       fullTypeName: composeSuiType(
         Option.$typeName,
         ...[extractType(Element)]
-      ) as `${typeof PKG_V15}::option::Option<${ToTypeStr<ToTypeArgument<Element>>}>`,
+      ) as `${typeof PKG_V16}::option::Option<${ToTypeStr<ToTypeArgument<Element>>}>`,
       typeArgs: [extractType(Element)] as [ToTypeStr<ToTypeArgument<Element>>],
       isPhantom: Option.$isPhantom,
       reifiedTypeArgs: [Element],

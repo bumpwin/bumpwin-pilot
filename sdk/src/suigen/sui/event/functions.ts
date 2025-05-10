@@ -1,6 +1,6 @@
+import type { Transaction } from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { GenericArg, generic } from '../../_framework/util';
-import { Transaction } from '@mysten/sui/transactions';
+import { type GenericArg, generic } from '../../_framework/util';
 
 export function emit(tx: Transaction, typeArg: string, event: GenericArg) {
   return tx.moveCall({

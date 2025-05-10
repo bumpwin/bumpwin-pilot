@@ -1,28 +1,28 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import * as reified from '../../_framework/reified';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   fieldToJSON,
   phantom,
 } from '../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
-import { Vector } from '../../_framework/vector';
-import { PKG_V29 } from '../index';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
+import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import type { Vector } from '../../_framework/vector';
+import { PKG_V30 } from '../index';
 
 /* ============================== BCS =============================== */
 
 export function isBCS(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::bcs::BCS`;
+  return type === `${PKG_V30}::bcs::BCS`;
 }
 
 export interface BCSFields {
@@ -34,12 +34,12 @@ export type BCSReified = Reified<BCS, BCSFields>;
 export class BCS implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::bcs::BCS`;
+  static readonly $typeName = `${PKG_V30}::bcs::BCS`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = BCS.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::bcs::BCS`;
+  readonly $fullTypeName: `${typeof PKG_V30}::bcs::BCS`;
   readonly $typeArgs: [];
   readonly $isPhantom = BCS.$isPhantom;
 
@@ -49,7 +49,7 @@ export class BCS implements StructClass {
     this.$fullTypeName = composeSuiType(
       BCS.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::bcs::BCS`;
+    ) as `${typeof PKG_V30}::bcs::BCS`;
     this.$typeArgs = typeArgs;
 
     this.bytes = fields.bytes;
@@ -58,7 +58,7 @@ export class BCS implements StructClass {
   static reified(): BCSReified {
     return {
       typeName: BCS.$typeName,
-      fullTypeName: composeSuiType(BCS.$typeName, ...[]) as `${typeof PKG_V29}::bcs::BCS`,
+      fullTypeName: composeSuiType(BCS.$typeName, ...[]) as `${typeof PKG_V30}::bcs::BCS`,
       typeArgs: [] as [],
       isPhantom: BCS.$isPhantom,
       reifiedTypeArgs: [],

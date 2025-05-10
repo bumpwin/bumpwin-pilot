@@ -1,3 +1,4 @@
+import type { StructClassLoader } from '../../../_framework/loader';
 import * as authenticatorState from './authenticator-state/structs';
 import * as bag from './bag/structs';
 import * as balance from './balance/structs';
@@ -36,7 +37,6 @@ import * as vecSet from './vec-set/structs';
 import * as versioned from './versioned/structs';
 import * as zkloginVerifiedId from './zklogin-verified-id/structs';
 import * as zkloginVerifiedIssuer from './zklogin-verified-issuer/structs';
-import { StructClassLoader } from '../../../_framework/loader';
 
 export function registerClasses(loader: StructClassLoader) {
   loader.register(authenticatorState.AuthenticatorState);

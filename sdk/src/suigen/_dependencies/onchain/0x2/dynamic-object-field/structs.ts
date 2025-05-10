@@ -1,11 +1,14 @@
+import { type BcsType, bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeArgument,
-  ToTypeStr,
-  TypeArgument,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeArgument,
+  type ToTypeStr,
+  type TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -17,21 +20,18 @@ import {
   toBcs,
 } from '../../../../_framework/reified';
 import {
-  FieldsWithTypes,
+  type FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../../../_framework/util';
-import { PKG_V29 } from '../index';
-import { BcsType, bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
+import { PKG_V30 } from '../index';
 
 /* ============================== Wrapper =============================== */
 
 export function isWrapper(type: string): boolean {
   type = compressSuiType(type);
-  return type.startsWith(`${PKG_V29}::dynamic_object_field::Wrapper` + '<');
+  return type.startsWith(`${PKG_V30}::dynamic_object_field::Wrapper` + '<');
 }
 
 export interface WrapperFields<T0 extends TypeArgument> {
@@ -43,12 +43,12 @@ export type WrapperReified<T0 extends TypeArgument> = Reified<Wrapper<T0>, Wrapp
 export class Wrapper<T0 extends TypeArgument> implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::dynamic_object_field::Wrapper`;
+  static readonly $typeName = `${PKG_V30}::dynamic_object_field::Wrapper`;
   static readonly $numTypeParams = 1;
   static readonly $isPhantom = [false] as const;
 
   readonly $typeName = Wrapper.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::dynamic_object_field::Wrapper<${ToTypeStr<T0>}>`;
+  readonly $fullTypeName: `${typeof PKG_V30}::dynamic_object_field::Wrapper<${ToTypeStr<T0>}>`;
   readonly $typeArgs: [ToTypeStr<T0>];
   readonly $isPhantom = Wrapper.$isPhantom;
 
@@ -58,7 +58,7 @@ export class Wrapper<T0 extends TypeArgument> implements StructClass {
     this.$fullTypeName = composeSuiType(
       Wrapper.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::dynamic_object_field::Wrapper<${ToTypeStr<T0>}>`;
+    ) as `${typeof PKG_V30}::dynamic_object_field::Wrapper<${ToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
     this.name = fields.name;
@@ -72,7 +72,7 @@ export class Wrapper<T0 extends TypeArgument> implements StructClass {
       fullTypeName: composeSuiType(
         Wrapper.$typeName,
         ...[extractType(T0)]
-      ) as `${typeof PKG_V29}::dynamic_object_field::Wrapper<${ToTypeStr<ToTypeArgument<T0>>}>`,
+      ) as `${typeof PKG_V30}::dynamic_object_field::Wrapper<${ToTypeStr<ToTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [ToTypeStr<ToTypeArgument<T0>>],
       isPhantom: Wrapper.$isPhantom,
       reifiedTypeArgs: [T0],

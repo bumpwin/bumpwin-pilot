@@ -1,6 +1,10 @@
+import type {
+  Transaction,
+  TransactionArgument,
+  TransactionObjectInput,
+} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { obj, pure } from '../../_framework/util';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export interface V2AddArgs {
   denyList: TransactionObjectInput;

@@ -3,3 +3,5 @@ export const hello = () => 'Hello SDK world';
 
 export * from './moveCall/bumpFamCoin';
 export * from './moveCall/justchat';
+
+export * from './events/justchat';

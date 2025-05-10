@@ -1,28 +1,28 @@
+import { bcs } from '@mysten/sui/bcs';
+import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import * as reified from '../../../../_framework/reified';
 import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
+  type PhantomReified,
+  type Reified,
+  type StructClass,
+  type ToField,
+  type ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   fieldToJSON,
   phantom,
 } from '../../../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
-import { Vector } from '../../../../_framework/vector';
-import { PKG_V29 } from '../index';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
+import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
+import type { Vector } from '../../../../_framework/vector';
+import { PKG_V30 } from '../index';
 
 /* ============================== TxContext =============================== */
 
 export function isTxContext(type: string): boolean {
   type = compressSuiType(type);
-  return type === `${PKG_V29}::tx_context::TxContext`;
+  return type === `${PKG_V30}::tx_context::TxContext`;
 }
 
 export interface TxContextFields {
@@ -38,12 +38,12 @@ export type TxContextReified = Reified<TxContext, TxContextFields>;
 export class TxContext implements StructClass {
   __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V29}::tx_context::TxContext`;
+  static readonly $typeName = `${PKG_V30}::tx_context::TxContext`;
   static readonly $numTypeParams = 0;
   static readonly $isPhantom = [] as const;
 
   readonly $typeName = TxContext.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V29}::tx_context::TxContext`;
+  readonly $fullTypeName: `${typeof PKG_V30}::tx_context::TxContext`;
   readonly $typeArgs: [];
   readonly $isPhantom = TxContext.$isPhantom;
 
@@ -57,7 +57,7 @@ export class TxContext implements StructClass {
     this.$fullTypeName = composeSuiType(
       TxContext.$typeName,
       ...typeArgs
-    ) as `${typeof PKG_V29}::tx_context::TxContext`;
+    ) as `${typeof PKG_V30}::tx_context::TxContext`;
     this.$typeArgs = typeArgs;
 
     this.sender = fields.sender;
@@ -73,7 +73,7 @@ export class TxContext implements StructClass {
       fullTypeName: composeSuiType(
         TxContext.$typeName,
         ...[]
-      ) as `${typeof PKG_V29}::tx_context::TxContext`,
+      ) as `${typeof PKG_V30}::tx_context::TxContext`,
       typeArgs: [] as [],
       isPhantom: TxContext.$isPhantom,
       reifiedTypeArgs: [],
@@ -106,12 +106,10 @@ export class TxContext implements StructClass {
 
   static get bcs() {
     return bcs.struct('TxContext', {
-      sender: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      sender: bcs.bytes(32).transform({
+        input: (val: string) => fromHEX(val),
+        output: (val: Uint8Array) => toHEX(val),
+      }),
       tx_hash: bcs.vector(bcs.u8()),
       epoch: bcs.u64(),
       epoch_timestamp_ms: bcs.u64(),
