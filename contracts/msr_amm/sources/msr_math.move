@@ -1,24 +1,44 @@
 /// Brier-Dual SCPM — Operational Definition
+/// -----------------------------------------
 ///
-/// Cost Function:
-/// C(q) = (1/4)∑q_i^2 - (1/4n)(∑q_i)^2 + (1/n)∑q_i
+/// State Space:
+/// - Let n be the number of mutually exclusive and exhaustive outcomes.
+/// - Let q ∈ ℝⁿ be the market state vector, where q_i is the total quantity of outcome-i shares.
+///   Each unit of q_i represents one share, i.e., a claim to 1 unit of numeraire if outcome i occurs.
 ///
-/// Price Function:
-/// p_i = (1/8)(3q_i - ∑(j≠i)q_j) + 1/4
+/// Share Definition:
+/// - An outcome-i share is a contract that pays exactly 1 unit of numeraire if and only if outcome i occurs.
+/// - We refer to each unit of such a share as a "share" in implementation contexts, but the object is formally a share.
 ///
-/// Trade:
-/// For trade bundle δ ∈ ℝⁿ, cost = C(q + δ) - C(q)
-/// Prices update as q → q + δ
+/// Cost Function (denominated in numeraire):
+/// - C(q) = (1/4) ∑ q_i² − (1/4n)(∑ q_i)² + (1/n) ∑ q_i
+/// - C(q) denotes the total cost to reach position q from the empty state.
+///
+/// Price Function (units: numeraire per share):
+/// - p_i(q) = ∂C/∂q_i = (1/8)(3q_i − ∑_{j≠i} q_j) + 1/4
+/// - p_i(q) is the marginal price of purchasing one additional unit of outcome-i share at position q.
+///
+/// Trading:
+/// - To purchase a bundle δ ∈ ℝⁿ  (where δ_i is the number of outcome-i shares), pay:
+///     C(q + δ) − C(q) (in units of numeraire)
+/// - Update state:  q ← q + δ
+///
+/// Payout:
+/// - Once outcome i* is realized, each outstanding unit of outcome-i* share pays 1 unit of numeraire.
+/// - All other outcome shares expire worthless.
 ///
 /// Guarantees:
-/// ∑p_i = 1, 0 ≤ p_i ≤ 1, max loss ≤ 1/2
+/// - Price normalization:        ∑ p_i(q) = 1
+/// - Bounded price domain:       0 ≤ p_i(q) ≤ 1
+/// - Bounded loss:               sup₍q₎ C(q) − inf₍i₎ q_i ≤ 1/2
+/// - C(q) is convex in q, ensuring consistent prices and no arbitrage.
 ///
-/// Core Properties:
-/// - Cost Function: C(q) = (1/4)∑q_i^2 - (1/4n)(∑q_i)^2 + (1/n)∑q_i
-/// - Price Function: p_i = (1/8)(3q_i - ∑(j≠i)q_j) + 1/4
-/// - Guarantees: ∑p_i = 1, 0 ≤ p_i ≤ 1
-/// - Loss Bound: Maximum 1/2
-/// - Computational: Quadratic efficiency
+/// Units Summary:
+/// - q_i:   number of shares (dimensionless)
+/// - p_i:   numeraire per share
+/// - C(q):  numeraire
+///
+
 
 module msr_amm::msr_amm;
 
@@ -36,7 +56,7 @@ const E_ZERO_AMOUNT: u64 = 2;
 const E_OUTCOME_NOT_FOUND: u64 = 3;
 
 /// Token representing ownership of a specific outcome
-public struct OutcomeToken<phantom CoinT> has drop {}
+public struct OutcomeShare<phantom CoinT> has drop {}
 
 /// Main prediction market structure
 public struct PredictionMarket has key, store {
@@ -52,10 +72,10 @@ public struct PredictionMarket has key, store {
     outcome_count: u64,           // Number of outcomes (n)
 }
 
-/// Vault for outcome tokens of a specific outcome
+/// Vault for outcome shares of a specific outcome
 public struct OutcomeVault<phantom CoinT> has key, store {
     id: UID,
-    outcome_reserve: Balance<OutcomeToken<CoinT>>,
+    outcome_reserve: Balance<OutcomeShare<CoinT>>,
 }
 
 /// Creates a new prediction market
@@ -109,9 +129,9 @@ fun update_market_quantities(
     is_increase: bool
 ) {
     assert!(delta > 0, E_ZERO_AMOUNT);
-    assert!(vec_map::contains(&market.quantities, &vault_id), E_OUTCOME_NOT_FOUND);
+    assert!(market.quantities.contains(&vault_id), E_OUTCOME_NOT_FOUND);
 
-    let old_quantity = *vec_map::get(&market.quantities, &vault_id);
+    let old_quantity = *market.quantities.get(&vault_id);
     let new_quantity = if (is_increase) {
         old_quantity + delta
     } else {
@@ -151,9 +171,9 @@ fun compute_cost_function(market: &PredictionMarket): u64 {
 /// @param vault_id - The ID of the outcome vault
 /// @return The calculated probability (as a decimal between 0-1, scaled by PRECISION)
 public fun get_outcome_probability(market: &PredictionMarket, vault_id: ID): u64 {
-    assert!(vec_map::contains(&market.quantities, &vault_id), E_OUTCOME_NOT_FOUND);
+    assert!(market.quantities.contains(&vault_id), E_OUTCOME_NOT_FOUND);
 
-    let q_i = *vec_map::get(&market.quantities, &vault_id);
+    let q_i = *market.quantities.get(&vault_id);
 
     // More efficient: sum_other_q = sum_q - q_i
     let sum_other_q = market.sum_quantities - q_i;
@@ -166,18 +186,18 @@ public fun get_outcome_probability(market: &PredictionMarket, vault_id: ID): u64
     (term1 + term2) / PRECISION
 }
 
-/// Buys outcome tokens with SUI
+/// Buys outcome shares with SUI
 /// @param market - The prediction market
 /// @param vault - The outcome vault
 /// @param payment - The SUI coins to spend
 /// @param ctx - Transaction context
-/// @return The outcome tokens received
+/// @return The outcome shares received
 public fun buy_prediction<CoinT>(
     market: &mut PredictionMarket,
     vault: &mut OutcomeVault<CoinT>,
     payment: Coin<SUI>,
     ctx: &mut TxContext
-): Coin<OutcomeToken<CoinT>> {
+): Coin<OutcomeShare<CoinT>> {
     let amount = coin::value(&payment);
     assert!(amount > 0, E_ZERO_AMOUNT);
 
@@ -192,29 +212,29 @@ public fun buy_prediction<CoinT>(
     // Get cost after trade (from cached value)
     let cost_after = market.current_cost;
 
-    // Calculate amount of outcome tokens to mint
-    let tokens_to_mint = cost_after - cost_before;
+    // Calculate amount of outcome shares to mint
+    let shares_to_mint = cost_after - cost_before;
 
     // Update reserves
     coin::put(&mut market.quote_reserve, payment);
 
-    // Mint new outcome tokens
-    coin::from_balance(balance::create_for_testing<OutcomeToken<CoinT>>(tokens_to_mint), ctx)
+    // Mint new outcome shares
+    coin::from_balance(balance::create_for_testing<OutcomeShare<CoinT>>(shares_to_mint), ctx)
 }
 
-/// Sells outcome tokens for SUI
+/// Sells outcome shares for SUI
 /// @param market - The prediction market
 /// @param vault - The outcome vault
-/// @param tokens - The outcome tokens to sell
+/// @param shares - The outcome shares to sell
 /// @param ctx - Transaction context
 /// @return The SUI coins received
 public fun sell_prediction<CoinT>(
     market: &mut PredictionMarket,
     vault: &mut OutcomeVault<CoinT>,
-    tokens: Coin<OutcomeToken<CoinT>>,
+    shares: Coin<OutcomeShare<CoinT>>,
     ctx: &mut TxContext
 ): Coin<SUI> {
-    let amount = coin::value(&tokens);
+    let amount = coin::value(&shares);
     assert!(amount > 0, E_ZERO_AMOUNT);
 
     let vault_id = object::uid_to_inner(&vault.id);
@@ -233,7 +253,7 @@ public fun sell_prediction<CoinT>(
     assert!(sui_to_return <= balance::value(&market.quote_reserve), E_INSUFFICIENT_BALANCE);
 
     // Update reserves
-    coin::put(&mut vault.outcome_reserve, tokens);
+    coin::put(&mut vault.outcome_reserve, shares);
 
     // Return SUI
     coin::take(&mut market.quote_reserve, sui_to_return, ctx)
@@ -244,8 +264,8 @@ public fun sell_prediction<CoinT>(
 /// @param vault_id - The ID of the outcome vault
 /// @return The current quantity
 public fun get_outcome_quantity(market: &PredictionMarket, vault_id: ID): u64 {
-    assert!(vec_map::contains(&market.quantities, &vault_id), E_OUTCOME_NOT_FOUND);
-    *vec_map::get(&market.quantities, &vault_id)
+    assert!(market.quantities.contains(&vault_id), E_OUTCOME_NOT_FOUND);
+    *market.quantities.get(&vault_id)
 }
 
 /// Gets the current market state information

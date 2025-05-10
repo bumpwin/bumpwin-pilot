@@ -4,7 +4,7 @@ module msr_amm::test_amm;
 use sui::test_scenario::{Self as test, ctx};
 use sui::coin::{Self, Coin};
 use sui::sui::SUI;
-use msr_amm::msr_amm::{Self, PredictionMarket, OutcomeVault, OutcomeToken};
+use msr_amm::msr_amm::{Self, PredictionMarket, OutcomeVault, OutcomeShare};
 use sui::transfer;
 
 const ALICE: address = @0xA11CE;
@@ -81,7 +81,7 @@ fun test_sell_prediction() {
     {
         let mut market = test::take_shared<PredictionMarket>(test);
         let mut vault = test::take_shared<OutcomeVault<SUI>>(test);
-        let prediction_tokens = test::take_from_address<Coin<OutcomeToken<SUI>>>(test, ALICE);
+        let prediction_tokens = test::take_from_address<Coin<OutcomeShare<SUI>>>(test, ALICE);
 
         let sui = msr_amm::sell_prediction(&mut market, &mut vault, prediction_tokens, test.ctx());
         assert!(coin::value(&sui) > 0, 1);
