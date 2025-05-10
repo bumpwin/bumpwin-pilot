@@ -56,8 +56,6 @@ module battle_market::market_math;
 use std::uq64_64;
 
 
-use safemath::{u64_safe};
-
 const EInvalidMarket: u64 = 1;   // n == 0
 
 /// Computes total cost in numeraire to reach state x
@@ -94,7 +92,7 @@ public fun price(
     qi: u64,
 ): u64 {
     // Compute sum_other = sum_q - qi
-    let sum_other = u64_safe::sub(sum_q, qi);
+    let sum_other = safemath::u64_safe::sub(sum_q, qi);
 
     // price = (1/8)(3qi - sum_other) + 1/4
     let price = uq64_64::from_quotient(3 * (qi as u128), 8)
@@ -104,12 +102,6 @@ public fun price(
     price.to_int()
 }
 
-public fun sqrt_uq64_64(x: uq64_64::UQ64_64): uq64_64::UQ64_64 {
-    let x_raw: u128 = x.to_raw();                // x × 2⁶⁴
-    let sqrt_input: u128 = x_raw << 64;          // x × 2¹²⁸
-    let sqrt_raw: u128 = sqrt_input.sqrt(); // √(x × 2¹²⁸)
-    uq64_64::from_raw(sqrt_raw)            // = sqrt(x)
-}
 
 /// Converts amount_in (Δz) to amount_out (Δxᵢ)
 /// Formula: Δxᵢ = [-b + sqrt(b² + 4aΔz)] / (2a)
@@ -139,7 +131,7 @@ public fun swap_rate_z_to_xi(
 
     // sqrt_disc = sqrt(b^2 + 4aΔz)
     let disc = b.mul(b).add(a.mul(uq64_64::from_int(delta_z)));
-    let sqrt_disc = sqrt_uq64_64(disc);
+    let sqrt_disc = safemath::uq64_safe::sqrt(disc);
 
 
     // (sqrt_disc - b) / 2a
