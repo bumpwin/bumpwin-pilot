@@ -1,11 +1,13 @@
-module round_manager::phase;
+module round_manager::round_phase;
 
 use sui::clock::Clock;
 
 const MS_PER_HOUR: u64 = 3600_000;
 const MS_PER_MINUTE: u64 = 60_000;
 
-public enum DarkNightBatch {
+const EInvalidPhase: u64 = 0;
+
+public enum DarkNightBatch has copy, drop {
     Batch1,
     Batch2,
     Batch3,
@@ -13,7 +15,7 @@ public enum DarkNightBatch {
     Batch5,
 }
 
-public enum RoundPhase {
+public enum RoundPhase has copy, drop {
     BeforeStart,
     Daytime,
     DarkNight(DarkNightBatch),
@@ -57,7 +59,11 @@ public fun round_phase(start_timestamp_ms: u64, clock: &Clock): RoundPhase {
     }
 }
 
-// MS_PER_HOURとMS_PER_MINUTEを外部から参照できるようにする
-public fun ms_per_hour(): u64 { MS_PER_HOUR }
-
-public fun ms_per_minute(): u64 { MS_PER_MINUTE }
+public fun assert_after_end(phase: RoundPhase) {
+    match (phase) {
+        RoundPhase::AfterEnd => {},
+        _ => {
+            abort EInvalidPhase
+        },
+    }
+}

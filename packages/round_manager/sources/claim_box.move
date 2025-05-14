@@ -5,8 +5,7 @@ use std::uq64_64::{Self, UQ64_64};
 use sui::balance::{Balance, Supply};
 use sui::coin::{Self, Coin};
 
-#[allow(missing_phantom)]
-public struct ClaimBox<CoinT> has key, store {
+public struct ClaimBox<phantom CoinT> has key, store {
     id: UID,
     reserve_to_redeem: Balance<CoinT>,
     total_supply_claimed: Supply<OutcomeShare<CoinT>>,

@@ -1,7 +1,9 @@
 module round_manager::battle_round;
 
 use round_manager::meme_registry::{Self, MemeRegistry};
+use round_manager::round_phase::{Self, RoundPhase};
 use sui::balance::Balance;
+use sui::clock::Clock;
 use sui::event;
 
 public struct BattleRound has key, store {
@@ -30,6 +32,10 @@ public(package) fun new(round: u64, start_timestamp_ms: u64, ctx: &mut TxContext
     });
 
     battle_round
+}
+
+public fun phase(self: &BattleRound, clock: &Clock): RoundPhase {
+    round_phase::round_phase(self.start_timestamp_ms, clock)
 }
 
 public fun withdraw_winner_balances<CoinT>(

@@ -1,40 +1,45 @@
 module round_manager::operations;
 
 use round_manager::battle_round::BattleRound;
+use round_manager::bs::BalanceSheet;
+use round_manager::champ_amm::{Self, ChampAMM};
+use round_manager::claim_box::{Self, ClaimBox};
 use sui::balance::Balance;
+use sui::clock::Clock;
 use sui::sui::SUI;
 
 #[allow(unused_field)]
-public struct BalanceSheet<phantom CoinT> has key, store {
+public struct MemeVault<phantom CoinT> has key, store {
     id: UID,
-    sui_reserve: Balance<SUI>,
     meme_reserve: Balance<CoinT>,
 }
 
-#[allow(unused_field)]
-public struct ChampAMM<phantom CoinT> has key, store {
-    id: UID,
-    reserve_sui: Balance<SUI>,
-    reserve_champ: Balance<CoinT>,
-}
-
-#[allow(missing_phantom, unused_field)]
-public struct ClaimeBox<CoinT> has key, store {
-    id: UID,
-    reserve: Balance<CoinT>,
-    total_supply_claimed: u64,
-}
-
 public fun sunrise_settlement<CoinT>(
-    _balance_sheet: &mut BalanceSheet<CoinT>,
     battle_round: &mut BattleRound,
-    _ctx: &mut TxContext,
-): (Balance<CoinT>, Balance<CoinT>) {
-    let (balance1, balance2) = battle_round.withdraw_winner_balances<CoinT>();
+    balance_sheet: BalanceSheet<CoinT>,
+    meme_vault: &mut MemeVault<CoinT>,
+    clock: &Clock,
+    ctx: &mut TxContext,
+): (ChampAMM<CoinT, SUI>, ClaimBox<CoinT>) {
+    battle_round.phase(clock).assert_after_end();
 
-    // TODO: Transfer balances to the winner
-    // transfer to Champ AMM
-    // transfer to Claimer
+    let (sui_reserve, share_supply) = balance_sheet.destroy();
 
-    (balance1, balance2)
+    let total = meme_vault.meme_reserve.value();
+    let champ1 = meme_vault.meme_reserve.split(total/2);
+    let champ2 = meme_vault.meme_reserve.split(total);
+
+    let champ_amm = champ_amm::new<CoinT, SUI>(
+        champ1,
+        sui_reserve,
+        ctx,
+    );
+
+    let claim_box = claim_box::new<CoinT>(
+        champ2,
+        share_supply,
+        ctx,
+    );
+
+    (champ_amm, claim_box)
 }
