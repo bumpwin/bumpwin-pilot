@@ -5,10 +5,12 @@ use round_manager::round;
 use sui::balance::Balance;
 use sui::event;
 
+
 public struct BattleRound has key, store {
     id: UID,
     round: u64,
     meme_registry: MemeRegistry,
+    start_timestamp_ms: u64,
 }
 
 public struct NewRoundEvent has copy, drop {
@@ -16,11 +18,12 @@ public struct NewRoundEvent has copy, drop {
     round: u64,
 }
 
-public(package) fun new(round: u64, ctx: &mut TxContext): BattleRound {
+public(package) fun new(round: u64, start_timestamp_ms: u64, ctx: &mut TxContext): BattleRound {
     let battle_round = BattleRound {
         id: object::new(ctx),
         round,
         meme_registry: meme_registry::new(ctx),
+        start_timestamp_ms,
     };
 
     event::emit(NewRoundEvent {

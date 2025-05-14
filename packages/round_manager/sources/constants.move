@@ -12,4 +12,3 @@ public fun half_total_supply(): u64 { HALF_TOTAL_SUPPLY }
 
 public fun decimals(): u8 { DECIMALS }
 
-public fun hour_ms(): u64 { HOUR_MS }
