@@ -4,12 +4,6 @@ use daymove::constants;
 use daymove::helpers;
 use daymove::utc_offset::{Self, UtcOffset};
 
-// Error codes
-const EInvalidDate: u64 = 1;
-const EInvalidTime: u64 = 2;
-const EPreUnixEpochDate: u64 = 3;
-const EUnderflow: u64 = 4;
-
 // OffsetDateTime structure that stores timestamp_ms and offset
 public struct OffsetDateTime has copy, drop {
     timestamp_ms: u64,
@@ -34,14 +28,6 @@ public fun new_utc(y: u16, m: u8, d: u8, h: u8, min: u8, s: u8): OffsetDateTime 
 public fun from_timestamp_ms(timestamp_ms: u64): OffsetDateTime {
     OffsetDateTime {
         timestamp_ms,
-        offset: utc_offset::utc(),
-    }
-}
-
-// Convert epoch to OffsetDateTime
-public fun from_unix_epoch(unix_epoch_sec: u64): OffsetDateTime {
-    OffsetDateTime {
-        timestamp_ms: unix_epoch_sec * constants::ms_per_second(),
         offset: utc_offset::utc(),
     }
 }
@@ -148,10 +134,10 @@ public fun add_milliseconds(self: &OffsetDateTime, delta: u64): OffsetDateTime {
     }
 }
 
-// Subtract operations - using saturating semantics
+// Subtract operations - with proper error handling
 public fun sub_days(self: &OffsetDateTime, delta: u64): OffsetDateTime {
     let ms_delta = delta * constants::ms_per_day();
-    let new_timestamp = saturating_sub(self.timestamp_ms, ms_delta);
+    let new_timestamp = helpers::try_sub(self.timestamp_ms, ms_delta).extract();
 
     OffsetDateTime {
         timestamp_ms: new_timestamp,
@@ -161,7 +147,7 @@ public fun sub_days(self: &OffsetDateTime, delta: u64): OffsetDateTime {
 
 public fun sub_hours(self: &OffsetDateTime, delta: u64): OffsetDateTime {
     let ms_delta = delta * constants::ms_per_hour();
-    let new_timestamp = saturating_sub(self.timestamp_ms, ms_delta);
+    let new_timestamp = helpers::try_sub(self.timestamp_ms, ms_delta).extract();
 
     OffsetDateTime {
         timestamp_ms: new_timestamp,
@@ -171,7 +157,7 @@ public fun sub_hours(self: &OffsetDateTime, delta: u64): OffsetDateTime {
 
 public fun sub_minutes(self: &OffsetDateTime, delta: u64): OffsetDateTime {
     let ms_delta = delta * constants::ms_per_minute();
-    let new_timestamp = saturating_sub(self.timestamp_ms, ms_delta);
+    let new_timestamp = helpers::try_sub(self.timestamp_ms, ms_delta).extract();
 
     OffsetDateTime {
         timestamp_ms: new_timestamp,
@@ -181,7 +167,7 @@ public fun sub_minutes(self: &OffsetDateTime, delta: u64): OffsetDateTime {
 
 public fun sub_seconds(self: &OffsetDateTime, delta: u64): OffsetDateTime {
     let ms_delta = delta * constants::ms_per_second();
-    let new_timestamp = saturating_sub(self.timestamp_ms, ms_delta);
+    let new_timestamp = helpers::try_sub(self.timestamp_ms, ms_delta).extract();
 
     OffsetDateTime {
         timestamp_ms: new_timestamp,
@@ -190,19 +176,12 @@ public fun sub_seconds(self: &OffsetDateTime, delta: u64): OffsetDateTime {
 }
 
 public fun sub_milliseconds(self: &OffsetDateTime, delta: u64): OffsetDateTime {
-    let new_timestamp = saturating_sub(self.timestamp_ms, delta);
+    let new_timestamp = helpers::try_sub(self.timestamp_ms, delta).extract();
 
     OffsetDateTime {
         timestamp_ms: new_timestamp,
         offset: self.offset,
     }
-}
-
-// =======================================
-// Epoch seconds <--> DateTime conversion
-// =======================================
-public fun to_unix_epoch(self: &OffsetDateTime): u64 {
-    self.timestamp_ms / constants::ms_per_second()
 }
 
 // =======================================
@@ -215,24 +194,4 @@ public fun to_offset(self: &OffsetDateTime, offset: &UtcOffset): OffsetDateTime 
         timestamp_ms: self.timestamp_ms,
         offset: *offset,
     }
-}
-
-// Timezone conversion functions
-public fun with_timezone(self: &OffsetDateTime, timezone: &UtcOffset): OffsetDateTime {
-    to_offset(self, timezone)
-}
-
-// Examples of timezone usage - can be used in application code:
-// let utc_time = daymove::daymove::from_timestamp_ms(timestamp);
-// let jst_time = daymove::daymove::with_timezone(&utc_time, &utc_offset::jst());
-// let est_time = daymove::daymove::with_timezone(&utc_time, &utc_offset::est());
-// let cet_time = daymove::daymove::with_timezone(&utc_time, &utc_offset::cet());
-
-// =======================================
-// Helper functions
-// =======================================
-
-// Saturating subtraction helper - returns max(a - b, 0)
-fun saturating_sub(a: u64, b: u64): u64 {
-    if (a >= b) { a - b } else { 0 }
 }

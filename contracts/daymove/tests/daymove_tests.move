@@ -76,7 +76,7 @@ fun timezone_offsets() {
     // Tokyo (UTC+9 = +540 minutes)
     let tokyo_tz = utc_offset::jst();
     let utc_dt = daymove::from_timestamp_ms(timestamp_ms);
-    let tokyo = daymove::with_timezone(&utc_dt, &tokyo_tz);
+    let tokyo = utc_dt.to_offset(&tokyo_tz);
     assert_eq!(tokyo.year(), 2024);
     assert_eq!(tokyo.month(), 5);
     assert_eq!(tokyo.day(), 14);
@@ -85,7 +85,7 @@ fun timezone_offsets() {
 
     // New York (UTC-5 = -300 minutes) - using EST
     let ny_tz = utc_offset::est();
-    let ny = daymove::with_timezone(&utc_dt, &ny_tz);
+    let ny = utc_dt.to_offset(&ny_tz);
     assert_eq!(ny.year(), 2024);
     assert_eq!(ny.month(), 5);
     assert_eq!(ny.day(), 13);
@@ -192,18 +192,18 @@ fun historical_dates() {
 fun time_component_tests() {
     // Test hour/minute/second components
     let time_test = daymove::new_utc(2024, 6, 15, 23, 59, 59);
-    let time_test_ms = daymove::to_timestamp_ms(&time_test);
+    let time_test_ms = time_test.to_timestamp_ms();
 
     // After 1 second, it should roll over to the next day
     let next_sec = daymove::new_utc(2024, 6, 16, 0, 0, 0);
-    let next_sec_ms = daymove::to_timestamp_ms(&next_sec);
+    let next_sec_ms = next_sec.to_timestamp_ms();
 
     // Check the difference is 1000ms = 1 second
     assert_eq!(next_sec_ms - time_test_ms, 1000);
 
     // Test hour boundaries
     let hour_test = daymove::new_utc(2024, 6, 15, 0, 0, 0);
-    let hour_ms = daymove::to_timestamp_ms(&hour_test);
+    let hour_ms = hour_test.to_timestamp_ms();
 
     // 1 hour later (3600000 ms = 1 hour)
     let hour_plus = daymove::from_timestamp_ms(hour_ms + 3600000);
@@ -218,7 +218,7 @@ fun timestamp_ms_precision() {
     let date = daymove::new_utc(2024, 1, 1, 12, 30, 45);
 
     // Convert to milliseconds
-    let ms = daymove::to_timestamp_ms(&date);
+    let ms = date.to_timestamp_ms();
 
     // Convert back
     let date2 = daymove::from_timestamp_ms(ms);
@@ -253,7 +253,7 @@ fun timezone_offset_symmetry() {
 
     // Same moment in different timezones:
     // UTC+9 (Tokyo): 2024-01-01T21:00:00+09:00
-    let tokyo = daymove::with_timezone(&base_dt, &utc_offset::jst());
+    let tokyo = base_dt.to_offset(&utc_offset::jst());
     assert_eq!(tokyo.year(), 2024);
     assert_eq!(tokyo.month(), 1);
     assert_eq!(tokyo.day(), 1);
@@ -261,7 +261,7 @@ fun timezone_offset_symmetry() {
     assert_eq!(tokyo.minute(), 0);
 
     // UTC-5 (New York): 2024-01-01T07:00:00-05:00
-    let ny = daymove::with_timezone(&base_dt, &utc_offset::est());
+    let ny = base_dt.to_offset(&utc_offset::est());
     assert_eq!(ny.year(), 2024);
     assert_eq!(ny.month(), 1);
     assert_eq!(ny.day(), 1);
@@ -269,8 +269,8 @@ fun timezone_offset_symmetry() {
     assert_eq!(ny.minute(), 0);
 
     // Both should have the same underlying timestamp
-    let tokyo_ms = daymove::to_timestamp_ms(&tokyo);
-    let ny_ms = daymove::to_timestamp_ms(&ny);
+    let tokyo_ms = tokyo.to_timestamp_ms();
+    let ny_ms = ny.to_timestamp_ms();
     assert_eq!(tokyo_ms, base_ms);
     assert_eq!(ny_ms, base_ms);
 
@@ -280,14 +280,14 @@ fun timezone_offset_symmetry() {
     let date_line_dt = daymove::from_timestamp_ms(date_line_ms);
 
     // Tokyo: 2024-01-01T09:00:00+09:00 (same day)
-    let tokyo_dl = daymove::with_timezone(&date_line_dt, &utc_offset::jst());
+    let tokyo_dl = date_line_dt.to_offset(&utc_offset::jst());
     assert_eq!(tokyo_dl.year(), 2024);
     assert_eq!(tokyo_dl.month(), 1);
     assert_eq!(tokyo_dl.day(), 1);
 
     // Honolulu: 2023-12-31T14:00:00-10:00 (previous day)
     let honolulu_tz = utc_offset::new_negative(600); // UTC-10
-    let honolulu = daymove::with_timezone(&date_line_dt, &honolulu_tz);
+    let honolulu = date_line_dt.to_offset(&honolulu_tz);
     assert_eq!(honolulu.year(), 2023);
     assert_eq!(honolulu.month(), 12);
     assert_eq!(honolulu.day(), 31);
@@ -295,25 +295,25 @@ fun timezone_offset_symmetry() {
 }
 
 #[test]
-fun timezone_conversion_with_timezone() {
-    // Test timezone conversion using with_timezone
+fun timezone_conversion_with_to_offset() {
+    // Test timezone conversion using to_offset
     let utc_date = daymove::new_utc(2024, 1, 1, 12, 0, 0);
 
     // Convert to JST (+9)
-    let jst_date = daymove::with_timezone(&utc_date, &utc_offset::jst());
+    let jst_date = utc_date.to_offset(&utc_offset::jst());
     assert_eq!(jst_date.hour(), 21); // UTC+9 -> 12h + 9h = 21h
 
     // Convert to EST (-5)
-    let est_date = daymove::with_timezone(&utc_date, &utc_offset::est());
+    let est_date = utc_date.to_offset(&utc_offset::est());
     assert_eq!(est_date.hour(), 7); // UTC-5 -> 12h - 5h = 7h
 
     // Convert back to UTC
-    let back_to_utc = daymove::with_timezone(&jst_date, &utc_offset::utc());
+    let back_to_utc = jst_date.to_offset(&utc_offset::utc());
     assert_eq!(back_to_utc.hour(), 12);
 
     // Ensure the underlying timestamp is unchanged
-    assert_eq!(daymove::to_timestamp_ms(&utc_date), daymove::to_timestamp_ms(&jst_date));
-    assert_eq!(daymove::to_timestamp_ms(&utc_date), daymove::to_timestamp_ms(&est_date));
+    assert_eq!(utc_date.to_timestamp_ms(), jst_date.to_timestamp_ms());
+    assert_eq!(utc_date.to_timestamp_ms(), est_date.to_timestamp_ms());
 }
 
 #[test]

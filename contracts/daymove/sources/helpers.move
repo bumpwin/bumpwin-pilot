@@ -2,6 +2,7 @@ module daymove::helpers;
 
 use daymove::constants;
 use daymove::utc_offset::{Self, UtcOffset};
+use std::option::{Self, Option};
 
 // Helper function to validate YMD
 public fun is_valid_ymd(y: u16, m: u8, d: u8): bool {
@@ -20,6 +21,15 @@ public fun days_in_month(y: u16, m: u8): u8 {
 
 public fun is_leap(y: u16): bool {
     ((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0)
+}
+
+// Safe subtraction that returns Option
+public fun try_sub(a: u64, b: u64): Option<u64> {
+    if (a >= b) {
+        option::some(a - b)
+    } else {
+        option::none()
+    }
 }
 
 // =======================================
