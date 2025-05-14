@@ -11,8 +11,11 @@ public fun is_valid_ymd(y: u16, m: u8, d: u8): bool {
 }
 
 public fun days_in_month(y: u16, m: u8): u8 {
-    if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12) 31
-    else if (m == 2) { if (is_leap(y)) 29 else 28 } else 30
+    match (m) {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
+        2 => if (is_leap(y)) 29 else 28,
+        _ => 30,
+    }
 }
 
 public fun is_leap(y: u16): bool {

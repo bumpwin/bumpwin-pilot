@@ -43,23 +43,23 @@ public fun cet(): UtcOffset {
 }
 
 // Get offset seconds from UtcOffset
-public fun offset_seconds(offset: &UtcOffset): u64 {
-    (offset.minutes as u64) * 60
+public fun offset_seconds(self: &UtcOffset): u64 {
+    (self.minutes as u64) * 60
 }
 
 // Get the minutes of the offset
-public fun minutes(offset: &UtcOffset): u16 {
-    offset.minutes
+public fun minutes(self: &UtcOffset): u16 {
+    self.minutes
 }
 
 // Check if the offset is negative
-public fun is_negative(offset: &UtcOffset): bool {
-    offset.is_negative
+public fun is_negative(self: &UtcOffset): bool {
+    self.is_negative
 }
 
 // Format offset as hours and minutes
-public fun to_hm(offset: &UtcOffset): (u8, u8) {
-    let hours = offset.minutes / 60;
-    let minutes = offset.minutes % 60;
+public fun to_hm(self: &UtcOffset): (u8, u8) {
+    let hours = self.minutes / 60;
+    let minutes = self.minutes % 60;
     ((hours as u8), (minutes as u8))
 }
