@@ -1,12 +1,11 @@
 module battle_market::market_vault;
 
+use battle_market::market_math;
+use safemath::u128_safe;
 use sui::balance::{Self, Balance, Supply};
 use sui::coin::Coin;
 use sui::object_bag::{Self, ObjectBag};
 use sui::sui::SUI;
-
-use battle_market::market_math;
-use safemath::u128_safe;
 
 /// Token representing ownership of a specific market outcome
 public struct MarketToken<phantom CoinT> has drop {}
@@ -22,7 +21,7 @@ public struct MarketVault has key, store {
 
 public struct TokenSupply<phantom CoinT> has key, store {
     id: UID,
-    supply: Supply<MarketToken<CoinT>>
+    supply: Supply<MarketToken<CoinT>>,
 }
 
 public fun num_outcomes(self: &MarketVault): u64 {
@@ -88,12 +87,16 @@ public fun total_share_supply_value(self: &MarketVault): u128 {
     self.total_shares
 }
 
-public fun buy_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<SUI>, ctx: &mut TxContext): Coin<MarketToken<CoinT>> {
+public fun buy_shares<CoinT>(
+    self: &mut MarketVault,
+    coin_in: Coin<SUI>,
+    ctx: &mut TxContext,
+): Coin<MarketToken<CoinT>> {
     let amount_out = market_math::swap_rate_z_to_xi(
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
-        self.num_outcomes
+        self.num_outcomes,
     );
 
     self.deposit_numeraire(coin_in.into_balance());
@@ -102,12 +105,16 @@ public fun buy_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<SUI>, ctx: &m
     coin_out
 }
 
-public fun sell_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<MarketToken<CoinT>>, ctx: &mut TxContext): Coin<SUI> {
+public fun sell_shares<CoinT>(
+    self: &mut MarketVault,
+    coin_in: Coin<MarketToken<CoinT>>,
+    ctx: &mut TxContext,
+): Coin<SUI> {
     let amount_out = market_math::swap_rate_xi_to_z(
         self.share_supply_value<CoinT>(),
         self.total_share_supply_value(),
         coin_in.value(),
-        self.num_outcomes
+        self.num_outcomes,
     );
 
     self.burn_shares<CoinT>(coin_in.into_balance());
@@ -115,11 +122,17 @@ public fun sell_shares<CoinT>(self: &mut MarketVault, coin_in: Coin<MarketToken<
 }
 
 #[test_only]
-public(package) fun mint_shares_for_test<CoinT>(self: &mut MarketVault, amount: u64): Balance<MarketToken<CoinT>> {
+public(package) fun mint_shares_for_test<CoinT>(
+    self: &mut MarketVault,
+    amount: u64,
+): Balance<MarketToken<CoinT>> {
     mint_shares<CoinT>(self, amount)
 }
 
 #[test_only]
-public(package) fun burn_shares_for_test<CoinT>(self: &mut MarketVault, balance: Balance<MarketToken<CoinT>>): u64 {
+public(package) fun burn_shares_for_test<CoinT>(
+    self: &mut MarketVault,
+    balance: Balance<MarketToken<CoinT>>,
+): u64 {
     burn_shares<CoinT>(self, balance)
 }

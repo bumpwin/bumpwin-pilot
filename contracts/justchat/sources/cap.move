@@ -32,18 +32,10 @@ public fun recipient(cap: &MessageFeeCap): address {
     cap.recipient
 }
 
-public fun set_message_fee(
-    _: &mut AdminCap,
-    config: &mut MessageFeeCap,
-    new_fee: u64,
-) {
+public fun set_message_fee(_: &mut AdminCap, config: &mut MessageFeeCap, new_fee: u64) {
     config.message_fee = new_fee;
 }
 
-public fun set_recipient(
-    _: &mut AdminCap,
-    config: &mut MessageFeeCap,
-    new_recipient: address,
-) {
+public fun set_recipient(_: &mut AdminCap, config: &mut MessageFeeCap, new_recipient: address) {
     config.recipient = new_recipient;
 }

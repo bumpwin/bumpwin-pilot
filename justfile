@@ -113,3 +113,7 @@ script-sendChat:
 
 poll-justchat-events:
     cd sdk && bunx tsx scripts/listenChatEvent.ts
+
+
+memo:
+    bunx @mysten/prettier-plugin-move  --use-module-label=true  -w meme_registry.move

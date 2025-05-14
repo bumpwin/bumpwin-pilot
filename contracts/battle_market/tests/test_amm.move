@@ -10,7 +10,6 @@ public struct MemeA has drop { }
 public struct MemeB has drop { }
 
 const ALICE: address = @0xA11CE;
-const BOB: address = @0xB0B;
 const INITIAL_LIQUIDITY: u64 = 1000000;
 
 #[test]
