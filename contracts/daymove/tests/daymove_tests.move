@@ -69,14 +69,14 @@ fun timezone_offsets() {
     // Test UTC timestamp in different time zones
     // 2024-05-14T00:00:00Z = 1715644800000 ms (corrected timestamp)
     let timestamp_ms = 1715644800000;
-    let epoch_sec = timestamp_ms / 1000;
+    let unix_epoch_sec = timestamp_ms / 1000;
 
     // UTC (no offset)
     let _utc = daymove::from_timestamp_ms(timestamp_ms); // prefix with underscore to silence warning
 
     // Tokyo (UTC+9 = +540 minutes)
     let tokyo_tz = timezone::jst();
-    let tokyo = daymove::from_epoch_with_tz(epoch_sec, &tokyo_tz);
+    let tokyo = daymove::from_unix_epoch_with_tz(unix_epoch_sec, &tokyo_tz);
     assert_eq!(tokyo.year(), 2024);
     assert_eq!(tokyo.month(), 5);
     assert_eq!(tokyo.day(), 14);
@@ -85,7 +85,7 @@ fun timezone_offsets() {
 
     // New York (UTC-5 = -300 minutes) - using EST
     let ny_tz = timezone::est();
-    let ny = daymove::from_epoch_with_tz(epoch_sec, &ny_tz);
+    let ny = daymove::from_unix_epoch_with_tz(unix_epoch_sec, &ny_tz);
     assert_eq!(ny.year(), 2024);
     assert_eq!(ny.month(), 5);
     assert_eq!(ny.day(), 13);
@@ -93,8 +93,8 @@ fun timezone_offsets() {
     assert_eq!(ny.minute(), 0);
 
     // Test timezone conversion roundtrip
-    let to_utc = ny.to_epoch();
-    let back_ny = daymove::from_epoch_with_tz(to_utc, &ny_tz);
+    let to_utc = ny.to_unix_epoch();
+    let back_ny = daymove::from_unix_epoch_with_tz(to_utc, &ny_tz);
     assert_eq!(back_ny.year(), 2024);
     assert_eq!(back_ny.month(), 5);
     assert_eq!(back_ny.day(), 13);
@@ -115,27 +115,27 @@ fun new_zdt_timezone_constructors() {
     let ny = daymove::new_zdt_with_tz(2023, 12, 31, 19, 0, 0, &ny_tz);
 
     // Convert both to UTC epochs
-    let tokyo_epoch = tokyo.to_epoch();
-    let ny_epoch = ny.to_epoch();
+    let tokyo_unix_epoch = tokyo.to_unix_epoch();
+    let ny_unix_epoch = ny.to_unix_epoch();
 
     // Now both should represent the same moment in time (the same UTC timestamp)
-    assert_eq!(tokyo_epoch, ny_epoch);
+    assert_eq!(tokyo_unix_epoch, ny_unix_epoch);
 }
 
 #[test]
 fun epoch_conversion() {
     // Create a date and convert to epoch
     let zdt = daymove::new_utc(1970, 1, 1, 0, 0, 0);
-    let epoch = zdt.to_epoch();
-    assert_eq!(epoch, 0);
+    let unix_epoch = zdt.to_unix_epoch();
+    assert_eq!(unix_epoch, 0);
 
     // Epoch for 2024-01-01T00:00:00Z = 1704067200
     let new_years_2024 = daymove::new_utc(2024, 1, 1, 0, 0, 0);
-    let epoch_2024 = new_years_2024.to_epoch();
-    assert_eq!(epoch_2024, 1704067200);
+    let unix_epoch_2024 = new_years_2024.to_unix_epoch();
+    assert_eq!(unix_epoch_2024, 1704067200);
 
     // Round-trip conversion
-    let back_to_date = daymove::from_epoch_with_tz(epoch_2024, &timezone::utc());
+    let back_to_date = daymove::from_unix_epoch_with_tz(unix_epoch_2024, &timezone::utc());
     assert_eq!(back_to_date.year(), 2024);
     assert_eq!(back_to_date.month(), 1);
     assert_eq!(back_to_date.day(), 1);
@@ -176,13 +176,13 @@ fun long_term_date_add() {
 #[test]
 fun ms_timestamp_boundaries() {
     // Test Unix epoch start
-    let epoch_start = daymove::from_timestamp_ms(0);
-    assert_eq!(epoch_start.year(), 1970);
-    assert_eq!(epoch_start.month(), 1);
-    assert_eq!(epoch_start.day(), 1);
-    assert_eq!(epoch_start.hour(), 0);
-    assert_eq!(epoch_start.minute(), 0);
-    assert_eq!(epoch_start.second(), 0);
+    let unix_epoch_start = daymove::from_timestamp_ms(0);
+    assert_eq!(unix_epoch_start.year(), 1970);
+    assert_eq!(unix_epoch_start.month(), 1);
+    assert_eq!(unix_epoch_start.day(), 1);
+    assert_eq!(unix_epoch_start.hour(), 0);
+    assert_eq!(unix_epoch_start.minute(), 0);
+    assert_eq!(unix_epoch_start.second(), 0);
 
     // Test Y2K timestamp (2000-01-01T00:00:00Z = 946684800000 ms)
     let y2k = daymove::from_timestamp_ms(946684800000);
@@ -198,12 +198,12 @@ fun extreme_date_ranges() {
     let distant_future = daymove::new_utc(2100, 12, 31, 23, 59, 59); // Year 2100
 
     // Convert to epochs
-    let ancient_epoch = ancient.to_epoch();
-    let future_epoch = distant_future.to_epoch();
+    let ancient_unix_epoch = ancient.to_unix_epoch();
+    let future_unix_epoch = distant_future.to_unix_epoch();
 
     // Ensure they round-trip correctly
-    let ancient_rt = daymove::from_epoch_with_tz(ancient_epoch, &timezone::utc());
-    let future_rt = daymove::from_epoch_with_tz(future_epoch, &timezone::utc());
+    let ancient_rt = daymove::from_unix_epoch_with_tz(ancient_unix_epoch, &timezone::utc());
+    let future_rt = daymove::from_unix_epoch_with_tz(future_unix_epoch, &timezone::utc());
 
     assert_eq!(ancient_rt.year(), 1970);
     assert_eq!(future_rt.year(), 2100);
@@ -236,18 +236,18 @@ fun historical_dates() {
     // Note: Moon landing (1969-07-20) is before Unix epoch, so not supported
 
     // Y2K: 2000-01-01T00:00:00Z = 946684800 seconds
-    let y2k_epoch = 946684800;
-    let y2k = daymove::from_epoch_with_tz(y2k_epoch, &timezone::utc());
+    let y2k_unix_epoch = 946684800;
+    let y2k = daymove::from_unix_epoch_with_tz(y2k_unix_epoch, &timezone::utc());
     assert_eq!(y2k.year(), 2000);
     assert_eq!(y2k.month(), 1);
     assert_eq!(y2k.day(), 1);
 
     // Unix Epoch + 1 day
-    let epoch_plus_day = daymove::from_epoch_with_tz(86400, &timezone::utc());
-    assert_eq!(epoch_plus_day.year(), 1970);
-    assert_eq!(epoch_plus_day.month(), 1);
-    assert_eq!(epoch_plus_day.day(), 2);
-    assert_eq!(epoch_plus_day.hour(), 0);
+    let unix_epoch_plus_day = daymove::from_unix_epoch_with_tz(86400, &timezone::utc());
+    assert_eq!(unix_epoch_plus_day.year(), 1970);
+    assert_eq!(unix_epoch_plus_day.month(), 1);
+    assert_eq!(unix_epoch_plus_day.day(), 2);
+    assert_eq!(unix_epoch_plus_day.hour(), 0);
 
     // Historical date: First iPhone release (2007-06-29)
     let iphone_release = daymove::new_utc(2007, 6, 29, 0, 0, 0);
@@ -265,16 +265,16 @@ fun time_component_tests() {
     let next_sec = daymove::new_utc(2024, 6, 16, 0, 0, 0);
 
     // Convert both to epoch and check the difference
-    let epoch1 = time_test.to_epoch();
-    let epoch2 = next_sec.to_epoch();
-    assert_eq!(epoch2 - epoch1, 1); // Exactly 1 second difference
+    let unix_epoch1 = time_test.to_unix_epoch();
+    let unix_epoch2 = next_sec.to_unix_epoch();
+    assert_eq!(unix_epoch2 - unix_epoch1, 1); // Exactly 1 second difference
 
     // Test hour boundaries
     let hour_test = daymove::new_utc(2024, 6, 15, 0, 0, 0);
-    let hour_epoch = hour_test.to_epoch();
+    let hour_unix_epoch = hour_test.to_unix_epoch();
 
     // 1 hour later
-    let hour_plus = daymove::from_epoch_with_tz(hour_epoch + 3600, &timezone::utc());
+    let hour_plus = daymove::from_unix_epoch_with_tz(hour_unix_epoch + 3600, &timezone::utc());
     assert_eq!(hour_plus.hour(), 1);
     assert_eq!(hour_plus.minute(), 0);
     assert_eq!(hour_plus.second(), 0);
@@ -316,11 +316,11 @@ fun timezone_offset_symmetry() {
     // Test that positive and negative timezone offsets are correctly handled
 
     // Base timestamp: 2024-01-01T12:00:00Z
-    let base_epoch = 1704110400; // Seconds since epoch
+    let base_unix_epoch = 1704110400; // Seconds since epoch
 
     // Same moment in different timezones:
     // UTC+9 (Tokyo): 2024-01-01T21:00:00+09:00
-    let tokyo = daymove::from_epoch_with_tz(base_epoch, &timezone::jst());
+    let tokyo = daymove::from_unix_epoch_with_tz(base_unix_epoch, &timezone::jst());
     assert_eq!(tokyo.year(), 2024);
     assert_eq!(tokyo.month(), 1);
     assert_eq!(tokyo.day(), 1);
@@ -328,7 +328,7 @@ fun timezone_offset_symmetry() {
     assert_eq!(tokyo.minute(), 0);
 
     // UTC-5 (New York): 2024-01-01T07:00:00-05:00
-    let ny = daymove::from_epoch_with_tz(base_epoch, &timezone::est());
+    let ny = daymove::from_unix_epoch_with_tz(base_unix_epoch, &timezone::est());
     assert_eq!(ny.year(), 2024);
     assert_eq!(ny.month(), 1);
     assert_eq!(ny.day(), 1);
@@ -336,24 +336,24 @@ fun timezone_offset_symmetry() {
     assert_eq!(ny.minute(), 0);
 
     // Both should convert back to the same UTC time
-    let tokyo_epoch = tokyo.to_epoch();
-    let ny_epoch = ny.to_epoch();
-    assert_eq!(tokyo_epoch, base_epoch);
-    assert_eq!(ny_epoch, base_epoch);
+    let tokyo_unix_epoch = tokyo.to_unix_epoch();
+    let ny_unix_epoch = ny.to_unix_epoch();
+    assert_eq!(tokyo_unix_epoch, base_unix_epoch);
+    assert_eq!(ny_unix_epoch, base_unix_epoch);
 
     // International Date Line test
     // UTC: 2024-01-01T00:00:00Z
-    let date_line_epoch = 1704067200;
+    let date_line_unix_epoch = 1704067200;
 
     // Tokyo: 2024-01-01T09:00:00+09:00 (same day)
-    let tokyo_dl = daymove::from_epoch_with_tz(date_line_epoch, &timezone::jst());
+    let tokyo_dl = daymove::from_unix_epoch_with_tz(date_line_unix_epoch, &timezone::jst());
     assert_eq!(tokyo_dl.year(), 2024);
     assert_eq!(tokyo_dl.month(), 1);
     assert_eq!(tokyo_dl.day(), 1);
 
     // Honolulu: 2023-12-31T14:00:00-10:00 (previous day)
     let honolulu_tz = timezone::new_negative(600); // UTC-10
-    let honolulu = daymove::from_epoch_with_tz(date_line_epoch, &honolulu_tz);
+    let honolulu = daymove::from_unix_epoch_with_tz(date_line_unix_epoch, &honolulu_tz);
     assert_eq!(honolulu.year(), 2023);
     assert_eq!(honolulu.month(), 12);
     assert_eq!(honolulu.day(), 31);
@@ -370,16 +370,16 @@ fun timezone_convenience_constructors() {
     let cet_time = daymove::new_cet(2024, 1, 1, 1, 0, 0);
 
     // All should represent approximately the same moment in time
-    let utc_epoch = utc_time.to_epoch();
-    let jst_epoch = jst_time.to_epoch();
-    let est_epoch = est_time.to_epoch();
-    let cet_epoch = cet_time.to_epoch();
+    let utc_unix_epoch = utc_time.to_unix_epoch();
+    let jst_unix_epoch = jst_time.to_unix_epoch();
+    let est_unix_epoch = est_time.to_unix_epoch();
+    let cet_unix_epoch = cet_time.to_unix_epoch();
 
     // We could use a small error margin for timezone rounding if needed
     // let _margin: u64 = 60;  // 1 minute error margin (prefixed with underscore)
 
     // Test that all epochs are within margin of each other
-    assert_eq!(utc_epoch, jst_epoch);
-    assert_eq!(utc_epoch, est_epoch);
-    assert_eq!(utc_epoch, cet_epoch);
+    assert_eq!(utc_unix_epoch, jst_unix_epoch);
+    assert_eq!(utc_unix_epoch, est_unix_epoch);
+    assert_eq!(utc_unix_epoch, cet_unix_epoch);
 }
