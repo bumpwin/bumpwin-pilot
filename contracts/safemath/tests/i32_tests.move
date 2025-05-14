@@ -77,15 +77,15 @@ fun test_comparison() {
     let neg_large = i32::neg_from_u32(100);
 
     // Test compare
-    assert_eq!(i32::compare(&zero, &zero), 0); // Equal
-    assert_eq!(i32::compare(&pos_small, &zero), 2); // Greater
-    assert_eq!(i32::compare(&zero, &pos_small), 1); // Less
-    assert_eq!(i32::compare(&pos_large, &pos_small), 2); // Greater
-    assert_eq!(i32::compare(&pos_small, &pos_large), 1); // Less
-    assert_eq!(i32::compare(&neg_small, &neg_large), 2); // Greater (closer to zero)
-    assert_eq!(i32::compare(&neg_large, &neg_small), 1); // Less (further from zero)
-    assert_eq!(i32::compare(&pos_small, &neg_small), 2); // Greater
-    assert_eq!(i32::compare(&neg_small, &pos_small), 1); // Less
+    assert_eq!(i32::compare(&zero, &zero), i32::equal()); // Equal
+    assert_eq!(i32::compare(&pos_small, &zero), i32::greater_than()); // Greater
+    assert_eq!(i32::compare(&zero, &pos_small), i32::less_than()); // Less
+    assert_eq!(i32::compare(&pos_large, &pos_small), i32::greater_than()); // Greater
+    assert_eq!(i32::compare(&pos_small, &pos_large), i32::less_than()); // Less
+    assert_eq!(i32::compare(&neg_small, &neg_large), i32::greater_than()); // Greater (closer to zero)
+    assert_eq!(i32::compare(&neg_large, &neg_small), i32::less_than()); // Less (further from zero)
+    assert_eq!(i32::compare(&pos_small, &neg_small), i32::greater_than()); // Greater
+    assert_eq!(i32::compare(&neg_small, &pos_small), i32::less_than()); // Less
 
     // Test comparison helper functions
     assert!(i32::lt(&pos_small, &pos_large), 9);
@@ -256,14 +256,14 @@ fun test_edge_cases() {
 
 // Test with expected error cases
 #[test]
-#[expected_failure(abort_code = 0)] // ECONVERSION_FROM_U32_OVERFLOW
+#[expected_failure(abort_code = 0, location = safemath::i32)] // EConversionFromU32Overflow
 fun test_from_u32_overflow() {
     // Trying to create an I32 from a u32 value > 2^31 - 1
     i32::from_u32(2147483648); // 2^31, should fail
 }
 
 #[test]
-#[expected_failure(abort_code = 1)] // ECONVERSION_TO_U32_UNDERFLOW
+#[expected_failure(abort_code = 1, location = safemath::i32)] // EConversionToU32Underflow
 fun test_as_u32_underflow() {
     // Trying to convert a negative I32 to u32
     let neg = i32::neg_from_u32(10);
@@ -271,7 +271,7 @@ fun test_as_u32_underflow() {
 }
 
 #[test]
-#[expected_failure(abort_code = 2)] // EDIVISION_BY_ZERO
+#[expected_failure(abort_code = 2, location = safemath::i32)] // EDivisionByZero
 fun test_division_by_zero() {
     // Division by zero
     let a = i32::from_u32(10);
@@ -280,7 +280,7 @@ fun test_division_by_zero() {
 }
 
 #[test]
-#[expected_failure(abort_code = 2)] // EDIVISION_BY_ZERO
+#[expected_failure(abort_code = 2, location = safemath::i32)] // EDivisionByZero
 fun test_modulo_by_zero() {
     // Modulo by zero
     let a = i32::from_u32(10);
@@ -289,7 +289,7 @@ fun test_modulo_by_zero() {
 }
 
 #[test]
-#[expected_failure(abort_code = 0)] // Changed to 0 as it fails with overflow during conversion
+#[expected_failure(abort_code = 0, location = safemath::i32)] // Changed to 0 as it fails with overflow during conversion
 fun test_add_overflow() {
     // Adding two large positive values that overflow
     let max_i32 = i32::from_u32(2147483647); // MAX_I32
@@ -317,7 +317,7 @@ fun test_mul_overflow_fixed() {
 }
 
 #[test]
-#[expected_failure(abort_code = 3)] // EOVERFLOW
+#[expected_failure(abort_code = 3, location = safemath::i32)] // EOverflow
 fun test_div_int_min_neg_one() {
     // Division of INT_MIN by -1, which would result in INT_MAX + 1
     let min_i32 = i32::neg_from_u32(2147483648); // MIN_I32

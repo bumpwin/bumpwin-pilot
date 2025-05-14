@@ -4,17 +4,35 @@ module safemath::i32;
 const MAX_I32_AS_U32: u32 = (1 << 31) - 1;
 const U32_WITH_FIRST_BIT_SET: u32 = 1 << 31;
 
-// Comparison result constants
-const EQUAL: u8 = 0;
-const LESS_THAN: u8 = 1;
-const GREATER_THAN: u8 = 2;
+// Comparison result enum
+public enum ComparisonResult has copy, drop, store {
+    Equal,
+    LessThan,
+    GreaterThan,
+}
+
+/// @notice Returns the Equal comparison result
+public fun equal(): ComparisonResult { ComparisonResult::Equal }
+
+/// @notice Returns the LessThan comparison result
+public fun less_than(): ComparisonResult { ComparisonResult::LessThan }
+
+/// @notice Returns the GreaterThan comparison result
+public fun greater_than(): ComparisonResult { ComparisonResult::GreaterThan }
+
+// Sign enum to represent positive or negative
+public enum Sign has copy, drop, store {
+    Positive,
+    Negative,
+}
 
 // Error codes
-const ECONVERSION_FROM_U32_OVERFLOW: u64 = 0;
-const ECONVERSION_TO_U32_UNDERFLOW: u64 = 1;
-const EDIVISION_BY_ZERO: u64 = 2;
-const EOVERFLOW: u64 = 3;
-const EUNDERFLOW: u64 = 4;
+const EConversionFromU32Overflow: u64 = 0;
+const EConversionToU32Underflow: u64 = 1;
+const EDivisionByZero: u64 = 2;
+const EOverflow: u64 = 3;
+#[allow(unused_const)]
+const EUnderflow: u64 = 4;
 
 /// @notice Struct representing a signed 32-bit integer.
 public struct I32 has copy, drop, store {
@@ -22,25 +40,39 @@ public struct I32 has copy, drop, store {
 }
 
 /// @notice Extract sign and magnitude from an I32
-/// @return (is_positive, magnitude)
-fun extract_sign_and_magnitude(x: &I32): (bool, u32) {
-    let is_positive = x.bits < U32_WITH_FIRST_BIT_SET;
-    let magnitude = if (is_positive) x.bits else x.bits - U32_WITH_FIRST_BIT_SET;
-    (is_positive, magnitude)
+/// @return (sign, magnitude)
+fun extract_sign_and_magnitude(value: &I32): (Sign, u32) {
+    let is_positive = value.bits < U32_WITH_FIRST_BIT_SET;
+    let magnitude = if (is_positive) {
+        value.bits
+    } else {
+        value.bits - U32_WITH_FIRST_BIT_SET
+    };
+
+    let sign = if (is_positive) {
+        Sign::Positive
+    } else {
+        Sign::Negative
+    };
+
+    (sign, magnitude)
 }
 
-/// @notice Create an I32 from sign and magnitude
-fun create_from_sign_and_magnitude(is_positive: bool, magnitude: u32): I32 {
-    if (is_positive) {
-        assert!(magnitude <= MAX_I32_AS_U32, ECONVERSION_FROM_U32_OVERFLOW);
-        I32 { bits: magnitude }
-    } else {
-        assert!(magnitude <= MAX_I32_AS_U32 + 1, ECONVERSION_FROM_U32_OVERFLOW);
-        if (magnitude == 0) {
-            I32 { bits: 0 }
-        } else {
-            I32 { bits: U32_WITH_FIRST_BIT_SET | magnitude }
-        }
+/// @notice Creates an I32 from sign and magnitude
+fun from_sign_and_magnitude(sign: Sign, magnitude: u32): I32 {
+    match (sign) {
+        Sign::Positive => {
+            assert!(magnitude <= MAX_I32_AS_U32, EConversionFromU32Overflow);
+            I32 { bits: magnitude }
+        },
+        Sign::Negative => {
+            assert!(magnitude <= MAX_I32_AS_U32 + 1, EConversionFromU32Overflow);
+            if (magnitude == 0) {
+                I32 { bits: 0 }
+            } else {
+                I32 { bits: U32_WITH_FIRST_BIT_SET | magnitude }
+            }
+        },
     }
 }
 
@@ -49,212 +81,262 @@ public fun zero(): I32 {
     I32 { bits: 0 }
 }
 
-/// @notice Casts an `I32` to a `u32`.
-public fun as_u32(x: &I32): u32 {
-    assert!(x.bits < U32_WITH_FIRST_BIT_SET, ECONVERSION_TO_U32_UNDERFLOW);
-    x.bits
+/// @notice Converts a `u32` to an `I32`.
+public fun from_u32(value: u32): I32 {
+    assert!(value <= MAX_I32_AS_U32, EConversionFromU32Overflow);
+    I32 { bits: value }
 }
 
-/// @notice Casts a `u32` to an `I32`.
-public fun from_u32(x: u32): I32 {
-    assert!(x <= MAX_I32_AS_U32, ECONVERSION_FROM_U32_OVERFLOW);
-    I32 { bits: x }
-}
-
-/// @notice Create I32 value from sign and magnitude.
-/// @param positive Whether the value is positive
-/// @param x The magnitude as a u32
-public fun new(positive: bool, x: u32): I32 {
-    create_from_sign_and_magnitude(positive, x)
+/// @notice Creates an I32 value from sign and magnitude.
+/// @param is_positive Whether the value is positive
+/// @param magnitude The magnitude as a u32
+public fun new(is_positive: bool, magnitude: u32): I32 {
+    let sign = if (is_positive) { Sign::Positive } else { Sign::Negative };
+    from_sign_and_magnitude(sign, magnitude)
 }
 
 /// @notice Creates a negative `I32` from a `u32` magnitude.
-public fun neg_from_u32(x: u32): I32 {
-    create_from_sign_and_magnitude(false, x)
+public fun neg_from_u32(magnitude: u32): I32 {
+    from_sign_and_magnitude(Sign::Negative, magnitude)
 }
 
-/// @notice Whether or not `x` is equal to 0.
-public fun is_zero(x: &I32): bool {
-    x.bits == 0
+/// @notice Whether the value is equal to 0.
+public fun is_zero(value: &I32): bool {
+    value.bits == 0
 }
 
-/// @notice Whether or not `x` is negative.
-public fun is_neg(x: &I32): bool {
-    x.bits >= U32_WITH_FIRST_BIT_SET
+/// @notice Whether the value is negative.
+public fun is_neg(value: &I32): bool {
+    value.bits >= U32_WITH_FIRST_BIT_SET
 }
 
-/// @notice Whether or not `x` is positive.
-public fun is_positive(x: &I32): bool {
-    x.bits > 0 && x.bits < U32_WITH_FIRST_BIT_SET
+/// @notice Whether the value is positive.
+public fun is_positive(value: &I32): bool {
+    value.bits > 0 && value.bits < U32_WITH_FIRST_BIT_SET
 }
 
-/// @notice Absolute value of `x`.
-public fun abs(x: &I32): u32 {
-    let (_, magnitude) = extract_sign_and_magnitude(x);
+/// @notice Returns the absolute value of the value.
+public fun abs(value: &I32): u32 {
+    let (_, magnitude) = extract_sign_and_magnitude(value);
     magnitude
 }
 
-/// @notice Compare `a` and `b`.
-/// @return EQUAL if a == b, LESS_THAN if a < b, GREATER_THAN if a > b
-public fun compare(a: &I32, b: &I32): u8 {
-    if (a.bits == b.bits) {
-        EQUAL
-    } else {
-        let (a_is_positive, _) = extract_sign_and_magnitude(a);
-        let (b_is_positive, _) = extract_sign_and_magnitude(b);
+/// @notice Converts to a u32 value.
+public fun as_u32(value: &I32): u32 {
+    assert!(value.bits < U32_WITH_FIRST_BIT_SET, EConversionToU32Underflow);
+    value.bits
+}
 
-        if (a_is_positive && !b_is_positive) {
-            // Positive > Negative
-            GREATER_THAN
-        } else if (!a_is_positive && b_is_positive) {
-            // Negative < Positive
-            LESS_THAN
-        } else if (a_is_positive) {
-            // Both positive, compare directly
-            if (a.bits > b.bits) GREATER_THAN else LESS_THAN
-        } else {
-            // Both negative, larger bit value means more negative
-            if (a.bits > b.bits) LESS_THAN else GREATER_THAN
+/// @notice Compares `lhs` and `rhs`.
+/// @return Equal if lhs == rhs, LessThan if lhs < rhs, GreaterThan if lhs > rhs
+public fun compare(lhs: &I32, rhs: &I32): ComparisonResult {
+    if (lhs.bits == rhs.bits) {
+        return equal()
+    } else {
+        let (lhs_sign, _) = extract_sign_and_magnitude(lhs);
+        let (rhs_sign, _) = extract_sign_and_magnitude(rhs);
+
+        match (lhs_sign) {
+            Sign::Positive => {
+                match (rhs_sign) {
+                    Sign::Positive => {
+                        // Both positive, compare directly
+                        if (lhs.bits > rhs.bits) {
+                            return greater_than()
+                        } else {
+                            return less_than()
+                        }
+                    },
+                    Sign::Negative => {
+                        // Positive > Negative
+                        return greater_than()
+                    },
+                }
+            },
+            Sign::Negative => {
+                match (rhs_sign) {
+                    Sign::Positive => {
+                        // Negative < Positive
+                        return less_than()
+                    },
+                    Sign::Negative => {
+                        // Both negative, larger bit value means more negative
+                        if (lhs.bits > rhs.bits) {
+                            return less_than()
+                        } else {
+                            return greater_than()
+                        }
+                    },
+                }
+            },
         }
     }
 }
 
-/// @notice Flips the sign of `x`.
-public fun neg(x: &I32): I32 {
-    if (x.bits == 0) {
-        *x
+/// @notice Returns the negation of the value.
+public fun neg(value: &I32): I32 {
+    if (value.bits == 0) {
+        *value
     } else {
-        let (is_positive, magnitude) = extract_sign_and_magnitude(x);
-        create_from_sign_and_magnitude(!is_positive, magnitude)
+        let (sign, magnitude) = extract_sign_and_magnitude(value);
+        match (sign) {
+            Sign::Positive => from_sign_and_magnitude(Sign::Negative, magnitude),
+            Sign::Negative => from_sign_and_magnitude(Sign::Positive, magnitude),
+        }
     }
 }
 
-/// @notice Add `a + b`.
-public fun add(a: &I32, b: &I32): I32 {
+/// @notice Adds `rhs` to `lhs`.
+public fun add(lhs: &I32, rhs: &I32): I32 {
     // Handle special case where one operand is zero
-    if (is_zero(a)) {
-        *b
-    } else if (is_zero(b)) {
-        *a
+    if (is_zero(lhs)) {
+        return *rhs
+    } else if (is_zero(rhs)) {
+        return *lhs
     } else {
-        let (a_is_positive, a_magnitude) = extract_sign_and_magnitude(a);
-        let (b_is_positive, b_magnitude) = extract_sign_and_magnitude(b);
+        let (lhs_sign, lhs_magnitude) = extract_sign_and_magnitude(lhs);
+        let (rhs_sign, rhs_magnitude) = extract_sign_and_magnitude(rhs);
 
-        // If signs are the same, result has the same sign
-        if (a_is_positive == b_is_positive) {
-            let result_magnitude = a_magnitude + b_magnitude;
-            // Check for overflow when adding two positives
-            if (a_is_positive) {
-                assert!(result_magnitude >= a_magnitude, EOVERFLOW); // Check overflow
-            };
-            create_from_sign_and_magnitude(a_is_positive, result_magnitude)
-        } else if (a_magnitude >= b_magnitude) {
-            // Signs are different, subtract the smaller magnitude from the larger
-            create_from_sign_and_magnitude(a_is_positive, a_magnitude - b_magnitude)
+        if (lhs_sign == Sign::Positive && rhs_sign == Sign::Positive) {
+            // Both positive, add magnitudes
+            let result_magnitude = lhs_magnitude + rhs_magnitude;
+            // Check for overflow
+            assert!(result_magnitude >= lhs_magnitude, EOverflow);
+            return from_sign_and_magnitude(Sign::Positive, result_magnitude)
+        } else if (lhs_sign == Sign::Negative && rhs_sign == Sign::Negative) {
+            // Both negative, add magnitudes
+            let result_magnitude = lhs_magnitude + rhs_magnitude;
+            return from_sign_and_magnitude(Sign::Negative, result_magnitude)
         } else {
-            create_from_sign_and_magnitude(b_is_positive, b_magnitude - a_magnitude)
+            // Signs are different
+            if (lhs_magnitude >= rhs_magnitude) {
+                return from_sign_and_magnitude(lhs_sign, lhs_magnitude - rhs_magnitude)
+            } else {
+                return from_sign_and_magnitude(rhs_sign, rhs_magnitude - lhs_magnitude)
+            }
         }
     }
 }
 
-/// @notice Subtract `a - b`.
-public fun sub(a: &I32, b: &I32): I32 {
-    // a - b = a + (-b)
-    add(a, &neg(b))
+/// @notice Subtracts `rhs` from `lhs`.
+public fun sub(lhs: &I32, rhs: &I32): I32 {
+    // lhs - rhs = lhs + (-rhs)
+    add(lhs, &neg(rhs))
 }
 
-/// @notice Multiply `a * b`.
-public fun mul(a: &I32, b: &I32): I32 {
+/// @notice Multiplies `lhs` by `rhs`.
+public fun mul(lhs: &I32, rhs: &I32): I32 {
     // Handle special cases for zero
-    if (is_zero(a) || is_zero(b)) {
-        zero()
+    if (is_zero(lhs) || is_zero(rhs)) {
+        return zero()
     } else {
-        let (a_is_positive, a_magnitude) = extract_sign_and_magnitude(a);
-        let (b_is_positive, b_magnitude) = extract_sign_and_magnitude(b);
+        let (lhs_sign, lhs_magnitude) = extract_sign_and_magnitude(lhs);
+        let (rhs_sign, rhs_magnitude) = extract_sign_and_magnitude(rhs);
 
         // Result sign is positive if both signs are the same, negative otherwise
-        let result_positive = a_is_positive == b_is_positive;
+        let result_sign = if (
+            (lhs_sign == Sign::Positive && rhs_sign == Sign::Positive) ||
+            (lhs_sign == Sign::Negative && rhs_sign == Sign::Negative)
+        ) {
+            Sign::Positive
+        } else {
+            Sign::Negative
+        };
 
         // Calculate result magnitude, checking for overflow
-        let result_magnitude = a_magnitude * b_magnitude;
-        if (b_magnitude != 0) {
-            assert!(result_magnitude / b_magnitude == a_magnitude, EOVERFLOW);
+        let result_magnitude = lhs_magnitude * rhs_magnitude;
+        if (rhs_magnitude != 0) {
+            assert!(result_magnitude / rhs_magnitude == lhs_magnitude, EOverflow);
         };
 
-        create_from_sign_and_magnitude(result_positive, result_magnitude)
+        return from_sign_and_magnitude(result_sign, result_magnitude)
     }
 }
 
-/// @notice Divide `a / b`.
-public fun div(a: &I32, b: &I32): I32 {
-    assert!(!is_zero(b), EDIVISION_BY_ZERO);
+/// @notice Divides `lhs` by `rhs`.
+public fun div(lhs: &I32, rhs: &I32): I32 {
+    assert!(!is_zero(rhs), EDivisionByZero);
 
     // Handle special case for zero dividend
-    if (is_zero(a)) {
-        zero()
+    if (is_zero(lhs)) {
+        return zero()
     } else {
         // Handle special case for INT_MIN / -1 which would overflow
-        if (a.bits == U32_WITH_FIRST_BIT_SET && b.bits == (U32_WITH_FIRST_BIT_SET | 1)) {
-            assert!(false, EOVERFLOW);
+        if (lhs.bits == U32_WITH_FIRST_BIT_SET && rhs.bits == (U32_WITH_FIRST_BIT_SET | 1)) {
+            abort EOverflow
         };
 
-        let (a_is_positive, a_magnitude) = extract_sign_and_magnitude(a);
-        let (b_is_positive, b_magnitude) = extract_sign_and_magnitude(b);
+        let (lhs_sign, lhs_magnitude) = extract_sign_and_magnitude(lhs);
+        let (rhs_sign, rhs_magnitude) = extract_sign_and_magnitude(rhs);
 
         // Result sign is positive if both signs are the same, negative otherwise
-        let result_positive = a_is_positive == b_is_positive;
-        let result_magnitude = a_magnitude / b_magnitude;
+        let result_sign = if (
+            (lhs_sign == Sign::Positive && rhs_sign == Sign::Positive) ||
+                             (lhs_sign == Sign::Negative && rhs_sign == Sign::Negative)
+        ) {
+            Sign::Positive
+        } else {
+            Sign::Negative
+        };
 
-        create_from_sign_and_magnitude(result_positive, result_magnitude)
+        let result_magnitude = lhs_magnitude / rhs_magnitude;
+
+        return from_sign_and_magnitude(result_sign, result_magnitude)
     }
 }
 
-/// @notice Modulo `a % b`.
-public fun modulo(a: &I32, b: &I32): I32 {
-    assert!(!is_zero(b), EDIVISION_BY_ZERO);
+/// @notice Calculates modulo `lhs % rhs`.
+public fun modulo(lhs: &I32, rhs: &I32): I32 {
+    assert!(!is_zero(rhs), EDivisionByZero);
 
     // Handle special case for zero dividend
-    if (is_zero(a)) {
-        zero()
+    if (is_zero(lhs)) {
+        return zero()
     } else {
-        let (a_is_positive, a_magnitude) = extract_sign_and_magnitude(a);
-        let (_, b_magnitude) = extract_sign_and_magnitude(b);
+        let (lhs_sign, lhs_magnitude) = extract_sign_and_magnitude(lhs);
+        let (_, rhs_magnitude) = extract_sign_and_magnitude(rhs);
 
-        // Calculate result; sign follows dividend (a)
-        let result_magnitude = a_magnitude % b_magnitude;
+        // Calculate result; sign follows dividend (lhs)
+        let result_magnitude = lhs_magnitude % rhs_magnitude;
 
-        create_from_sign_and_magnitude(a_is_positive, result_magnitude)
+        return from_sign_and_magnitude(lhs_sign, result_magnitude)
     }
 }
 
 /// @notice Returns the minimum of two I32 values
-public fun min(a: &I32, b: &I32): I32 {
-    if (compare(a, b) == LESS_THAN) { *a } else { *b }
+public fun min(lhs: &I32, rhs: &I32): I32 {
+    match (compare(lhs, rhs)) {
+        x if (x == less_than()) => *lhs,
+        _ => *rhs,
+    }
 }
 
 /// @notice Returns the maximum of two I32 values
-public fun max(a: &I32, b: &I32): I32 {
-    if (compare(a, b) == GREATER_THAN) { *a } else { *b }
+public fun max(lhs: &I32, rhs: &I32): I32 {
+    match (compare(lhs, rhs)) {
+        x if (x == greater_than()) => *lhs,
+        _ => *rhs,
+    }
 }
 
-/// @notice Check if a is less than b
-public fun lt(a: &I32, b: &I32): bool {
-    compare(a, b) == LESS_THAN
+/// @notice Check if lhs is less than rhs
+public fun lt(lhs: &I32, rhs: &I32): bool {
+    compare(lhs, rhs) == less_than()
 }
 
-/// @notice Check if a is less than or equal to b
-public fun lte(a: &I32, b: &I32): bool {
-    let cmp = compare(a, b);
-    cmp == LESS_THAN || cmp == EQUAL
+/// @notice Check if lhs is less than or equal to rhs
+public fun lte(lhs: &I32, rhs: &I32): bool {
+    let cmp = compare(lhs, rhs);
+    cmp == less_than() || cmp == equal()
 }
 
-/// @notice Check if a is greater than b
-public fun gt(a: &I32, b: &I32): bool {
-    compare(a, b) == GREATER_THAN
+/// @notice Check if lhs is greater than rhs
+public fun gt(lhs: &I32, rhs: &I32): bool {
+    compare(lhs, rhs) == greater_than()
 }
 
-/// @notice Check if a is greater than or equal to b
-public fun gte(a: &I32, b: &I32): bool {
-    let cmp = compare(a, b);
-    cmp == GREATER_THAN || cmp == EQUAL
+/// @notice Check if lhs is greater than or equal to rhs
+public fun gte(lhs: &I32, rhs: &I32): bool {
+    let cmp = compare(lhs, rhs);
+    cmp == greater_than() || cmp == equal()
 }
