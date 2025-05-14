@@ -1,5 +1,6 @@
 module daymove::daymove;
 
+use daymove::constants;
 use daymove::helpers;
 use daymove::timezone::{Self, TimeZone};
 
@@ -38,11 +39,11 @@ public fun new_zdt_with_tz(
     let jd = helpers::ymd_to_jd(y, m, d);
 
     // Calculate epoch days and seconds within the day
-    let epoch_days = jd - helpers::jd_unix_epoch();
+    let epoch_days = jd - constants::jd_unix_epoch();
     let day_seconds = (h as u64) * 3600 + (min as u64) * 60 + (s as u64);
 
     // Calculate UTC timestamp
-    let local_seconds = epoch_days * helpers::seconds_per_day() + day_seconds;
+    let local_seconds = epoch_days * constants::seconds_per_day() + day_seconds;
 
     // Apply timezone offset to get UTC
     let (offset_seconds, is_negative) = timezone::offset_seconds(tz);
@@ -58,7 +59,7 @@ public fun new_zdt_with_tz(
     };
 
     // Convert to milliseconds
-    let timestamp_ms = utc_seconds * helpers::ms_per_second();
+    let timestamp_ms = utc_seconds * constants::ms_per_second();
 
     ZonedDateTime {
         timestamp_ms,
@@ -122,9 +123,11 @@ public fun new_cet(y: u16, m: u8, d: u8, h: u8, min: u8, s: u8): ZonedDateTime {
 // =======================================
 
 // Internal helper to decompose ZonedDateTime into components
-fun decompose(self: &ZonedDateTime): (u16, u8, u8, u8, u8, u8) {
+// Now includes ms component as well
+fun decompose(self: &ZonedDateTime): (u16, u8, u8, u8, u8, u8, u16) {
     let timestamp_ms = self.timestamp_ms;
-    let utc_seconds = timestamp_ms / helpers::ms_per_second();
+    let ms_part = (timestamp_ms % constants::ms_per_second()) as u16;
+    let utc_seconds = timestamp_ms / constants::ms_per_second();
 
     // Apply timezone offset for local time
     let (offset_seconds, is_negative) = timezone::offset_seconds(&self.tz);
@@ -139,48 +142,54 @@ fun decompose(self: &ZonedDateTime): (u16, u8, u8, u8, u8, u8) {
     };
 
     // Calculate days and time
-    let days = local_seconds / helpers::seconds_per_day();
-    let day_seconds = local_seconds % helpers::seconds_per_day();
+    let days = local_seconds / constants::seconds_per_day();
+    let day_seconds = local_seconds % constants::seconds_per_day();
 
     // Convert to date and time components
-    let (year, month, day) = helpers::jd_to_ymd(days + helpers::jd_unix_epoch());
+    let (year, month, day) = helpers::jd_to_ymd(days + constants::jd_unix_epoch());
     let hour = (day_seconds / 3600) as u8;
     let remainder = day_seconds % 3600;
     let minute = (remainder / 60) as u8;
     let second = (remainder % 60) as u8;
 
-    (year, month, day, hour, minute, second)
+    (year, month, day, hour, minute, second, ms_part)
 }
 
 // Get component methods
 public fun year(self: &ZonedDateTime): u16 {
-    let (y, _, _, _, _, _) = decompose(self);
+    let (y, _, _, _, _, _, _) = decompose(self);
     y
 }
 
 public fun month(self: &ZonedDateTime): u8 {
-    let (_, m, _, _, _, _) = decompose(self);
+    let (_, m, _, _, _, _, _) = decompose(self);
     m
 }
 
 public fun day(self: &ZonedDateTime): u8 {
-    let (_, _, d, _, _, _) = decompose(self);
+    let (_, _, d, _, _, _, _) = decompose(self);
     d
 }
 
 public fun hour(self: &ZonedDateTime): u8 {
-    let (_, _, _, h, _, _) = decompose(self);
+    let (_, _, _, h, _, _, _) = decompose(self);
     h
 }
 
 public fun minute(self: &ZonedDateTime): u8 {
-    let (_, _, _, _, m, _) = decompose(self);
+    let (_, _, _, _, m, _, _) = decompose(self);
     m
 }
 
 public fun second(self: &ZonedDateTime): u8 {
-    let (_, _, _, _, _, s) = decompose(self);
+    let (_, _, _, _, _, s, _) = decompose(self);
     s
+}
+
+// New method to get milliseconds part
+public fun millisecond(self: &ZonedDateTime): u16 {
+    let (_, _, _, _, _, _, ms) = decompose(self);
+    ms
 }
 
 // Extract TimeZone from a ZonedDateTime
@@ -208,7 +217,7 @@ public fun from_timestamp_ms_with_tz(timestamp_ms: u64, tz: &TimeZone): ZonedDat
 // Add operations
 public fun add_days(self: &ZonedDateTime, delta: u64): ZonedDateTime {
     // Simply add days worth of milliseconds
-    let new_timestamp = self.timestamp_ms + (delta * helpers::ms_per_day());
+    let new_timestamp = self.timestamp_ms + (delta * constants::ms_per_day());
 
     ZonedDateTime {
         timestamp_ms: new_timestamp,
@@ -217,7 +226,7 @@ public fun add_days(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun add_hours(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let new_timestamp = self.timestamp_ms + (delta * helpers::ms_per_hour());
+    let new_timestamp = self.timestamp_ms + (delta * constants::ms_per_hour());
 
     ZonedDateTime {
         timestamp_ms: new_timestamp,
@@ -226,7 +235,7 @@ public fun add_hours(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun add_minutes(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let new_timestamp = self.timestamp_ms + (delta * helpers::ms_per_minute());
+    let new_timestamp = self.timestamp_ms + (delta * constants::ms_per_minute());
 
     ZonedDateTime {
         timestamp_ms: new_timestamp,
@@ -235,7 +244,7 @@ public fun add_minutes(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun add_seconds(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let new_timestamp = self.timestamp_ms + (delta * helpers::ms_per_second());
+    let new_timestamp = self.timestamp_ms + (delta * constants::ms_per_second());
 
     ZonedDateTime {
         timestamp_ms: new_timestamp,
@@ -255,7 +264,7 @@ public fun add_milliseconds(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 // Subtract operations
 public fun sub_days(self: &ZonedDateTime, delta: u64): ZonedDateTime {
     // Handle underflow
-    let ms_delta = delta * helpers::ms_per_day();
+    let ms_delta = delta * constants::ms_per_day();
     let new_timestamp = if (self.timestamp_ms >= ms_delta) {
         self.timestamp_ms - ms_delta
     } else {
@@ -269,7 +278,7 @@ public fun sub_days(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun sub_hours(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let ms_delta = delta * helpers::ms_per_hour();
+    let ms_delta = delta * constants::ms_per_hour();
     let new_timestamp = if (self.timestamp_ms >= ms_delta) {
         self.timestamp_ms - ms_delta
     } else {
@@ -283,7 +292,7 @@ public fun sub_hours(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun sub_minutes(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let ms_delta = delta * helpers::ms_per_minute();
+    let ms_delta = delta * constants::ms_per_minute();
     let new_timestamp = if (self.timestamp_ms >= ms_delta) {
         self.timestamp_ms - ms_delta
     } else {
@@ -297,7 +306,7 @@ public fun sub_minutes(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 }
 
 public fun sub_seconds(self: &ZonedDateTime, delta: u64): ZonedDateTime {
-    let ms_delta = delta * helpers::ms_per_second();
+    let ms_delta = delta * constants::ms_per_second();
     let new_timestamp = if (self.timestamp_ms >= ms_delta) {
         self.timestamp_ms - ms_delta
     } else {
@@ -327,13 +336,13 @@ public fun sub_milliseconds(self: &ZonedDateTime, delta: u64): ZonedDateTime {
 // 5. Epoch seconds <--> DateTime conversion
 // =======================================
 public fun to_unix_epoch(self: &ZonedDateTime): u64 {
-    self.timestamp_ms / helpers::ms_per_second()
+    self.timestamp_ms / constants::ms_per_second()
 }
 
 // Convert epoch to ZonedDateTime using a TimeZone struct
 public fun from_unix_epoch_with_tz(unix_epoch_sec: u64, tz: &TimeZone): ZonedDateTime {
     ZonedDateTime {
-        timestamp_ms: unix_epoch_sec * helpers::ms_per_second(),
+        timestamp_ms: unix_epoch_sec * constants::ms_per_second(),
         tz: *tz,
     }
 }
@@ -506,4 +515,33 @@ public fun test_timezone_conversion() {
 public fun test_pre_epoch_date() {
     // This should fail because it's before Unix epoch
     let _pre_epoch = new_utc(1969, 7, 20, 20, 17, 40);
+}
+
+#[test]
+public fun test_millisecond_precision() {
+    // Test with specific millisecond values
+    let base_ms = 1715644800123; // Some timestamp with milliseconds
+    let zdt = from_timestamp_ms(base_ms);
+
+    // Verify millisecond part
+    assert!(millisecond(&zdt) == 123, 0);
+
+    // Add some milliseconds
+    let zdt2 = add_milliseconds(&zdt, 456);
+    assert!(millisecond(&zdt2) == 579, 1); // 123 + 456 = 579
+
+    // Verify rollover when adding milliseconds
+    let zdt3 = add_milliseconds(&zdt, 900);
+    assert!(millisecond(&zdt3) == 23, 2); // 123 + 900 = 1023 -> 23ms
+    assert!(second(&zdt3) == second(&zdt) + 1, 3); // And second incremented
+
+    // Test nanosecond rounding (we don't store nanoseconds, just milliseconds)
+    let zdt4 = from_timestamp_ms(base_ms + 0); // Same millisecond
+    let zdt5 = from_timestamp_ms(base_ms + 1); // Next millisecond
+
+    assert!(millisecond(&zdt4) == 123, 4);
+    assert!(millisecond(&zdt5) == 124, 5);
+
+    // Verify that to_timestamp_ms preserves milliseconds
+    assert!(to_timestamp_ms(&zdt) == base_ms, 6);
 }
