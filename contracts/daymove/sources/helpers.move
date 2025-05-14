@@ -1,6 +1,7 @@
 module daymove::helpers;
 
 use daymove::constants;
+use daymove::utc_offset::{Self, UtcOffset};
 
 // Helper function to validate YMD
 public fun is_valid_ymd(y: u16, m: u8, d: u8): bool {
@@ -47,4 +48,84 @@ public fun jd_to_ymd(jd: u64): (u16, u8, u8) {
     let month = (g + 3 - 12 * (g / 10)) as u8;
     let year = (100 * c + e - 4800 + (g / 10)) as u16;
     (year, month, day)
+}
+
+// =======================================
+// DateTime creation and decomposition
+// =======================================
+
+// Create timestamp from components
+public fun components_to_timestamp(
+    y: u16,
+    m: u8,
+    d: u8,
+    h: u8,
+    min: u8,
+    s: u8,
+    offset: &UtcOffset,
+): u64 {
+    // Pre-validate
+    assert!(is_valid_ymd(y, m, d), 1); // EInvalidDate
+    assert!(h < 24 && min < 60 && s < 60, 2); // EInvalidTime
+    assert!(y > 1970 || (y == 1970 && (m > 1 || (m == 1 && d >= 1))), 3); // EPreUnixEpochDate
+
+    // Convert to Julian day
+    let jd = ymd_to_jd(y, m, d);
+
+    // Calculate epoch days and seconds within the day
+    let epoch_days = jd - constants::jd_unix_epoch();
+    let day_seconds = (h as u64) * 3600 + (min as u64) * 60 + (s as u64);
+
+    // Calculate UTC timestamp
+    let local_seconds = epoch_days * constants::seconds_per_day() + day_seconds;
+
+    // Apply offset to get UTC
+    let offset_sec = utc_offset::offset_seconds(offset);
+    let utc_seconds = if (utc_offset::is_negative(offset)) {
+        local_seconds + offset_sec
+    } else {
+        // Avoid underflow
+        if (local_seconds >= offset_sec) {
+            local_seconds - offset_sec
+        } else {
+            0
+        }
+    };
+
+    // Convert to milliseconds
+    utc_seconds * constants::ms_per_second()
+}
+
+// Decompose timestamp into components using an offset
+public fun decompose_timestamp(
+    timestamp_ms: u64,
+    offset: &UtcOffset,
+): (u16, u8, u8, u8, u8, u8, u16) {
+    let ms_part = (timestamp_ms % constants::ms_per_second()) as u16;
+    let utc_seconds = timestamp_ms / constants::ms_per_second();
+
+    // Apply timezone offset for local time
+    let offset_sec = utc_offset::offset_seconds(offset);
+    let local_seconds = if (utc_offset::is_negative(offset)) {
+        if (utc_seconds >= offset_sec) {
+            utc_seconds - offset_sec
+        } else {
+            0
+        }
+    } else {
+        utc_seconds + offset_sec
+    };
+
+    // Calculate days and time
+    let days = local_seconds / constants::seconds_per_day();
+    let day_seconds = local_seconds % constants::seconds_per_day();
+
+    // Convert to date and time components
+    let (year, month, day) = jd_to_ymd(days + constants::jd_unix_epoch());
+    let hour = (day_seconds / 3600) as u8;
+    let remainder = day_seconds % 3600;
+    let minute = (remainder / 60) as u8;
+    let second = (remainder % 60) as u8;
+
+    (year, month, day, hour, minute, second, ms_part)
 }
