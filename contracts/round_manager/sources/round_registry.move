@@ -1,10 +1,7 @@
 module round_manager::round_registry;
 
-
-use sui::table::{Self, Table};
-
 use round_manager::round::{Self, Round};
-
+use sui::table::{Self, Table};
 
 public struct RoundRegistry has key, store {
     id: UID,
@@ -22,11 +19,7 @@ public(package) fun new(ctx: &mut TxContext): RoundRegistry {
     }
 }
 
-
-public fun create_round(
-    self: &mut RoundRegistry,
-    ctx: &mut TxContext,
-) {
+public fun create_round(self: &mut RoundRegistry, ctx: &mut TxContext) {
     self.current_round = self.current_round;
 
     let round = round::new(self.current_round, ctx);

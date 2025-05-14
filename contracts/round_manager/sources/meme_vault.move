@@ -8,13 +8,14 @@ use sui::event;
 use sui::url;
 
 const TOTAL_SUPPLY: u64 = 1_000_000_000_000_000; // 1 billion coins (10^9), with 6 decimals → 10^(9+6) base units
+const HALF_TOTAL_SUPPLY: u64 = 500_000_000_000_000; // 500 million coins (10^9), with 6 decimals → 10^(9+6) base units
 const DECIMALS: u8 = 6; // Number of decimal places (1 coin = 10^6 base units)
 
 const EInvalidSupply: u64 = 1;
 const EInvalidDecimals: u64 = 2;
+const EInvalidReserve: u64 = 3;
 
-
-public struct NewMemeVaultEvent<phantom CoinT> has drop, copy {
+public struct NewMemeVaultEvent<phantom CoinT> has copy, drop {
     id: ID,
 }
 
@@ -25,7 +26,6 @@ public struct MemeVault<phantom CoinT> has key, store {
     links: vector<url::Url>,
     reserve: Balance<CoinT>,
 }
-
 
 public fun new<CoinT>(
     treasury_cap: TreasuryCap<CoinT>,
@@ -55,7 +55,6 @@ public fun new<CoinT>(
     vault
 }
 
-
 public(package) fun update_metadata<CoinT>(
     self: &mut MemeVault<CoinT>,
     name: string::String,
@@ -69,4 +68,15 @@ public(package) fun update_metadata<CoinT>(
     cap.update_symbol(metadata, symbol);
     cap.update_description(metadata, description);
     cap.update_icon_url(metadata, icon_url.inner_url());
+}
+
+public fun withdraw_two_half_supply<CoinT>(
+    self: &mut MemeVault<CoinT>,
+): (Balance<CoinT>, Balance<CoinT>) {
+    let balance1 = self.reserve.split(HALF_TOTAL_SUPPLY);
+    let balance2 = self.reserve.split(HALF_TOTAL_SUPPLY);
+
+    assert!(self.reserve.value() == 0, EInvalidReserve);
+
+    (balance1, balance2)
 }

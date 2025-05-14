@@ -1,9 +1,8 @@
 module round_manager::meme_registry;
 
-use sui::object_bag::{Self, ObjectBag};
-use sui::coin::{TreasuryCap, CoinMetadata};
-
 use round_manager::meme_vault;
+use sui::coin::{TreasuryCap, CoinMetadata};
+use sui::object_bag::{Self, ObjectBag};
 
 public struct MemeRegistry has key, store {
     id: UID,
@@ -32,3 +31,10 @@ public fun register_meme<CoinT>(
     registry.table.add(coin_type_name, vault);
     registry.num_memes = registry.num_memes + 1;
 }
+
+public fun borrow_mut_vault<CoinT>(registry: &mut MemeRegistry): &mut meme_vault::MemeVault<CoinT> {
+    let coin_type_name = std::type_name::get<CoinT>();
+    registry.table.borrow_mut(coin_type_name)
+}
+
+public fun withdraw_funds<CoinT>(registry: &mut MemeRegistry, amount: u64, ctx: &mut TxContext) {}

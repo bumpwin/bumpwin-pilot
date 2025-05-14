@@ -1,9 +1,7 @@
 module round_manager::round;
 
-use sui::event;
-
 use round_manager::meme_registry::{Self, MemeRegistry};
-
+use sui::event;
 
 public struct Round has key, store {
     id: UID,
@@ -11,16 +9,12 @@ public struct Round has key, store {
     meme_registry: MemeRegistry,
 }
 
-public struct NewRoundEvent has drop, copy {
+public struct NewRoundEvent has copy, drop {
     id: ID,
     round: u64,
 }
 
-public(package) fun new(
-    round: u64,
-    ctx: &mut TxContext,
-): Round {
-
+public(package) fun new(round: u64, ctx: &mut TxContext): Round {
     let round = Round {
         id: object::new(ctx),
         round,
@@ -34,4 +28,3 @@ public(package) fun new(
 
     round
 }
-
