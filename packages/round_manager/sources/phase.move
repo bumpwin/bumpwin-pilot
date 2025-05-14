@@ -28,9 +28,9 @@ public struct BattleRoundConfig has copy, drop, store {
 
 fun round_config(): BattleRoundConfig {
     BattleRoundConfig {
-        daytime_ms: 24 * 3600000, // 24 hours in milliseconds
-        darknight_ms: 1 * 3600000, // 1 hour in milliseconds
-        darknight_batch_ms: 12 * 60000, // 12 minutes in milliseconds
+        daytime_ms: 24 * MS_PER_HOUR, // 24 hours in milliseconds
+        darknight_ms: 1 * MS_PER_HOUR, // 1 hour in milliseconds
+        darknight_batch_ms: 12 * MS_PER_MINUTE, // 12 minutes in milliseconds
     }
 }
 
@@ -56,3 +56,8 @@ public fun round_phase(start_timestamp_ms: u64, clock: &Clock): RoundPhase {
         RoundPhase::AfterEnd
     }
 }
+
+// MS_PER_HOURとMS_PER_MINUTEを外部から参照できるようにする
+public fun ms_per_hour(): u64 { MS_PER_HOUR }
+
+public fun ms_per_minute(): u64 { MS_PER_MINUTE }

@@ -37,4 +37,9 @@ public fun borrow_mut_vault<CoinT>(registry: &mut MemeRegistry): &mut meme_vault
     registry.table.borrow_mut(coin_type_name)
 }
 
-public fun withdraw_funds<CoinT>(registry: &mut MemeRegistry, amount: u64, ctx: &mut TxContext) {}
+#[allow(unused_type_parameter)]
+public fun withdraw_funds<CoinT>(
+    _registry: &mut MemeRegistry,
+    _amount: u64,
+    _ctx: &mut TxContext,
+) {}

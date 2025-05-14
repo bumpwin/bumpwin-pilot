@@ -1,10 +1,8 @@
 module round_manager::battle_round;
 
 use round_manager::meme_registry::{Self, MemeRegistry};
-use round_manager::round;
 use sui::balance::Balance;
 use sui::event;
-
 
 public struct BattleRound has key, store {
     id: UID,
