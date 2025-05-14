@@ -1,18 +1,26 @@
-/*
 #[test_only]
-module round_manager::round_manager_tests;
-// uncomment this line to import the module
-// use round_manager::round_manager;
+module round_manager::season_config_tests;
 
-const ENotImplemented: u64 = 0;
+use round_manager::season_config;
+use sui::clock;
+use sui::test_scenario::{Self as test, ctx};
+
+const ALICE: address = @0x1;
 
 #[test]
-fun test_round_manager() {
-    // pass
-}
+public fun test_season_config() {
+    let mut scenario = test::begin(@0x1);
+    let test = &mut scenario;
 
-#[test, expected_failure(abort_code = ::round_manager::round_manager_tests::ENotImplemented)]
-fun test_round_manager_fail() {
-    abort ENotImplemented
+    clock::create_for_testing(test.ctx()).share_for_testing();
+
+    test.next_tx(ALICE);
+    {
+        let clock = test.take_shared<clock::Clock>();
+
+        let season_config = season_config::new(1, 10, clock, test.ctx());
+
+    };
+
+    scenario.end();
 }
-*/

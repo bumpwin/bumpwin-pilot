@@ -129,47 +129,59 @@ public fun as_u32(value: &I32): u32 {
 
 /// @notice Compares `lhs` and `rhs`.
 /// @return Equal if lhs == rhs, LessThan if lhs < rhs, GreaterThan if lhs > rhs
-public fun compare(lhs: &I32, rhs: &I32): ComparisonResult {
+public fun b_compare(lhs: &I32, rhs: &I32): ComparisonResult {
     if (lhs.bits == rhs.bits) {
-        return equal()
+        equal()
     } else {
         let (lhs_sign, _) = extract_sign_and_magnitude(lhs);
         let (rhs_sign, _) = extract_sign_and_magnitude(rhs);
 
-        match (lhs_sign) {
-            Sign::Positive => {
-                match (rhs_sign) {
-                    Sign::Positive => {
-                        // Both positive, compare directly
-                        if (lhs.bits > rhs.bits) {
-                            return greater_than()
-                        } else {
-                            return less_than()
-                        }
-                    },
-                    Sign::Negative => {
-                        // Positive > Negative
-                        return greater_than()
-                    },
-                }
-            },
-            Sign::Negative => {
-                match (rhs_sign) {
-                    Sign::Positive => {
-                        // Negative < Positive
-                        return less_than()
-                    },
-                    Sign::Negative => {
-                        // Both negative, larger bit value means more negative
-                        if (lhs.bits > rhs.bits) {
-                            return less_than()
-                        } else {
-                            return greater_than()
-                        }
-                    },
-                }
-            },
+        if (lhs_sign == Sign::Positive && rhs_sign == Sign::Positive) {
+            if (lhs.bits > rhs.bits) {
+                greater_than()
+            } else {
+                less_than()
+            }
+        } else if (lhs_sign == Sign::Negative && rhs_sign == Sign::Negative) {
+            if (lhs.bits > rhs.bits) {
+                less_than()
+            } else {
+                greater_than()
+            }
+        } else if (lhs_sign == Sign::Positive && rhs_sign == Sign::Negative) {
+            greater_than()
+        } else { // lhs_sign == Sign::Negative && rhs_sign == Sign::Positive
+            less_than()
         }
+    }
+}
+public fun compare(lhs: &I32, rhs: &I32): ComparisonResult {
+    if (lhs.bits == rhs.bits) {
+        return equal();
+    };
+
+    let (lhs_sign, _) = extract_sign_and_magnitude(lhs);
+    let (rhs_sign, _) = extract_sign_and_magnitude(rhs);
+
+    // let pair = (lhs_sign, rhs_sign);
+    match (lhs_sign, rhs_sign) {
+        (Sign::Positive, Sign::Positive) => {
+            if (lhs.bits > rhs.bits) {
+                greater_than()
+            } else {
+                less_than()
+            }
+        },
+        (Sign::Negative, Sign::Negative) => {
+            if (lhs.bits > rhs.bits) {
+                less_than()
+            } else {
+                greater_than()
+            }
+        },
+        (Sign::Positive, Sign::Negative) => greater_than(),
+        (Sign::Negative, Sign::Positive) => less_than(),
+        _ => equal() // fallback: 理論的には不要だが exhaustiveness 満たすため
     }
 }
 
