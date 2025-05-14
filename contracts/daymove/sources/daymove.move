@@ -6,29 +6,37 @@ use daymove::timezone::{Self, TimeZone};
 const JD_OFFSET: u64 = 2_440_588; // 1970-01-01 Julian day
 const SECONDS_PER_DAY: u64 = 86_400;
 const MS_PER_SECOND: u64 = 1000;
+const MS_PER_DAY: u64 = SECONDS_PER_DAY * MS_PER_SECOND;
 
-// Format: YYYY-MM-DD
-public struct PlainDate has copy, drop {
-    year: u16,
-    month: u8,
-    day: u8,
-}
+// Error codes
+const EInvalidDate: u64 = 1;
+const EInvalidTime: u64 = 2;
+const EPreEpochDate: u64 = 3;
 
-// Local time + TZ offset (in minutes, e.g. +540 = JST)
+// New ZonedDateTime structure that stores timestamp_ms and timezone
 public struct ZonedDateTime has copy, drop {
-    date: PlainDate,
-    hour: u8,
-    minute: u8,
-    second: u8,
+    timestamp_ms: u64,
     tz: TimeZone,
 }
 
 // =======================================
 // 1. Constructors & Validators
 // =======================================
-public fun new_date(y: u16, m: u8, d: u8): PlainDate {
-    assert!(is_valid_ymd(y, m, d), 0);
-    PlainDate { year: y, month: m, day: d }
+
+// Helper function to validate YMD
+fun is_valid_ymd(y: u16, m: u8, d: u8): bool {
+    if (!(m >= 1 && m <= 12)) { return false };
+    let dim = days_in_month(y, m);
+    d >= 1 && d <= dim
+}
+
+fun days_in_month(y: u16, m: u8): u8 {
+    if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12) 31
+    else if (m == 2) { if (is_leap(y)) 29 else 28 } else 30
+}
+
+fun is_leap(y: u16): bool {
+    ((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0)
 }
 
 // Create ZonedDateTime with a TimeZone
@@ -41,27 +49,46 @@ public fun new_zdt_with_tz(
     s: u8,
     tz: &TimeZone,
 ): ZonedDateTime {
-    let date = new_date(y, m, d);
-    assert!(h < 24 && min < 60 && s < 60, 1);
+    assert!(is_valid_ymd(y, m, d), EInvalidDate);
+    assert!(h < 24 && min < 60 && s < 60, EInvalidTime);
+
+    // Check if the date is before Unix epoch (1970-01-01)
+    assert!(y > 1970 || (y == 1970 && (m > 1 || (m == 1 && d >= 1))), EPreEpochDate);
+
+    // Convert to Julian day
+    let jd = ymd_to_jd(y, m, d);
+
+    // Calculate epoch days and seconds within the day
+    let epoch_days = jd - JD_OFFSET;
+    let day_seconds = (h as u64) * 3600 + (min as u64) * 60 + (s as u64);
+
+    // Calculate UTC timestamp
+    let local_seconds = epoch_days * SECONDS_PER_DAY + day_seconds;
+
+    // Apply timezone offset to get UTC
+    let (offset_seconds, is_negative) = timezone::offset_seconds(tz);
+    let utc_seconds = if (is_negative) {
+        local_seconds + offset_seconds
+    } else {
+        // Avoid underflow
+        if (local_seconds >= offset_seconds) {
+            local_seconds - offset_seconds
+        } else {
+            0
+        }
+    };
+
+    // Convert to milliseconds
+    let timestamp_ms = utc_seconds * MS_PER_SECOND;
+
     ZonedDateTime {
-        date,
-        hour: h,
-        minute: min,
-        second: s,
+        timestamp_ms,
         tz: *tz,
     }
 }
 
 public fun new_zdt(y: u16, m: u8, d: u8, h: u8, min: u8, s: u8, tz_offset_min: u16): ZonedDateTime {
-    let date = new_date(y, m, d);
-    assert!(h < 24 && min < 60 && s < 60, 1);
-    ZonedDateTime {
-        date,
-        hour: h,
-        minute: min,
-        second: s,
-        tz: timezone::new_positive(tz_offset_min),
-    }
+    new_zdt_with_tz(y, m, d, h, min, s, &timezone::new_positive(tz_offset_min))
 }
 
 // Create a ZonedDateTime with a negative timezone offset
@@ -74,15 +101,7 @@ public fun new_zdt_negative(
     s: u8,
     tz_offset_min: u16,
 ): ZonedDateTime {
-    let date = new_date(y, m, d);
-    assert!(h < 24 && min < 60 && s < 60, 1);
-    ZonedDateTime {
-        date,
-        hour: h,
-        minute: min,
-        second: s,
-        tz: timezone::new_negative(tz_offset_min),
-    }
+    new_zdt_with_tz(y, m, d, h, min, s, &timezone::new_negative(tz_offset_min))
 }
 
 // Function to create a ZonedDateTime from epoch with a negative timezone offset
@@ -96,10 +115,10 @@ public fun from_epoch_negative(epoch_sec: u64, tz_offset_min: u16): ZonedDateTim
 
 // Creates a ZonedDateTime from a UTC timestamp in milliseconds
 public fun from_timestamp_ms(timestamp_ms: u64): ZonedDateTime {
-    // Convert timestamp in milliseconds to epoch seconds
-    let epoch_sec = timestamp_ms / MS_PER_SECOND;
-    // Use UTC timezone (offset = 0)
-    from_epoch_with_tz(epoch_sec, &timezone::utc())
+    ZonedDateTime {
+        timestamp_ms,
+        tz: timezone::utc(),
+    }
 }
 
 // Convenience functions to create ZonedDateTime with common timezones
@@ -119,18 +138,67 @@ public fun new_cet(y: u16, m: u8, d: u8, h: u8, min: u8, s: u8): ZonedDateTime {
     new_zdt_with_tz(y, m, d, h, min, s, &timezone::cet())
 }
 
+// Internal helper to decompose ZonedDateTime into components
+fun decompose(zdt: &ZonedDateTime): (u16, u8, u8, u8, u8, u8) {
+    let timestamp_ms = zdt.timestamp_ms;
+    let utc_seconds = timestamp_ms / MS_PER_SECOND;
+
+    // Apply timezone offset for local time
+    let (offset_seconds, is_negative) = timezone::offset_seconds(&zdt.tz);
+    let local_seconds = if (is_negative) {
+        if (utc_seconds >= offset_seconds) {
+            utc_seconds - offset_seconds
+        } else {
+            0
+        }
+    } else {
+        utc_seconds + offset_seconds
+    };
+
+    // Calculate days and time
+    let days = local_seconds / SECONDS_PER_DAY;
+    let day_seconds = local_seconds % SECONDS_PER_DAY;
+
+    // Convert to date and time components
+    let (year, month, day) = jd_to_ymd(days + JD_OFFSET);
+    let hour = (day_seconds / 3600) as u8;
+    let remainder = day_seconds % 3600;
+    let minute = (remainder / 60) as u8;
+    let second = (remainder % 60) as u8;
+
+    (year, month, day, hour, minute, second)
+}
+
 // Get component methods
-public fun year(zdt: &ZonedDateTime): u16 { zdt.date.year }
+public fun year(zdt: &ZonedDateTime): u16 {
+    let (y, _, _, _, _, _) = decompose(zdt);
+    y
+}
 
-public fun month(zdt: &ZonedDateTime): u8 { zdt.date.month }
+public fun month(zdt: &ZonedDateTime): u8 {
+    let (_, m, _, _, _, _) = decompose(zdt);
+    m
+}
 
-public fun day(zdt: &ZonedDateTime): u8 { zdt.date.day }
+public fun day(zdt: &ZonedDateTime): u8 {
+    let (_, _, d, _, _, _) = decompose(zdt);
+    d
+}
 
-public fun hour(zdt: &ZonedDateTime): u8 { zdt.hour }
+public fun hour(zdt: &ZonedDateTime): u8 {
+    let (_, _, _, h, _, _) = decompose(zdt);
+    h
+}
 
-public fun minute(zdt: &ZonedDateTime): u8 { zdt.minute }
+public fun minute(zdt: &ZonedDateTime): u8 {
+    let (_, _, _, _, m, _) = decompose(zdt);
+    m
+}
 
-public fun second(zdt: &ZonedDateTime): u8 { zdt.second }
+public fun second(zdt: &ZonedDateTime): u8 {
+    let (_, _, _, _, _, s) = decompose(zdt);
+    s
+}
 
 // Extract TimeZone from a ZonedDateTime
 public fun timezone_from_zdt(zdt: &ZonedDateTime): TimeZone {
@@ -139,28 +207,24 @@ public fun timezone_from_zdt(zdt: &ZonedDateTime): TimeZone {
 
 // Convert to timestamp in milliseconds
 public fun to_timestamp_ms(zdt: &ZonedDateTime): u64 {
-    to_epoch(zdt) * MS_PER_SECOND
+    zdt.timestamp_ms
 }
 
 // Creates a ZonedDateTime from a timestamp in milliseconds with specific TimeZone
 public fun from_timestamp_ms_with_tz(timestamp_ms: u64, tz: &TimeZone): ZonedDateTime {
-    from_epoch_with_tz(timestamp_ms / MS_PER_SECOND, tz)
+    ZonedDateTime {
+        timestamp_ms,
+        tz: *tz,
+    }
 }
 
 // Add days to the date
 public fun add_days(zdt: &ZonedDateTime, delta: u64): ZonedDateTime {
-    // Convert local date to Julian day number
-    let jd = ymd_to_jd(zdt.date.year, zdt.date.month, zdt.date.day);
-    // Add delta to Julian day
-    let jd_new = jd + delta;
-    // Convert Julian day to new Y-M-D
-    let (y2, m2, d2) = jd_to_ymd(jd_new);
-    // Reconstruct with new date (time and TZ unchanged)
+    // Simply add days worth of milliseconds
+    let new_timestamp = zdt.timestamp_ms + (delta * MS_PER_DAY);
+
     ZonedDateTime {
-        date: new_date(y2, m2, d2),
-        hour: zdt.hour,
-        minute: zdt.minute,
-        second: zdt.second,
+        timestamp_ms: new_timestamp,
         tz: zdt.tz,
     }
 }
@@ -169,62 +233,13 @@ public fun add_days(zdt: &ZonedDateTime, delta: u64): ZonedDateTime {
 // 3. Epoch seconds <--> DateTime conversion
 // =======================================
 public fun to_epoch(zdt: &ZonedDateTime): u64 {
-    // Julian day -> Epoch days -> seconds - TZ offset = UTC
-    let jd = ymd_to_jd(zdt.date.year, zdt.date.month, zdt.date.day);
-    let epoch_days = jd - JD_OFFSET;
-    let day_seconds =
-        (zdt.hour as u64) * 3600
-        + (zdt.minute as u64) * 60
-        + (zdt.second as u64);
-
-    let (offset_seconds, is_negative) = timezone::offset_seconds(&zdt.tz);
-
-    // Convert local time to UTC
-    if (is_negative) {
-        epoch_days * SECONDS_PER_DAY + day_seconds + offset_seconds
-    } else {
-        epoch_days * SECONDS_PER_DAY + day_seconds - offset_seconds
-    }
+    zdt.timestamp_ms / MS_PER_SECOND
 }
 
 // Convert epoch to ZonedDateTime using a TimeZone struct
 public fun from_epoch_with_tz(epoch_sec: u64, tz: &TimeZone): ZonedDateTime {
-    // Calculate offset in seconds
-    let (offset_seconds, is_negative) = timezone::offset_seconds(tz);
-
-    // Apply timezone offset
-    let local_seconds = if (is_negative) {
-        if (epoch_sec >= offset_seconds) {
-            epoch_sec - offset_seconds
-        } else {
-            // Handle underflow case (rare, but possible near epoch start)
-            0
-        }
-    } else {
-        epoch_sec + offset_seconds
-    };
-
-    // Calculate days and time
-    let days = local_seconds / SECONDS_PER_DAY;
-    let day_seconds = local_seconds % SECONDS_PER_DAY;
-
-    // Convert days to date
-    let (year, month, day) = jd_to_ymd(days + JD_OFFSET);
-
-    // Calculate hours, minutes, seconds
-    let hours = (day_seconds / 3600) as u8;
-    let remainder = day_seconds % 3600;
-    let minutes = (remainder / 60) as u8;
-    let seconds = (remainder % 60) as u8;
-
-    // Create date and validate
-    let date = new_date(year, month, day);
-
     ZonedDateTime {
-        date,
-        hour: hours,
-        minute: minutes,
-        second: seconds,
+        timestamp_ms: epoch_sec * MS_PER_SECOND,
         tz: *tz,
     }
 }
@@ -264,24 +279,6 @@ fun jd_to_ymd(jd: u64): (u16, u8, u8) {
     (year, month, day)
 }
 
-// =======================================
-// 5. Validators
-// =======================================
-fun is_valid_ymd(y: u16, m: u8, d: u8): bool {
-    if (!(m >= 1 && m <= 12)) { return false };
-    let dim = days_in_month(y, m);
-    d >= 1 && d <= dim
-}
-
-fun days_in_month(y: u16, m: u8): u8 {
-    if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12) 31
-    else if (m == 2) { if (is_leap(y)) 29 else 28 } else 30
-}
-
-fun is_leap(y: u16): bool {
-    ((y % 4 == 0) && (y % 100 != 0)) || (y % 400 == 0)
-}
-
 #[test]
 public fun test_date_struct() {
     let jst = timezone::jst();
@@ -289,7 +286,7 @@ public fun test_date_struct() {
     let after = add_days(&z, 20); // 20 days later
     let epoch = to_epoch(&after); // UTC epoch seconds
     let roundtrip = from_epoch_with_tz(epoch, &jst);
-    assert!(after.date.day == roundtrip.date.day, 0);
+    assert!(day(&after) == day(&roundtrip), 0);
 }
 
 #[test]
@@ -304,20 +301,20 @@ public fun test_timezone_struct() {
     let epoch = to_epoch(&after);
     let roundtrip = from_epoch_with_tz(epoch, &jst);
     // Verify
-    assert!(after.date.year == roundtrip.date.year, 0);
-    assert!(after.date.month == roundtrip.date.month, 1);
-    assert!(after.date.day == roundtrip.date.day, 2);
-    assert!(after.hour == roundtrip.hour, 3);
-    assert!(after.minute == roundtrip.minute, 4);
-    assert!(after.second == roundtrip.second, 5);
+    assert!(year(&after) == year(&roundtrip), 0);
+    assert!(month(&after) == month(&roundtrip), 1);
+    assert!(day(&after) == day(&roundtrip), 2);
+    assert!(hour(&after) == hour(&roundtrip), 3);
+    assert!(minute(&after) == minute(&roundtrip), 4);
+    assert!(second(&after) == second(&roundtrip), 5);
 
     // Test EST timezone
     let est = timezone::est();
     let z2 = new_zdt_with_tz(2025, 5, 14, 15, 30, 0, &est);
     let epoch2 = to_epoch(&z2);
     let roundtrip2 = from_epoch_with_tz(epoch2, &est);
-    assert!(z2.date.day == roundtrip2.date.day, 6);
-    assert!(z2.hour == roundtrip2.hour, 7);
+    assert!(day(&z2) == day(&roundtrip2), 6);
+    assert!(hour(&z2) == hour(&roundtrip2), 7);
 }
 
 #[test]
@@ -338,4 +335,11 @@ public fun test_convenience_functions() {
     // Test that all epochs are within margin of each other
     assert!(utc_epoch >= jst_epoch - margin && utc_epoch <= jst_epoch + margin, 0);
     assert!(utc_epoch >= est_epoch - margin && utc_epoch <= est_epoch + margin, 1);
+}
+
+#[test]
+#[expected_failure(abort_code = EPreEpochDate)]
+public fun test_pre_epoch_date() {
+    // This should fail because it's before Unix epoch
+    let _pre_epoch = new_utc(1969, 7, 20, 20, 17, 40);
 }
