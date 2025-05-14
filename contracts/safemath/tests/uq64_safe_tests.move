@@ -1,5 +1,5 @@
 #[test_only]
-module safemath::test_uq64;
+module safemath::uq64_safe_tests;
 
 use std::debug;
 use std::uq64_64;

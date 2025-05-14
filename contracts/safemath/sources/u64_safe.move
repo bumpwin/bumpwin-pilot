@@ -1,6 +1,6 @@
 module safemath::u64_safe;
 
-use std::{u64};
+use std::u64;
 
 /// Error codes
 const EOverflow: u64 = 0;
