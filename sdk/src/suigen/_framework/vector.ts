@@ -1,20 +1,20 @@
 import { bcs } from '@mysten/sui/bcs';
 import {
-  type Reified,
-  type ToField,
-  type ToTypeArgument,
-  type ToTypeStr,
-  type TypeArgument,
-  type VectorClass,
-  type VectorClassReified,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   extractType,
-  fieldToJSON,
+  Reified,
   toBcs,
+  ToField,
+  ToTypeArgument,
+  ToTypeStr,
+  TypeArgument,
+  VectorClass,
+  VectorClassReified,
+  fieldToJSON,
 } from './reified';
-import { type FieldsWithTypes, composeSuiType } from './util';
+import { composeSuiType, FieldsWithTypes } from './util';
 
 export type VectorElements<T extends TypeArgument> = Array<ToField<T>>;
 

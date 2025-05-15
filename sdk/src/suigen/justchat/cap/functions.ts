@@ -1,10 +1,6 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { obj, pure } from '../../_framework/util';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function init(tx: Transaction) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::cap::init`, arguments: [] });

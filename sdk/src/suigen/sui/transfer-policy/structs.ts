@@ -1,18 +1,14 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
-import { TypeName } from '../../_dependencies/source/0x1/type-name/structs';
 import * as reified from '../../_framework/reified';
+import { TypeName } from '../../_dependencies/source/0x1/type-name/structs';
 import {
-  type PhantomReified,
-  type PhantomToTypeStr,
-  type PhantomTypeArgument,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeStr as ToPhantom,
-  type ToPhantomTypeArgument,
-  type ToTypeStr,
+  PhantomReified,
+  PhantomToTypeStr,
+  PhantomTypeArgument,
+  Reified,
+  StructClass,
+  ToField,
+  ToPhantomTypeArgument,
+  ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -20,9 +16,10 @@ import {
   decodeFromJSONField,
   extractType,
   phantom,
+  ToTypeStr as ToPhantom,
 } from '../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
@@ -32,6 +29,9 @@ import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { SUI } from '../sui/structs';
 import { VecSet } from '../vec-set/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== TransferRequest =============================== */
 

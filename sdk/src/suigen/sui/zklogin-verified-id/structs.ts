@@ -1,21 +1,21 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { String } from '../../_dependencies/source/0x1/string/structs';
 import {
-  type PhantomReified,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeStr,
+  PhantomReified,
+  Reified,
+  StructClass,
+  ToField,
+  ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   phantom,
 } from '../../_framework/reified';
-import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== VerifiedID =============================== */
 
@@ -109,10 +109,12 @@ export class VerifiedID implements StructClass {
   static get bcs() {
     return bcs.struct('VerifiedID', {
       id: UID.bcs,
-      owner: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
+      owner: bcs
+        .bytes(32)
+        .transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
       key_claim_name: String.bcs,
       key_claim_value: String.bcs,
       issuer: String.bcs,

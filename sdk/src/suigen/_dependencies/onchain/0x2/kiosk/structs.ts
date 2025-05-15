@@ -1,17 +1,13 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import * as reified from '../../../../_framework/reified';
 import {
-  type PhantomReified,
-  type PhantomToTypeStr,
-  type PhantomTypeArgument,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeStr as ToPhantom,
-  type ToPhantomTypeArgument,
-  type ToTypeStr,
+  PhantomReified,
+  PhantomToTypeStr,
+  PhantomTypeArgument,
+  Reified,
+  StructClass,
+  ToField,
+  ToPhantomTypeArgument,
+  ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -19,9 +15,10 @@ import {
   decodeFromJSONField,
   extractType,
   phantom,
+  ToTypeStr as ToPhantom,
 } from '../../../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
@@ -30,6 +27,9 @@ import { Balance } from '../balance/structs';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { SUI } from '../sui/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== Kiosk =============================== */
 
@@ -118,10 +118,12 @@ export class Kiosk implements StructClass {
     return bcs.struct('Kiosk', {
       id: UID.bcs,
       profits: Balance.bcs,
-      owner: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
+      owner: bcs
+        .bytes(32)
+        .transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
       item_count: bcs.u32(),
       allow_extensions: bcs.bool(),
     });

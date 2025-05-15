@@ -27,7 +27,7 @@ public struct MemeVault<phantom CoinT> has key, store {
     reserve: Balance<CoinT>,
 }
 
-public fun new<CoinT>(
+public fun new<CoinT> (
     treasury_cap: TreasuryCap<CoinT>,
     metadata: CoinMetadata<CoinT>,
     ctx: &mut TxContext,

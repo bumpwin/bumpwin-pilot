@@ -1,27 +1,27 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import * as reified from '../../_framework/reified';
 import {
-  type PhantomReified,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeStr as ToPhantom,
-  type ToTypeStr,
+  PhantomReified,
+  Reified,
+  StructClass,
+  ToField,
+  ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   fieldToJSON,
   phantom,
+  ToTypeStr as ToPhantom,
 } from '../../_framework/reified';
-import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
-import type { Vector } from '../../_framework/vector';
+import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import { Vector } from '../../_framework/vector';
 import { Bag } from '../bag/structs';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { Table } from '../table/structs';
 import { VecSet } from '../vec-set/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== DenyList =============================== */
 
@@ -604,10 +604,12 @@ export class AddressKey implements StructClass {
 
   static get bcs() {
     return bcs.struct('AddressKey', {
-      pos0: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
+      pos0: bcs
+        .bytes(32)
+        .transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
     });
   }
 

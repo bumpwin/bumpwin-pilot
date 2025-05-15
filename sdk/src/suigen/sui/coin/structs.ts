@@ -1,18 +1,15 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 import { String as String1 } from '../../_dependencies/source/0x1/ascii/structs';
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import { String } from '../../_dependencies/source/0x1/string/structs';
 import {
-  type PhantomReified,
-  type PhantomToTypeStr,
-  type PhantomTypeArgument,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToPhantomTypeArgument,
-  type ToTypeStr,
+  PhantomReified,
+  PhantomToTypeStr,
+  PhantomTypeArgument,
+  Reified,
+  StructClass,
+  ToField,
+  ToPhantomTypeArgument,
+  ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -23,7 +20,7 @@ import {
   phantom,
 } from '../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
@@ -32,6 +29,9 @@ import { Balance, Supply } from '../balance/structs';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { Url } from '../url/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== Coin =============================== */
 

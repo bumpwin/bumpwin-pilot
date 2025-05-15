@@ -1,11 +1,7 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { type GenericArg, generic, obj, pure } from '../../_framework/util';
+import { GenericArg, generic, obj, pure } from '../../_framework/util';
 import { ID } from '../object/structs';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export interface TransferArgs {
   obj: GenericArg;

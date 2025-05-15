@@ -1,10 +1,6 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { obj, pure } from '../../_framework/util';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function bls12381(tx: Transaction) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::groth16::bls12381`, arguments: [] });

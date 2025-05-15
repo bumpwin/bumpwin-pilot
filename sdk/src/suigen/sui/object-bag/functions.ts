@@ -1,6 +1,6 @@
-import type { Transaction, TransactionObjectInput } from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
-import { type GenericArg, generic, obj } from '../../_framework/util';
+import { GenericArg, generic, obj } from '../../_framework/util';
+import { Transaction, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(tx: Transaction) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::object_bag::new`, arguments: [] });

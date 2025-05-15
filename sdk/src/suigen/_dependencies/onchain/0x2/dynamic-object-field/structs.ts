@@ -1,14 +1,11 @@
-import { type BcsType, bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 import {
-  type PhantomReified,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeArgument,
-  type ToTypeStr,
-  type TypeArgument,
+  PhantomReified,
+  Reified,
+  StructClass,
+  ToField,
+  ToTypeArgument,
+  ToTypeStr,
+  TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -20,12 +17,15 @@ import {
   toBcs,
 } from '../../../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../../../_framework/util';
 import { PKG_V30 } from '../index';
+import { BcsType, bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== Wrapper =============================== */
 

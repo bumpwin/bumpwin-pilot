@@ -1,17 +1,14 @@
-import { type BcsType, bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64 } from '@mysten/sui/utils';
 import {
-  type PhantomReified,
-  type PhantomToTypeStr,
-  type PhantomTypeArgument,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToPhantomTypeArgument,
-  type ToTypeArgument,
-  type ToTypeStr,
-  type TypeArgument,
+  PhantomReified,
+  PhantomToTypeStr,
+  PhantomTypeArgument,
+  Reified,
+  StructClass,
+  ToField,
+  ToPhantomTypeArgument,
+  ToTypeArgument,
+  ToTypeStr,
+  TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -23,7 +20,7 @@ import {
   toBcs,
 } from '../../../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
@@ -31,6 +28,9 @@ import {
 import { Option } from '../../0x1/option/structs';
 import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
+import { BcsType, bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64 } from '@mysten/sui/utils';
 
 /* ============================== Config =============================== */
 
