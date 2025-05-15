@@ -1,7 +1,7 @@
 module round_manager::operations;
 
+use round_manager::battle_market::{Self, BattleMarket};
 use round_manager::battle_round::BattleRound;
-use round_manager::bs::BalanceSheet;
 use round_manager::champ_amm::{Self, ChampAMM};
 use round_manager::claim_box::{Self, ClaimBox};
 use round_manager::meme_vault::MemeVault;
@@ -10,16 +10,16 @@ use sui::clock::Clock;
 
 public fun sunrise_settlement<CoinT>(
     battle_round: &mut BattleRound,
-    balance_sheet: BalanceSheet<CoinT>,
+    battle_market: BattleMarket,
     meme_vault: MemeVault<CoinT>,
     clock: &Clock,
     ctx: &mut TxContext,
 ): (ChampAMM<CoinT, WSUI>, ClaimBox<CoinT>) {
     battle_round.phase(clock).assert_after_end();
 
-    let (sui_reserve, share_supply) = balance_sheet.destroy();
+    let (sui_reserve, share_supply) = battle_market.destroy();
 
-    let mut champ1 = meme_vault.destroy();
+    let mut champ1 = meme_vault.destroy<CoinT>();
     let total = champ1.value();
     let champ2 = champ1.split(total/2);
 

@@ -1,41 +1,37 @@
 module round_manager::account;
 
+use round_manager::position::{Self, Position};
 use round_manager::round_number::{Self, RoundNumber};
-use std::ascii::String;
-use sui::bag::{Self, Bag};
+use round_manager::wsui::WSUI;
+use sui::balance::{Self, Balance};
 use sui::table::{Self, Table};
-use sui::sui::SUI;
 
-public struct PositionBag has store {
-    bag: Bag,
-}
-
-public struct Account has store {
+public struct Account has key, store {
+    id: UID,
     owner: address,
-    positions: Table<RoundNumber, PositionBag>,
+    round_positions: Table<RoundNumber, Position>,
+    reserver_wsui: Balance<WSUI>,
 }
 
 public fun new(ctx: &mut TxContext): Account {
-    Account {
+    let account = Account {
+        id: object::new(ctx),
         owner: ctx.sender(),
-        positions: table::new(ctx),
-    }
+        round_positions: table::new(ctx),
+        reserver_wsui: balance::zero(),
+    };
+    account
+}
+
+public fun deposit_wsui(self: &mut Account, balance: Balance<WSUI>): u64 {
+    self.reserver_wsui.join(balance)
+}
+
+public fun withdraw_wsui(self: &mut Account, amount: u64): Balance<WSUI> {
+    self.reserver_wsui.split(amount)
 }
 
 public fun create_position(self: &mut Account, round_number: RoundNumber, ctx: &mut TxContext) {
-    let position_bag = PositionBag {
-        bag: bag::new(ctx),
-    };
-    self.positions.add(round_number, position_bag);
-}
-
-public fun borrow_position_bag(self: &Account, round_number: RoundNumber): &PositionBag {
-    self.positions.borrow(round_number)
-}
-
-public fun borrow_mut_position_bag(
-    self: &mut Account,
-    round_number: RoundNumber,
-): &mut PositionBag {
-    self.positions.borrow_mut(round_number)
+    let position = position::new(self.owner, round_number, ctx);
+    self.round_positions.add(round_number, position);
 }

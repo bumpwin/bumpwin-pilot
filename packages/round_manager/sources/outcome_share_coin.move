@@ -1,3 +1,9 @@
 module round_manager::outcome_share_coin;
 
-public struct OutcomeShare<phantom CoinT> has drop {}
+use sui::balance::{Self, Supply};
+
+public struct OutcomeShare<phantom Outcome> has drop {}
+
+public fun new_supply<Outcome>(): Supply<OutcomeShare<Outcome>> {
+    balance::create_supply(OutcomeShare<Outcome> {})
+}

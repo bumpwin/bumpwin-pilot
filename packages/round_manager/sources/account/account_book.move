@@ -5,14 +5,12 @@ use round_manager::round_number::RoundNumber;
 use sui::table::{Self, Table};
 
 public struct AccountBook has store {
-    round: RoundNumber,
     accounts: Table<address, Account>,
     num_accounts: u64,
 }
 
-public fun new(round_number: RoundNumber, ctx: &mut TxContext): AccountBook {
+public fun new(ctx: &mut TxContext): AccountBook {
     AccountBook {
-        round: round_number,
         accounts: table::new(ctx),
         num_accounts: 0,
     }
