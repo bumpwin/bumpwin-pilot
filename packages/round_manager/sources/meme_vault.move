@@ -80,3 +80,19 @@ public fun withdraw_two_half_supply<CoinT>(
 
     (balance1, balance2)
 }
+
+public fun destroy<CoinT>(self: MemeVault<CoinT>): Balance<CoinT> {
+    let MemeVault {
+        id,
+        metadata,
+        treasury,
+        links,
+        reserve,
+    } = self;
+    id.delete();
+
+    transfer::public_share_object(treasury);
+    transfer::public_share_object(metadata);
+
+    reserve
+}
