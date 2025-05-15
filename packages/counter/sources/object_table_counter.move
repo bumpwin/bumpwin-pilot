@@ -1,4 +1,4 @@
-module counter::root_counter;
+module counter::object_table_counter;
 
 use sui::event;
 use sui::object_table::{Self, ObjectTable};
