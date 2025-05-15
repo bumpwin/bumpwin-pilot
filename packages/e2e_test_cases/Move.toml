@@ -1,11 +1,15 @@
 [package]
-name = "Safemath"
-edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
+name = "e2e_test_cases"
+edition = "2024.beta"   # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet", override = true }
+battle_market = { local = "../battle_market" }
+msr_amm = { local = "../msr_amm" }
+bump_fam_factory = { local = "../bump_fam_factory" }
+bump_fam_coin = { local = "../bump_fam_coin" }
 
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.
@@ -19,7 +23,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-safemath = "0x0"
+e2e_test_cases = "0x0"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
