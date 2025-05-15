@@ -5,6 +5,7 @@ import { getKeyInfoFromAlias } from '../test/keyInfo';
 import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
 import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui/utils';
 import { getAllowlistedKeyServers, SealClient, SessionKey } from '@mysten/seal';
+import { Buffer } from 'buffer';
 
 // === 設定 ===
 const PACKAGE_ID = '0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38';
@@ -26,13 +27,14 @@ tx.moveCall({
   arguments: [tx.object(COUNTER_ID), tx.pure.u64(42)],
 });
 tx.setSender(keypair.toSuiAddress());
-const txBytes = await tx.build({ client: suiClient }); // ★フル構造体でビルド
+const txBytes = await tx.build({ client: suiClient });
 
 // === 時限 ID を構成 ===
-const unlockTimestampMs = BigInt(Date.now() - 1 * 60 * 1000); // 今より1分前
+const unlockTimestampMs = BigInt(Date.now() + 10 * 1000); // 10 seconds later
 const idBytes = bcs.u64().serialize(unlockTimestampMs).toBytes();
-const idHex = '0x' + Buffer.from(idBytes).toString('hex');
-console.log(`Current time: ${Date.now()}, Unlock time: ${Number(unlockTimestampMs)}`);
+const idHex = `0x${Buffer.from(idBytes).toString('hex')}`;
+console.log(`Current time: ${Date.now()} (${new Date().toISOString()})`);
+console.log(`Unlock time:  ${Number(unlockTimestampMs)} (${new Date(Number(unlockTimestampMs)).toISOString()})`);
 
 // === SealClient を使って暗号化 ===
 const sealClient = new SealClient({
@@ -58,7 +60,7 @@ const sessionKey = new SessionKey({
 const personalMessage = sessionKey.getPersonalMessage();
 const { signature } = await keypair.signPersonalMessage(personalMessage);
 sessionKey.setPersonalMessageSignature(signature);
-console.log(`Session key ready`);
+console.log('Session key ready');
 
 // === seal_approve トランザクションを構築 ===
 const approvalTx = new Transaction();
@@ -70,7 +72,7 @@ const approvalTxBytes = await approvalTx.build({
   client: suiClient,
   onlyTransactionKind: true,
 });
-console.log(`Approval tx bytes ready`);
+console.log('Approval tx bytes ready');
 
 // === 復号 & 実行ループ ===
 while (true) {
@@ -80,7 +82,7 @@ while (true) {
       sessionKey,
       txBytes: approvalTxBytes,
     });
-    console.log(`Decrypted tx bytes retrieved`);
+    console.log('Decrypted tx bytes retrieved');
 
     const signedTx = await keypair.signTransaction(decryptedTxBytes);
     const result = await suiClient.executeTransactionBlock({
@@ -93,7 +95,8 @@ while (true) {
     break;
   } catch (error) {
     console.error('Error:', error);
+    console.log(`Current time: ${Date.now()} (${new Date().toISOString()})`);
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 20_000)); // wait 20s
+  await new Promise((resolve) => setTimeout(resolve, 5_000)); // wait 5 seconds
 }
