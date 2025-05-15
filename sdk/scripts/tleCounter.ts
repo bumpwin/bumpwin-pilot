@@ -1,14 +1,14 @@
 import { Transaction } from '@mysten/sui/transactions';
-import { bcs, fromHex } from '@mysten/bcs';
+import { bcs } from '@mysten/bcs';
+import { fromHex } from '@mysten/bcs';
 import { getKeyInfoFromAlias } from '../test/keyInfo';
-import { getFullnodeUrl } from '@mysten/sui/client';
-import { SuiClient } from '@mysten/sui/client';
-
+import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui/utils';
 import { getAllowlistedKeyServers, SealClient, SessionKey } from '@mysten/seal';
 
 // === 設定 ===
 const PACKAGE_ID = '0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38';
-const MODULE_NAME = 'tle_counter'; // Moveモジュール名
+const MODULE_NAME = 'tle_counter';
 const COUNTER_ID = '0x742914409cdb3a5a4f66230f0e0c769f61cd1c326d5000121e7a1e0fe8c7eac1';
 const FULLNODE_URL = getFullnodeUrl('testnet');
 
@@ -19,22 +19,22 @@ if (!keypair) throw new Error('Keypair not found');
 
 const keyServerIds = await getAllowlistedKeyServers('testnet');
 
-// === 暗号化対象トランザクション ===
+// === トランザクション構築（完全な TransactionBlock を作成）===
 const tx = new Transaction();
 tx.moveCall({
   target: `${PACKAGE_ID}::${MODULE_NAME}::add`,
   arguments: [tx.object(COUNTER_ID), tx.pure.u64(42)],
 });
 tx.setSender(keypair.toSuiAddress());
-const builtTx = await tx.build({ client: suiClient });
-const signedTx = await keypair.signTransaction(builtTx);
+const txBytes = await tx.build({ client: suiClient }); // ★フル構造体でビルド
 
-// === 時限IDを生成 ===
-const unlockTimestampMs = BigInt(Date.now() - 1 * 60 * 1000); // 1 min
-const idBytes = bcs.u64().serialize(unlockTimestampMs).toHex();
+// === 時限 ID を構成 ===
+const unlockTimestampMs = BigInt(Date.now() - 1 * 60 * 1000); // 今より1分前
+const idBytes = bcs.u64().serialize(unlockTimestampMs).toBytes();
+const idHex = '0x' + Buffer.from(idBytes).toString('hex');
 console.log(`Current time: ${Date.now()}, Unlock time: ${Number(unlockTimestampMs)}`);
 
-// === SealClient を構築して暗号化 ===
+// === SealClient を使って暗号化 ===
 const sealClient = new SealClient({
   suiClient,
   serverObjectIds: keyServerIds,
@@ -44,12 +44,12 @@ const sealClient = new SealClient({
 const { encryptedObject } = await sealClient.encrypt({
   threshold: 1,
   packageId: PACKAGE_ID,
-  id: idBytes,
-  data: Uint8Array.from(signedTx.bytes),
+  id: idHex,
+  data: txBytes,
 });
 console.log(`Encrypted object: ${encryptedObject}`);
 
-// === session key を生成（署名つき）===
+// === セッションキーを作成 ===
 const sessionKey = new SessionKey({
   address: keypair.toSuiAddress(),
   packageId: PACKAGE_ID,
@@ -58,21 +58,21 @@ const sessionKey = new SessionKey({
 const personalMessage = sessionKey.getPersonalMessage();
 const { signature } = await keypair.signPersonalMessage(personalMessage);
 sessionKey.setPersonalMessageSignature(signature);
-console.log(`Session key: ${sessionKey}`);
+console.log(`Session key ready`);
 
 // === seal_approve トランザクションを構築 ===
 const approvalTx = new Transaction();
 approvalTx.moveCall({
   target: `${PACKAGE_ID}::${MODULE_NAME}::seal_approve`,
-  arguments: [approvalTx.pure.vector('u8', Array.from(fromHex(idBytes))), approvalTx.object(COUNTER_ID)],
+  arguments: [approvalTx.pure.vector('u8', Array.from(idBytes)), approvalTx.object(SUI_CLOCK_OBJECT_ID)],
 });
 const approvalTxBytes = await approvalTx.build({
   client: suiClient,
   onlyTransactionKind: true,
 });
-console.log(`Approval tx bytes: ${approvalTxBytes}`);
+console.log(`Approval tx bytes ready`);
 
-// === 復号 ===
+// === 復号 & 実行ループ ===
 while (true) {
   try {
     const decryptedTxBytes = await sealClient.decrypt({
@@ -80,18 +80,20 @@ while (true) {
       sessionKey,
       txBytes: approvalTxBytes,
     });
-    console.log(`Decrypted tx bytes: ${decryptedTxBytes}`);
+    console.log(`Decrypted tx bytes retrieved`);
 
-    // === 復号後のトランザクションを実行 ===
-    await suiClient.executeTransactionBlock({
+    const signedTx = await keypair.signTransaction(decryptedTxBytes);
+    const result = await suiClient.executeTransactionBlock({
       transactionBlock: decryptedTxBytes,
       signature: signedTx.signature,
       options: { showEffects: true },
     });
-    console.log('Transaction executed successfully');
+
+    console.log('Transaction executed successfully:', result.effects);
+    break;
   } catch (error) {
     console.error('Error:', error);
   }
-  await new Promise(resolve => setTimeout(resolve, 20_000));
-}
 
+  await new Promise((resolve) => setTimeout(resolve, 20_000)); // wait 20s
+}
