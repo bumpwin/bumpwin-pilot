@@ -1,7 +1,6 @@
 module round_manager::account_book;
 
-use round_manager::account::{Account, Self};
-use round_manager::round_number::RoundNumber;
+use round_manager::account::{Self, Account};
 use sui::table::{Self, Table};
 
 public struct AccountBook has store {
@@ -29,5 +28,3 @@ public fun borrow_account(self: &AccountBook, address: address): &Account {
 public fun borrow_mut_account(self: &mut AccountBook, address: address): &mut Account {
     self.accounts.borrow_mut(address)
 }
-
-

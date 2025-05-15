@@ -3,6 +3,7 @@ module round_manager::outcome_share_bag;
 use round_manager::outcome_share_coin::{Self, OutcomeShare};
 use sui::bag::{Self, Bag};
 use sui::balance::{Self, Supply, Balance};
+use sui::transfer::public_freeze_object;
 
 const ESupplyNotFound: u64 = 0;
 const EAlreadyRegistered: u64 = 1;
@@ -17,6 +18,20 @@ public fun new(ctx: &mut TxContext): SupplyBag {
         inner: bag::new(ctx),
         total_supply: 0,
     }
+}
+
+public fun destroy<Outcome>(self: SupplyBag): Supply<OutcomeShare<Outcome>> {
+    let SupplyBag { inner: mut inner, .. } = self;
+
+    // TODO: Improve this
+
+    let type_name = std::type_name::get<OutcomeShare<Outcome>>();
+    let key = type_name.into_string();
+    let supply = inner.remove<_, Supply<OutcomeShare<Outcome>>>(key);
+
+    transfer::public_freeze_object(inner);
+
+    supply
 }
 
 public fun register_outcome<Outcome>(self: &mut SupplyBag) {

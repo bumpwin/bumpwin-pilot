@@ -5,10 +5,11 @@ use std::type_name;
 use sui::bag::{Self, Bag};
 use sui::balance::{Self, Balance};
 
+
 public struct Position has store {
     owner: address,
     round_number: RoundNumber,
-    bag: Bag,
+    bag: Bag, // type_name::get<CoinT>() -> Balance<CoinT>
 }
 
 public fun new(owner: address, round_number: RoundNumber, ctx: &mut TxContext): Position {
