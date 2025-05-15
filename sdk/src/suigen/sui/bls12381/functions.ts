@@ -1,12 +1,8 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { obj, pure, vector } from '../../_framework/util';
 import { Element } from '../group-ops/structs';
 import { G1, G2, Scalar, UncompressedG1 } from './structs';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export interface Bls12381MinSigVerifyArgs {
   signature: Array<number | TransactionArgument> | TransactionArgument;

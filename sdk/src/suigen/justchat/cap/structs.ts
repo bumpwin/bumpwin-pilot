@@ -1,20 +1,20 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { UID } from '../../_dependencies/onchain/0x2/object/structs';
 import {
-  type PhantomReified,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeStr,
+  PhantomReified,
+  Reified,
+  StructClass,
+  ToField,
+  ToTypeStr,
   decodeFromFields,
   decodeFromFieldsWithTypes,
   decodeFromJSONField,
   phantom,
 } from '../../_framework/reified';
-import { type FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
 import { PKG_V1 } from '../index';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== MessageFeeCap =============================== */
 
@@ -100,10 +100,12 @@ export class MessageFeeCap implements StructClass {
     return bcs.struct('MessageFeeCap', {
       id: UID.bcs,
       message_fee: bcs.u64(),
-      recipient: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
+      recipient: bcs
+        .bytes(32)
+        .transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
     });
   }
 

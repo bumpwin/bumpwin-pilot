@@ -1,7 +1,7 @@
-import { type BcsType, bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { bcs, BcsType } from '@mysten/sui/bcs';
 import { fromHEX, toHEX } from '@mysten/sui/utils';
-import { type FieldsWithTypes, compressSuiType, parseTypeName } from './util';
+import { FieldsWithTypes, compressSuiType, parseTypeName } from './util';
+import { SuiClient, SuiParsedData, SuiObjectData } from '@mysten/sui/client';
 
 // for backwards compatibility
 export { vector } from './vector';

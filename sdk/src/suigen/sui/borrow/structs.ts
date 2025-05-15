@@ -1,15 +1,12 @@
-import { type BcsType, bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import {
-  type PhantomReified,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToTypeArgument,
-  type ToTypeStr,
-  type TypeArgument,
+  PhantomReified,
+  Reified,
+  StructClass,
+  ToField,
+  ToTypeArgument,
+  ToTypeStr,
+  TypeArgument,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -21,13 +18,16 @@ import {
   toBcs,
 } from '../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
 } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { ID } from '../object/structs';
+import { BcsType, bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== Referent =============================== */
 
@@ -111,10 +111,12 @@ export class Referent<T extends TypeArgument> implements StructClass {
   static get bcs() {
     return <T extends BcsType<any>>(T: T) =>
       bcs.struct(`Referent<${T.name}>`, {
-        id: bcs.bytes(32).transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+        id: bcs
+          .bytes(32)
+          .transform({
+            input: (val: string) => fromHEX(val),
+            output: (val: Uint8Array) => toHEX(val),
+          }),
         value: Option.bcs(T),
       });
   }
@@ -329,10 +331,12 @@ export class Borrow implements StructClass {
 
   static get bcs() {
     return bcs.struct('Borrow', {
-      ref: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
+      ref: bcs
+        .bytes(32)
+        .transform({
+          input: (val: string) => fromHEX(val),
+          output: (val: Uint8Array) => toHEX(val),
+        }),
       obj: ID.bcs,
     });
   }

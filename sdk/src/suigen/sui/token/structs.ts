@@ -1,18 +1,15 @@
-import { bcs } from '@mysten/sui/bcs';
-import type { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import { String } from '../../_dependencies/source/0x1/string/structs';
 import { TypeName } from '../../_dependencies/source/0x1/type-name/structs';
 import {
-  type PhantomReified,
-  type PhantomToTypeStr,
-  type PhantomTypeArgument,
-  type Reified,
-  type StructClass,
-  type ToField,
-  type ToPhantomTypeArgument,
-  type ToTypeStr,
+  PhantomReified,
+  PhantomToTypeStr,
+  PhantomTypeArgument,
+  Reified,
+  StructClass,
+  ToField,
+  ToPhantomTypeArgument,
+  ToTypeStr,
   assertFieldsWithTypesArgsMatch,
   assertReifiedTypeArgsMatch,
   decodeFromFields,
@@ -23,7 +20,7 @@ import {
   phantom,
 } from '../../_framework/reified';
 import {
-  type FieldsWithTypes,
+  FieldsWithTypes,
   composeSuiType,
   compressSuiType,
   parseTypeName,
@@ -33,6 +30,9 @@ import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
 import { VecMap } from '../vec-map/structs';
 import { VecSet } from '../vec-set/structs';
+import { bcs } from '@mysten/sui/bcs';
+import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
+import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
 
 /* ============================== Token =============================== */
 
@@ -817,15 +817,19 @@ export class ActionRequest<T extends PhantomTypeArgument> implements StructClass
     return bcs.struct('ActionRequest', {
       name: String.bcs,
       amount: bcs.u64(),
-      sender: bcs.bytes(32).transform({
-        input: (val: string) => fromHEX(val),
-        output: (val: Uint8Array) => toHEX(val),
-      }),
-      recipient: Option.bcs(
-        bcs.bytes(32).transform({
+      sender: bcs
+        .bytes(32)
+        .transform({
           input: (val: string) => fromHEX(val),
           output: (val: Uint8Array) => toHEX(val),
-        })
+        }),
+      recipient: Option.bcs(
+        bcs
+          .bytes(32)
+          .transform({
+            input: (val: string) => fromHEX(val),
+            output: (val: Uint8Array) => toHEX(val),
+          })
       ),
       spent_balance: Option.bcs(Balance.bcs),
       approvals: VecSet.bcs(TypeName.bcs),

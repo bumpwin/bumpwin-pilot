@@ -1,5 +1,5 @@
-import { type BcsType, bcs } from '@mysten/sui/bcs';
-import type {
+import { bcs, BcsType } from '@mysten/sui/bcs';
+import {
   Transaction,
   TransactionArgument,
   TransactionObjectArgument,

@@ -11,6 +11,7 @@ interface KeyInfo {
   address: string;
   publicKey: string;
   privateKey: string;
+  keypair: Ed25519Keypair;
 }
 
 export const getKeyInfoFromAlias = (alias: string): KeyInfo | null => {
@@ -59,5 +60,6 @@ export const getKeyInfoFromAlias = (alias: string): KeyInfo | null => {
     address,
     publicKey: keyAlias.public_key_base64,
     privateKey: keystore[keyIndex],
+    keypair,
   };
 };

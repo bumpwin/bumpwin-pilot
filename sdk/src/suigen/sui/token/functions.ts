@@ -1,13 +1,9 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import { String } from '../../_dependencies/source/0x1/string/structs';
-import { type GenericArg, generic, obj, option, pure } from '../../_framework/util';
+import { GenericArg, generic, obj, option, pure } from '../../_framework/util';
 import { Balance } from '../balance/structs';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function newPolicy(tx: Transaction, typeArg: string, treasuryCap: TransactionObjectInput) {
   return tx.moveCall({

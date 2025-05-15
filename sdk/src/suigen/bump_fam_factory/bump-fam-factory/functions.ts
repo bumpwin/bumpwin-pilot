@@ -1,12 +1,8 @@
-import type {
-  Transaction,
-  TransactionArgument,
-  TransactionObjectInput,
-} from '@mysten/sui/transactions';
 import { PUBLISHED_AT } from '..';
 import { String as String1 } from '../../_dependencies/onchain/0x1/ascii/structs';
 import { String } from '../../_dependencies/onchain/0x1/string/structs';
 import { obj, pure } from '../../_framework/util';
+import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export interface CreateCoinArgs {
   treasuryCap: TransactionObjectInput;
