@@ -44,10 +44,7 @@ export class Url implements StructClass {
   readonly url: ToField<String>;
 
   private constructor(typeArgs: [], fields: UrlFields) {
-    this.$fullTypeName = composeSuiType(
-      Url.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::url::Url`;
+    this.$fullTypeName = composeSuiType(Url.$typeName, ...typeArgs) as `${typeof PKG_V30}::url::Url`;
     this.$typeArgs = typeArgs;
 
     this.url = fields.url;
@@ -153,7 +150,7 @@ export class Url implements StructClass {
       return Url.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

@@ -3,11 +3,7 @@ import { GenericArg, generic, obj } from '../../_framework/util';
 import { Transaction, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(tx: Transaction, typeArgs: [string, string]) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::linked_table::new`,
-    typeArguments: typeArgs,
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::linked_table::new`, typeArguments: typeArgs, arguments: [] });
 }
 
 export function front(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
@@ -36,11 +32,7 @@ export function pushFront(tx: Transaction, typeArgs: [string, string], args: Pus
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::push_front`,
     typeArguments: typeArgs,
-    arguments: [
-      obj(tx, args.table),
-      generic(tx, `${typeArgs[0]}`, args.k),
-      generic(tx, `${typeArgs[1]}`, args.value),
-    ],
+    arguments: [obj(tx, args.table), generic(tx, `${typeArgs[0]}`, args.k), generic(tx, `${typeArgs[1]}`, args.value)],
   });
 }
 
@@ -54,11 +46,7 @@ export function pushBack(tx: Transaction, typeArgs: [string, string], args: Push
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::push_back`,
     typeArguments: typeArgs,
-    arguments: [
-      obj(tx, args.table),
-      generic(tx, `${typeArgs[0]}`, args.k),
-      generic(tx, `${typeArgs[1]}`, args.value),
-    ],
+    arguments: [obj(tx, args.table), generic(tx, `${typeArgs[0]}`, args.k), generic(tx, `${typeArgs[1]}`, args.value)],
   });
 }
 
@@ -127,11 +115,7 @@ export function remove(tx: Transaction, typeArgs: [string, string], args: Remove
   });
 }
 
-export function popFront(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function popFront(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::pop_front`,
     typeArguments: typeArgs,
@@ -139,11 +123,7 @@ export function popFront(
   });
 }
 
-export function popBack(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function popBack(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::pop_back`,
     typeArguments: typeArgs,
@@ -172,11 +152,7 @@ export function length(tx: Transaction, typeArgs: [string, string], table: Trans
   });
 }
 
-export function isEmpty(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function isEmpty(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::is_empty`,
     typeArguments: typeArgs,
@@ -184,11 +160,7 @@ export function isEmpty(
   });
 }
 
-export function destroyEmpty(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function destroyEmpty(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::linked_table::destroy_empty`,
     typeArguments: typeArgs,

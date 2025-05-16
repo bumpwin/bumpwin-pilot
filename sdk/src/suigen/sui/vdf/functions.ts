@@ -2,19 +2,13 @@ import { PUBLISHED_AT } from '..';
 import { pure } from '../../_framework/util';
 import { Transaction, TransactionArgument } from '@mysten/sui/transactions';
 
-export function hashToInput(
-  tx: Transaction,
-  message: Array<number | TransactionArgument> | TransactionArgument
-) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::vdf::hash_to_input`,
-    arguments: [pure(tx, message, `vector<u8>`)],
-  });
+export function hashToInput(tx: Transaction, message: Array<number | TransactionArgument> | TransactionArgument) {
+  return tx.moveCall({ target: `${PUBLISHED_AT}::vdf::hash_to_input`, arguments: [pure(tx, message, `vector<u8>`)] });
 }
 
 export function hashToInputInternal(
   tx: Transaction,
-  message: Array<number | TransactionArgument> | TransactionArgument
+  message: Array<number | TransactionArgument> | TransactionArgument,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::vdf::hash_to_input_internal`,

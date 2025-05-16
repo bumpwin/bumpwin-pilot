@@ -38,10 +38,7 @@ export function bls12381MinPkVerify(tx: Transaction, args: Bls12381MinPkVerifyAr
   });
 }
 
-export function scalarFromBytes(
-  tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
-) {
+export function scalarFromBytes(tx: Transaction, bytes: Array<number | TransactionArgument> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::scalar_from_bytes`,
     arguments: [pure(tx, bytes, `vector<u8>`)],
@@ -49,10 +46,7 @@ export function scalarFromBytes(
 }
 
 export function scalarFromU64(tx: Transaction, x: bigint | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::scalar_from_u64`,
-    arguments: [pure(tx, x, `u64`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::scalar_from_u64`, arguments: [pure(tx, x, `u64`)] });
 }
 
 export function scalarZero(tx: Transaction) {
@@ -119,10 +113,7 @@ export function scalarInv(tx: Transaction, e: TransactionObjectInput) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::scalar_inv`, arguments: [obj(tx, e)] });
 }
 
-export function g1FromBytes(
-  tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
-) {
+export function g1FromBytes(tx: Transaction, bytes: Array<number | TransactionArgument> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::g1_from_bytes`,
     arguments: [pure(tx, bytes, `vector<u8>`)],
@@ -143,10 +134,7 @@ export interface G1AddArgs {
 }
 
 export function g1Add(tx: Transaction, args: G1AddArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g1_add`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_add`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G1SubArgs {
@@ -155,10 +143,7 @@ export interface G1SubArgs {
 }
 
 export function g1Sub(tx: Transaction, args: G1SubArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g1_sub`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_sub`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G1MulArgs {
@@ -167,10 +152,7 @@ export interface G1MulArgs {
 }
 
 export function g1Mul(tx: Transaction, args: G1MulArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g1_mul`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_mul`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G1DivArgs {
@@ -179,24 +161,15 @@ export interface G1DivArgs {
 }
 
 export function g1Div(tx: Transaction, args: G1DivArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g1_div`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_div`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export function g1Neg(tx: Transaction, e: TransactionObjectInput) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_neg`, arguments: [obj(tx, e)] });
 }
 
-export function hashToG1(
-  tx: Transaction,
-  m: Array<number | TransactionArgument> | TransactionArgument
-) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::hash_to_g1`,
-    arguments: [pure(tx, m, `vector<u8>`)],
-  });
+export function hashToG1(tx: Transaction, m: Array<number | TransactionArgument> | TransactionArgument) {
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::hash_to_g1`, arguments: [pure(tx, m, `vector<u8>`)] });
 }
 
 export interface G1MultiScalarMultiplicationArgs {
@@ -204,10 +177,7 @@ export interface G1MultiScalarMultiplicationArgs {
   elements: Array<TransactionObjectInput> | TransactionArgument;
 }
 
-export function g1MultiScalarMultiplication(
-  tx: Transaction,
-  args: G1MultiScalarMultiplicationArgs
-) {
+export function g1MultiScalarMultiplication(tx: Transaction, args: G1MultiScalarMultiplicationArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::g1_multi_scalar_multiplication`,
     arguments: [
@@ -218,16 +188,10 @@ export function g1MultiScalarMultiplication(
 }
 
 export function g1ToUncompressedG1(tx: Transaction, e: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g1_to_uncompressed_g1`,
-    arguments: [obj(tx, e)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g1_to_uncompressed_g1`, arguments: [obj(tx, e)] });
 }
 
-export function g2FromBytes(
-  tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
-) {
+export function g2FromBytes(tx: Transaction, bytes: Array<number | TransactionArgument> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::g2_from_bytes`,
     arguments: [pure(tx, bytes, `vector<u8>`)],
@@ -248,10 +212,7 @@ export interface G2AddArgs {
 }
 
 export function g2Add(tx: Transaction, args: G2AddArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g2_add`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g2_add`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G2SubArgs {
@@ -260,10 +221,7 @@ export interface G2SubArgs {
 }
 
 export function g2Sub(tx: Transaction, args: G2SubArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g2_sub`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g2_sub`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G2MulArgs {
@@ -272,10 +230,7 @@ export interface G2MulArgs {
 }
 
 export function g2Mul(tx: Transaction, args: G2MulArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g2_mul`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g2_mul`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface G2DivArgs {
@@ -284,24 +239,15 @@ export interface G2DivArgs {
 }
 
 export function g2Div(tx: Transaction, args: G2DivArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::g2_div`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g2_div`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export function g2Neg(tx: Transaction, e: TransactionObjectInput) {
   return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::g2_neg`, arguments: [obj(tx, e)] });
 }
 
-export function hashToG2(
-  tx: Transaction,
-  m: Array<number | TransactionArgument> | TransactionArgument
-) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::hash_to_g2`,
-    arguments: [pure(tx, m, `vector<u8>`)],
-  });
+export function hashToG2(tx: Transaction, m: Array<number | TransactionArgument> | TransactionArgument) {
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::hash_to_g2`, arguments: [pure(tx, m, `vector<u8>`)] });
 }
 
 export interface G2MultiScalarMultiplicationArgs {
@@ -309,10 +255,7 @@ export interface G2MultiScalarMultiplicationArgs {
   elements: Array<TransactionObjectInput> | TransactionArgument;
 }
 
-export function g2MultiScalarMultiplication(
-  tx: Transaction,
-  args: G2MultiScalarMultiplicationArgs
-) {
+export function g2MultiScalarMultiplication(tx: Transaction, args: G2MultiScalarMultiplicationArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::g2_multi_scalar_multiplication`,
     arguments: [
@@ -336,10 +279,7 @@ export interface GtAddArgs {
 }
 
 export function gtAdd(tx: Transaction, args: GtAddArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::gt_add`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::gt_add`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface GtSubArgs {
@@ -348,10 +288,7 @@ export interface GtSubArgs {
 }
 
 export function gtSub(tx: Transaction, args: GtSubArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::gt_sub`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::gt_sub`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface GtMulArgs {
@@ -360,10 +297,7 @@ export interface GtMulArgs {
 }
 
 export function gtMul(tx: Transaction, args: GtMulArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::gt_mul`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::gt_mul`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export interface GtDivArgs {
@@ -372,10 +306,7 @@ export interface GtDivArgs {
 }
 
 export function gtDiv(tx: Transaction, args: GtDivArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::gt_div`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::gt_div`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export function gtNeg(tx: Transaction, e: TransactionObjectInput) {
@@ -388,23 +319,14 @@ export interface PairingArgs {
 }
 
 export function pairing(tx: Transaction, args: PairingArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::pairing`,
-    arguments: [obj(tx, args.e1), obj(tx, args.e2)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::pairing`, arguments: [obj(tx, args.e1), obj(tx, args.e2)] });
 }
 
 export function uncompressedG1ToG1(tx: Transaction, e: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::bls12381::uncompressed_g1_to_g1`,
-    arguments: [obj(tx, e)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::bls12381::uncompressed_g1_to_g1`, arguments: [obj(tx, e)] });
 }
 
-export function uncompressedG1Sum(
-  tx: Transaction,
-  terms: Array<TransactionObjectInput> | TransactionArgument
-) {
+export function uncompressedG1Sum(tx: Transaction, terms: Array<TransactionObjectInput> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bls12381::uncompressed_g1_sum`,
     arguments: [vector(tx, `${Element.$typeName}<${UncompressedG1.$typeName}>`, terms)],

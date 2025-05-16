@@ -9,9 +9,7 @@ describe('Justchat Tests', () => {
   const client = new SuiClient({ url: getFullnodeUrl('testnet') });
   const aliceKeyInfo = getKeyInfoFromAlias('alice');
   if (!aliceKeyInfo) throw new Error('Alice key info not found');
-  const keypair = Ed25519Keypair.fromSecretKey(
-    Buffer.from(aliceKeyInfo.privateKey, 'base64').slice(1)
-  );
+  const keypair = Ed25519Keypair.fromSecretKey(Buffer.from(aliceKeyInfo.privateKey, 'base64').slice(1));
   const address = aliceKeyInfo.address;
 
   it('should send a message', async () => {

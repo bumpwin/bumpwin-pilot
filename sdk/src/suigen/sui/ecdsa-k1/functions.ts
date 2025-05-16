@@ -11,18 +11,11 @@ export interface Secp256k1EcrecoverArgs {
 export function secp256k1Ecrecover(tx: Transaction, args: Secp256k1EcrecoverArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::ecdsa_k1::secp256k1_ecrecover`,
-    arguments: [
-      pure(tx, args.signature, `vector<u8>`),
-      pure(tx, args.msg, `vector<u8>`),
-      pure(tx, args.hash, `u8`),
-    ],
+    arguments: [pure(tx, args.signature, `vector<u8>`), pure(tx, args.msg, `vector<u8>`), pure(tx, args.hash, `u8`)],
   });
 }
 
-export function decompressPubkey(
-  tx: Transaction,
-  pubkey: Array<number | TransactionArgument> | TransactionArgument
-) {
+export function decompressPubkey(tx: Transaction, pubkey: Array<number | TransactionArgument> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::ecdsa_k1::decompress_pubkey`,
     arguments: [pure(tx, pubkey, `vector<u8>`)],

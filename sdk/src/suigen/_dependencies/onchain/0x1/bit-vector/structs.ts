@@ -48,10 +48,7 @@ export class BitVector implements StructClass {
   readonly bitField: ToField<Vector<'bool'>>;
 
   private constructor(typeArgs: [], fields: BitVectorFields) {
-    this.$fullTypeName = composeSuiType(
-      BitVector.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V16}::bit_vector::BitVector`;
+    this.$fullTypeName = composeSuiType(BitVector.$typeName, ...typeArgs) as `${typeof PKG_V16}::bit_vector::BitVector`;
     this.$typeArgs = typeArgs;
 
     this.length = fields.length;
@@ -61,10 +58,7 @@ export class BitVector implements StructClass {
   static reified(): BitVectorReified {
     return {
       typeName: BitVector.$typeName,
-      fullTypeName: composeSuiType(
-        BitVector.$typeName,
-        ...[]
-      ) as `${typeof PKG_V16}::bit_vector::BitVector`,
+      fullTypeName: composeSuiType(BitVector.$typeName, ...[]) as `${typeof PKG_V16}::bit_vector::BitVector`,
       typeArgs: [] as [],
       isPhantom: BitVector.$isPhantom,
       reifiedTypeArgs: [],
@@ -172,7 +166,7 @@ export class BitVector implements StructClass {
       return BitVector.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

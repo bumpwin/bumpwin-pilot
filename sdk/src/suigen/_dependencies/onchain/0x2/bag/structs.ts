@@ -46,10 +46,7 @@ export class Bag implements StructClass {
   readonly size: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: BagFields) {
-    this.$fullTypeName = composeSuiType(
-      Bag.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bag::Bag`;
+    this.$fullTypeName = composeSuiType(Bag.$typeName, ...typeArgs) as `${typeof PKG_V30}::bag::Bag`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -167,7 +164,7 @@ export class Bag implements StructClass {
       return Bag.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

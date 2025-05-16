@@ -30,15 +30,12 @@ export function pvkFromBytes(tx: Transaction, args: PvkFromBytesArgs) {
 }
 
 export function pvkToBytes(tx: Transaction, pvk: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::groth16::pvk_to_bytes`,
-    arguments: [obj(tx, pvk)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::groth16::pvk_to_bytes`, arguments: [obj(tx, pvk)] });
 }
 
 export function publicProofInputsFromBytes(
   tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
+  bytes: Array<number | TransactionArgument> | TransactionArgument,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::groth16::public_proof_inputs_from_bytes`,
@@ -48,7 +45,7 @@ export function publicProofInputsFromBytes(
 
 export function proofPointsFromBytes(
   tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
+  bytes: Array<number | TransactionArgument> | TransactionArgument,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::groth16::proof_points_from_bytes`,
@@ -73,10 +70,7 @@ export interface PrepareVerifyingKeyInternalArgs {
   verifyingKey: Array<number | TransactionArgument> | TransactionArgument;
 }
 
-export function prepareVerifyingKeyInternal(
-  tx: Transaction,
-  args: PrepareVerifyingKeyInternalArgs
-) {
+export function prepareVerifyingKeyInternal(tx: Transaction, args: PrepareVerifyingKeyInternalArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::groth16::prepare_verifying_key_internal`,
     arguments: [pure(tx, args.curve, `u8`), pure(tx, args.verifyingKey, `vector<u8>`)],

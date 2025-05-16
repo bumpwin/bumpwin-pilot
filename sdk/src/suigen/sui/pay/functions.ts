@@ -4,11 +4,7 @@ import { Coin } from '../coin/structs';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function keep(tx: Transaction, typeArg: string, c: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::pay::keep`,
-    typeArguments: [typeArg],
-    arguments: [obj(tx, c)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::pay::keep`, typeArguments: [typeArg], arguments: [obj(tx, c)] });
 }
 
 export interface SplitArgs {
@@ -99,9 +95,6 @@ export function joinVecAndTransfer(tx: Transaction, typeArg: string, args: JoinV
   return tx.moveCall({
     target: `${PUBLISHED_AT}::pay::join_vec_and_transfer`,
     typeArguments: [typeArg],
-    arguments: [
-      vector(tx, `${Coin.$typeName}<${typeArg}>`, args.coins),
-      pure(tx, args.receiver, `address`),
-    ],
+    arguments: [vector(tx, `${Coin.$typeName}<${typeArg}>`, args.coins), pure(tx, args.receiver, `address`)],
   });
 }

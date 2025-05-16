@@ -4,17 +4,11 @@ import { obj, pure } from '../../_framework/util';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function shareRoot(tx: Transaction) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object_table_counter::share_root`,
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object_table_counter::share_root`, arguments: [] });
 }
 
 export function createCounter(tx: Transaction, root: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object_table_counter::create_counter`,
-    arguments: [obj(tx, root)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object_table_counter::create_counter`, arguments: [obj(tx, root)] });
 }
 
 export function createCounterWithEvent(tx: Transaction, root: TransactionObjectInput) {

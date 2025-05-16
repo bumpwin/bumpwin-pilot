@@ -46,10 +46,7 @@ export class BCS implements StructClass {
   readonly bytes: ToField<Vector<'u8'>>;
 
   private constructor(typeArgs: [], fields: BCSFields) {
-    this.$fullTypeName = composeSuiType(
-      BCS.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bcs::BCS`;
+    this.$fullTypeName = composeSuiType(BCS.$typeName, ...typeArgs) as `${typeof PKG_V30}::bcs::BCS`;
     this.$typeArgs = typeArgs;
 
     this.bytes = fields.bytes;
@@ -104,9 +101,7 @@ export class BCS implements StructClass {
       throw new Error('not a BCS type');
     }
 
-    return BCS.reified().new({
-      bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes),
-    });
+    return BCS.reified().new({ bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes) });
   }
 
   static fromBcs(data: Uint8Array): BCS {
@@ -157,7 +152,7 @@ export class BCS implements StructClass {
       return BCS.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

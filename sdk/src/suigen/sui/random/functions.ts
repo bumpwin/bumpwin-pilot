@@ -7,10 +7,7 @@ export function create(tx: Transaction) {
 }
 
 export function loadInnerMut(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::random::load_inner_mut`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::random::load_inner_mut`, arguments: [obj(tx, self)] });
 }
 
 export function loadInner(tx: Transaction, self: TransactionObjectInput) {
@@ -26,11 +23,7 @@ export interface UpdateRandomnessStateArgs {
 export function updateRandomnessState(tx: Transaction, args: UpdateRandomnessStateArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::random::update_randomness_state`,
-    arguments: [
-      obj(tx, args.self),
-      pure(tx, args.newRound, `u64`),
-      pure(tx, args.newBytes, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.self), pure(tx, args.newRound, `u64`), pure(tx, args.newBytes, `vector<u8>`)],
   });
 }
 
@@ -39,10 +32,7 @@ export function newGenerator(tx: Transaction, r: TransactionObjectInput) {
 }
 
 export function deriveNextBlock(tx: Transaction, g: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::random::derive_next_block`,
-    arguments: [obj(tx, g)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::random::derive_next_block`, arguments: [obj(tx, g)] });
 }
 
 export function fillBuffer(tx: Transaction, g: TransactionObjectInput) {

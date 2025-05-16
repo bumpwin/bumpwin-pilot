@@ -44,10 +44,7 @@ export class TypeName implements StructClass {
   readonly name: ToField<String>;
 
   private constructor(typeArgs: [], fields: TypeNameFields) {
-    this.$fullTypeName = composeSuiType(
-      TypeName.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V16}::type_name::TypeName`;
+    this.$fullTypeName = composeSuiType(TypeName.$typeName, ...typeArgs) as `${typeof PKG_V16}::type_name::TypeName`;
     this.$typeArgs = typeArgs;
 
     this.name = fields.name;
@@ -56,10 +53,7 @@ export class TypeName implements StructClass {
   static reified(): TypeNameReified {
     return {
       typeName: TypeName.$typeName,
-      fullTypeName: composeSuiType(
-        TypeName.$typeName,
-        ...[]
-      ) as `${typeof PKG_V16}::type_name::TypeName`,
+      fullTypeName: composeSuiType(TypeName.$typeName, ...[]) as `${typeof PKG_V16}::type_name::TypeName`,
       typeArgs: [] as [],
       isPhantom: TypeName.$isPhantom,
       reifiedTypeArgs: [],
@@ -105,9 +99,7 @@ export class TypeName implements StructClass {
       throw new Error('not a TypeName type');
     }
 
-    return TypeName.reified().new({
-      name: decodeFromFieldsWithTypes(String.reified(), item.fields.name),
-    });
+    return TypeName.reified().new({ name: decodeFromFieldsWithTypes(String.reified(), item.fields.name) });
   }
 
   static fromBcs(data: Uint8Array): TypeName {
@@ -158,7 +150,7 @@ export class TypeName implements StructClass {
       return TypeName.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

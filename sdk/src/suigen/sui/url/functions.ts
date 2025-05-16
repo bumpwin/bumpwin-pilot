@@ -4,16 +4,10 @@ import { obj, pure } from '../../_framework/util';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function newUnsafe(tx: Transaction, url: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::url::new_unsafe`,
-    arguments: [pure(tx, url, `${String.$typeName}`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::url::new_unsafe`, arguments: [pure(tx, url, `${String.$typeName}`)] });
 }
 
-export function newUnsafeFromBytes(
-  tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
-) {
+export function newUnsafeFromBytes(tx: Transaction, bytes: Array<number | TransactionArgument> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::url::new_unsafe_from_bytes`,
     arguments: [pure(tx, bytes, `vector<u8>`)],

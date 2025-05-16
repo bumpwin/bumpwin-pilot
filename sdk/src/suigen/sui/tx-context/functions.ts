@@ -27,10 +27,7 @@ export function epochTimestampMs(tx: Transaction) {
 }
 
 export function nativeEpochTimestampMs(tx: Transaction) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::tx_context::native_epoch_timestamp_ms`,
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::tx_context::native_epoch_timestamp_ms`, arguments: [] });
 }
 
 export function sponsor(tx: Transaction) {
@@ -38,10 +35,7 @@ export function sponsor(tx: Transaction) {
 }
 
 export function freshObjectAddress(tx: Transaction) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::tx_context::fresh_object_address`,
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::tx_context::fresh_object_address`, arguments: [] });
 }
 
 export function freshId(tx: Transaction) {

@@ -46,10 +46,7 @@ export class ObjectBag implements StructClass {
   readonly size: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: ObjectBagFields) {
-    this.$fullTypeName = composeSuiType(
-      ObjectBag.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::object_bag::ObjectBag`;
+    this.$fullTypeName = composeSuiType(ObjectBag.$typeName, ...typeArgs) as `${typeof PKG_V30}::object_bag::ObjectBag`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -59,10 +56,7 @@ export class ObjectBag implements StructClass {
   static reified(): ObjectBagReified {
     return {
       typeName: ObjectBag.$typeName,
-      fullTypeName: composeSuiType(
-        ObjectBag.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::object_bag::ObjectBag`,
+      fullTypeName: composeSuiType(ObjectBag.$typeName, ...[]) as `${typeof PKG_V30}::object_bag::ObjectBag`,
       typeArgs: [] as [],
       isPhantom: ObjectBag.$isPhantom,
       reifiedTypeArgs: [],
@@ -170,7 +164,7 @@ export class ObjectBag implements StructClass {
       return ObjectBag.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

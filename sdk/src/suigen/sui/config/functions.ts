@@ -39,11 +39,7 @@ export interface AddForNextEpochArgs {
   value: GenericArg;
 }
 
-export function addForNextEpoch(
-  tx: Transaction,
-  typeArgs: [string, string, string],
-  args: AddForNextEpochArgs
-) {
+export function addForNextEpoch(tx: Transaction, typeArgs: [string, string, string], args: AddForNextEpochArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::add_for_next_epoch`,
     typeArguments: typeArgs,
@@ -62,11 +58,7 @@ export interface RemoveForNextEpochArgs {
   name: GenericArg;
 }
 
-export function removeForNextEpoch(
-  tx: Transaction,
-  typeArgs: [string, string, string],
-  args: RemoveForNextEpochArgs
-) {
+export function removeForNextEpoch(tx: Transaction, typeArgs: [string, string, string], args: RemoveForNextEpochArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::remove_for_next_epoch`,
     typeArguments: typeArgs,
@@ -83,11 +75,7 @@ export interface ExistsWithTypeArgs {
   name: GenericArg;
 }
 
-export function existsWithType(
-  tx: Transaction,
-  typeArgs: [string, string, string],
-  args: ExistsWithTypeArgs
-) {
+export function existsWithType(tx: Transaction, typeArgs: [string, string, string], args: ExistsWithTypeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::exists_with_type`,
     typeArguments: typeArgs,
@@ -103,7 +91,7 @@ export interface ExistsWithTypeForNextEpochArgs {
 export function existsWithTypeForNextEpoch(
   tx: Transaction,
   typeArgs: [string, string, string],
-  args: ExistsWithTypeForNextEpochArgs
+  args: ExistsWithTypeForNextEpochArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::exists_with_type_for_next_epoch`,
@@ -121,7 +109,7 @@ export interface BorrowForNextEpochMutArgs {
 export function borrowForNextEpochMut(
   tx: Transaction,
   typeArgs: [string, string, string],
-  args: BorrowForNextEpochMutArgs
+  args: BorrowForNextEpochMutArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::borrow_for_next_epoch_mut`,
@@ -142,7 +130,7 @@ export interface ReadSettingForNextEpochArgs {
 export function readSettingForNextEpoch(
   tx: Transaction,
   typeArgs: [string, string, string],
-  args: ReadSettingForNextEpochArgs
+  args: ReadSettingForNextEpochArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::read_setting_for_next_epoch`,
@@ -173,15 +161,11 @@ export interface ReadSettingImplArgs {
 export function readSettingImpl(
   tx: Transaction,
   typeArgs: [string, string, string, string],
-  args: ReadSettingImplArgs
+  args: ReadSettingImplArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::config::read_setting_impl`,
     typeArguments: typeArgs,
-    arguments: [
-      pure(tx, args.config, `address`),
-      pure(tx, args.name, `address`),
-      pure(tx, args.currentEpoch, `u64`),
-    ],
+    arguments: [pure(tx, args.config, `address`), pure(tx, args.name, `address`), pure(tx, args.currentEpoch, `u64`)],
   });
 }

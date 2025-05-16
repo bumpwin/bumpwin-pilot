@@ -1,14 +1,6 @@
-import {
-  type EventId,
-  SuiClient,
-  type SuiEvent as SuiClientEvent,
-  getFullnodeUrl,
-} from '@mysten/sui/client';
+import { type EventId, SuiClient, type SuiEvent as SuiClientEvent, getFullnodeUrl } from '@mysten/sui/client';
 import { PACKAGE_ID } from '../suigen/justchat/index';
-import {
-  type MessageReceivedEventFields,
-  isMessageReceivedEvent,
-} from '../suigen/justchat/messaging/structs';
+import { type MessageReceivedEventFields, isMessageReceivedEvent } from '../suigen/justchat/messaging/structs';
 
 export type Network = 'testnet' | 'devnet' | 'mainnet';
 
@@ -39,9 +31,7 @@ function convertToMessageEvent(event: SuiClientEvent): MessageEvent {
   return {
     digest: event.id.txDigest,
     sequence: Number.parseInt(event.id.eventSeq),
-    timestamp: event.timestampMs
-      ? new Date(Number.parseInt(event.timestampMs)).toISOString()
-      : 'N/A',
+    timestamp: event.timestampMs ? new Date(Number.parseInt(event.timestampMs)).toISOString() : 'N/A',
     sender: chatEventData.sender,
     text: chatEventData.text,
   };

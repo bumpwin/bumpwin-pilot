@@ -35,11 +35,7 @@ export function loadValueMut(tx: Transaction, typeArg: string, self: Transaction
   });
 }
 
-export function removeValueForUpgrade(
-  tx: Transaction,
-  typeArg: string,
-  self: TransactionObjectInput
-) {
+export function removeValueForUpgrade(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::versioned::remove_value_for_upgrade`,
     typeArguments: [typeArg],

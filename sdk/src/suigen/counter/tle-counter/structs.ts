@@ -46,10 +46,7 @@ export class Counter implements StructClass {
   readonly value: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: CounterFields) {
-    this.$fullTypeName = composeSuiType(
-      Counter.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V1}::tle_counter::Counter`;
+    this.$fullTypeName = composeSuiType(Counter.$typeName, ...typeArgs) as `${typeof PKG_V1}::tle_counter::Counter`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -59,10 +56,7 @@ export class Counter implements StructClass {
   static reified(): CounterReified {
     return {
       typeName: Counter.$typeName,
-      fullTypeName: composeSuiType(
-        Counter.$typeName,
-        ...[]
-      ) as `${typeof PKG_V1}::tle_counter::Counter`,
+      fullTypeName: composeSuiType(Counter.$typeName, ...[]) as `${typeof PKG_V1}::tle_counter::Counter`,
       typeArgs: [] as [],
       isPhantom: Counter.$isPhantom,
       reifiedTypeArgs: [],
@@ -170,7 +164,7 @@ export class Counter implements StructClass {
       return Counter.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

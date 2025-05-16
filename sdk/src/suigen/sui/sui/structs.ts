@@ -43,10 +43,7 @@ export class SUI implements StructClass {
   readonly dummyField: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: SUIFields) {
-    this.$fullTypeName = composeSuiType(
-      SUI.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::sui::SUI`;
+    this.$fullTypeName = composeSuiType(SUI.$typeName, ...typeArgs) as `${typeof PKG_V30}::sui::SUI`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -101,9 +98,7 @@ export class SUI implements StructClass {
       throw new Error('not a SUI type');
     }
 
-    return SUI.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return SUI.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): SUI {
@@ -154,7 +149,7 @@ export class SUI implements StructClass {
       return SUI.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

@@ -48,11 +48,7 @@ export function withdraw(tx: Transaction, typeArg: string, args: WithdrawArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::transfer_policy::withdraw`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.self),
-      obj(tx, args.cap),
-      pure(tx, args.amount, `${Option.$typeName}<u64>`),
-    ],
+    arguments: [obj(tx, args.self), obj(tx, args.cap), pure(tx, args.amount, `${Option.$typeName}<u64>`)],
   });
 }
 
@@ -142,11 +138,7 @@ export function addReceipt(tx: Transaction, typeArgs: [string, string], args: Ad
   });
 }
 
-export function hasRule(
-  tx: Transaction,
-  typeArgs: [string, string],
-  policy: TransactionObjectInput
-) {
+export function hasRule(tx: Transaction, typeArgs: [string, string], policy: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::transfer_policy::has_rule`,
     typeArguments: typeArgs,
@@ -159,11 +151,7 @@ export interface RemoveRuleArgs {
   cap: TransactionObjectInput;
 }
 
-export function removeRule(
-  tx: Transaction,
-  typeArgs: [string, string, string],
-  args: RemoveRuleArgs
-) {
+export function removeRule(tx: Transaction, typeArgs: [string, string, string], args: RemoveRuleArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::transfer_policy::remove_rule`,
     typeArguments: typeArgs,

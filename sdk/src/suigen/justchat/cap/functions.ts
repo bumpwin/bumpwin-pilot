@@ -7,17 +7,11 @@ export function init(tx: Transaction) {
 }
 
 export function messageFee(tx: Transaction, messageFeeCap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::cap::message_fee`,
-    arguments: [obj(tx, messageFeeCap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::cap::message_fee`, arguments: [obj(tx, messageFeeCap)] });
 }
 
 export function recipient(tx: Transaction, messageFeeCap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::cap::recipient`,
-    arguments: [obj(tx, messageFeeCap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::cap::recipient`, arguments: [obj(tx, messageFeeCap)] });
 }
 
 export interface SetMessageFeeArgs {
@@ -42,10 +36,6 @@ export interface SetRecipientArgs {
 export function setRecipient(tx: Transaction, args: SetRecipientArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::cap::set_recipient`,
-    arguments: [
-      obj(tx, args.adminCap),
-      obj(tx, args.messageFeeCap),
-      pure(tx, args.address, `address`),
-    ],
+    arguments: [obj(tx, args.adminCap), obj(tx, args.messageFeeCap), pure(tx, args.address, `address`)],
   });
 }

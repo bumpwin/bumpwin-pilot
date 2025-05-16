@@ -43,10 +43,7 @@ export class UQ64_64 implements StructClass {
   readonly pos0: ToField<'u128'>;
 
   private constructor(typeArgs: [], fields: UQ64_64Fields) {
-    this.$fullTypeName = composeSuiType(
-      UQ64_64.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V16}::uq64_64::UQ64_64`;
+    this.$fullTypeName = composeSuiType(UQ64_64.$typeName, ...typeArgs) as `${typeof PKG_V16}::uq64_64::UQ64_64`;
     this.$typeArgs = typeArgs;
 
     this.pos0 = fields.pos0;
@@ -55,10 +52,7 @@ export class UQ64_64 implements StructClass {
   static reified(): UQ64_64Reified {
     return {
       typeName: UQ64_64.$typeName,
-      fullTypeName: composeSuiType(
-        UQ64_64.$typeName,
-        ...[]
-      ) as `${typeof PKG_V16}::uq64_64::UQ64_64`,
+      fullTypeName: composeSuiType(UQ64_64.$typeName, ...[]) as `${typeof PKG_V16}::uq64_64::UQ64_64`,
       typeArgs: [] as [],
       isPhantom: UQ64_64.$isPhantom,
       reifiedTypeArgs: [],
@@ -155,7 +149,7 @@ export class UQ64_64 implements StructClass {
       return UQ64_64.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

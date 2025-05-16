@@ -86,8 +86,9 @@ export type ToTypeArgument<
       ? U
       : never;
 
-export type ToPhantomTypeArgument<T extends PhantomReified<PhantomTypeArgument>> =
-  T extends PhantomReified<infer U> ? U : never;
+export type ToPhantomTypeArgument<T extends PhantomReified<PhantomTypeArgument>> = T extends PhantomReified<infer U>
+  ? U
+  : never;
 
 export type PhantomTypeArgument = string;
 
@@ -96,9 +97,7 @@ export interface PhantomReified<P> {
   kind: 'PhantomReified';
 }
 
-export function phantom<T extends Reified<TypeArgument, any>>(
-  reified: T
-): PhantomReified<ToTypeStr<ToTypeArgument<T>>>;
+export function phantom<T extends Reified<TypeArgument, any>>(reified: T): PhantomReified<ToTypeStr<ToTypeArgument<T>>>;
 export function phantom<P extends PhantomTypeArgument>(phantomType: P): PhantomReified<P>;
 export function phantom(type: string | Reified<TypeArgument, any>): PhantomReified<string> {
   if (typeof type === 'string') {
@@ -122,9 +121,7 @@ export type ToTypeStr<T extends TypeArgument> = T extends Primitive
       ? T['$fullTypeName']
       : never;
 
-export type PhantomToTypeStr<T extends PhantomTypeArgument> = T extends PhantomTypeArgument
-  ? T
-  : never;
+export type PhantomToTypeStr<T extends PhantomTypeArgument> = T extends PhantomTypeArgument ? T : never;
 
 export type ToJSON<T extends TypeArgument> = T extends 'bool'
   ? boolean
@@ -228,15 +225,13 @@ export function toBcs<T extends Reified<TypeArgument, any>>(arg: T): BcsType<any
   }
 }
 
-export function extractType<T extends Reified<TypeArgument, any>>(
-  reified: T
-): ToTypeStr<ToTypeArgument<T>>;
+export function extractType<T extends Reified<TypeArgument, any>>(reified: T): ToTypeStr<ToTypeArgument<T>>;
 export function extractType<T extends PhantomReified<PhantomTypeArgument>>(
-  reified: T
+  reified: T,
 ): PhantomToTypeStr<ToPhantomTypeArgument<T>>;
-export function extractType<
-  T extends Reified<TypeArgument, any> | PhantomReified<PhantomTypeArgument>,
->(reified: T): string;
+export function extractType<T extends Reified<TypeArgument, any> | PhantomReified<PhantomTypeArgument>>(
+  reified: T,
+): string;
 export function extractType(reified: Reified<TypeArgument, any> | PhantomReified<string>): string {
   switch (reified) {
     case 'u8':
@@ -340,19 +335,19 @@ export function decodeFromFieldsWithTypes(reified: Reified<TypeArgument, any>, i
 export function assertReifiedTypeArgsMatch(
   fullType: string,
   typeArgs: string[],
-  reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<string>>
+  reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<string>>,
 ) {
   if (reifiedTypeArgs.length !== typeArgs.length) {
     throw new Error(
-      `provided item has mismatching number of type argments ${fullType} (expected ${reifiedTypeArgs.length}, got ${typeArgs.length}))`
+      `provided item has mismatching number of type argments ${fullType} (expected ${reifiedTypeArgs.length}, got ${typeArgs.length}))`,
     );
   }
   for (let i = 0; i < typeArgs.length; i++) {
     if (compressSuiType(typeArgs[i]) !== compressSuiType(extractType(reifiedTypeArgs[i]))) {
       throw new Error(
         `provided item has mismatching type argments ${fullType} (expected ${extractType(
-          reifiedTypeArgs[i]
-        )}, got ${typeArgs[i]}))`
+          reifiedTypeArgs[i],
+        )}, got ${typeArgs[i]}))`,
       );
     }
   }
@@ -360,7 +355,7 @@ export function assertReifiedTypeArgsMatch(
 
 export function assertFieldsWithTypesArgsMatch(
   item: FieldsWithTypes,
-  reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<string>>
+  reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<string>>,
 ) {
   const { typeArgs: itemTypeArgs } = parseTypeName(item.type);
   assertReifiedTypeArgsMatch(item.type, itemTypeArgs, reifiedTypeArgs);

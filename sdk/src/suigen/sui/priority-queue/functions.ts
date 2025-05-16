@@ -3,11 +3,7 @@ import { GenericArg, generic, obj, pure, vector } from '../../_framework/util';
 import { Entry } from './structs';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
-export function new_(
-  tx: Transaction,
-  typeArg: string,
-  entries: Array<TransactionObjectInput> | TransactionArgument
-) {
+export function new_(tx: Transaction, typeArg: string, entries: Array<TransactionObjectInput> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::priority_queue::new`,
     typeArguments: [typeArg],
@@ -33,11 +29,7 @@ export function insert(tx: Transaction, typeArg: string, args: InsertArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::priority_queue::insert`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.pq),
-      pure(tx, args.priority, `u64`),
-      generic(tx, `${typeArg}`, args.value),
-    ],
+    arguments: [obj(tx, args.pq), pure(tx, args.priority, `u64`), generic(tx, `${typeArg}`, args.value)],
   });
 }
 
@@ -72,11 +64,7 @@ export interface RestoreHeapRecursiveArgs {
   i: bigint | TransactionArgument;
 }
 
-export function restoreHeapRecursive(
-  tx: Transaction,
-  typeArg: string,
-  args: RestoreHeapRecursiveArgs
-) {
+export function restoreHeapRecursive(tx: Transaction, typeArg: string, args: RestoreHeapRecursiveArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::priority_queue::restore_heap_recursive`,
     typeArguments: [typeArg],
@@ -90,11 +78,7 @@ export interface MaxHeapifyRecursiveArgs {
   i: bigint | TransactionArgument;
 }
 
-export function maxHeapifyRecursive(
-  tx: Transaction,
-  typeArg: string,
-  args: MaxHeapifyRecursiveArgs
-) {
+export function maxHeapifyRecursive(tx: Transaction, typeArg: string, args: MaxHeapifyRecursiveArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::priority_queue::max_heapify_recursive`,
     typeArguments: [typeArg],

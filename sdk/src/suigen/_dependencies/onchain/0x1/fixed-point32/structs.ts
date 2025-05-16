@@ -45,7 +45,7 @@ export class FixedPoint32 implements StructClass {
   private constructor(typeArgs: [], fields: FixedPoint32Fields) {
     this.$fullTypeName = composeSuiType(
       FixedPoint32.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V16}::fixed_point32::FixedPoint32`;
     this.$typeArgs = typeArgs;
 
@@ -55,10 +55,7 @@ export class FixedPoint32 implements StructClass {
   static reified(): FixedPoint32Reified {
     return {
       typeName: FixedPoint32.$typeName,
-      fullTypeName: composeSuiType(
-        FixedPoint32.$typeName,
-        ...[]
-      ) as `${typeof PKG_V16}::fixed_point32::FixedPoint32`,
+      fullTypeName: composeSuiType(FixedPoint32.$typeName, ...[]) as `${typeof PKG_V16}::fixed_point32::FixedPoint32`,
       typeArgs: [] as [],
       isPhantom: FixedPoint32.$isPhantom,
       reifiedTypeArgs: [],
@@ -104,9 +101,7 @@ export class FixedPoint32 implements StructClass {
       throw new Error('not a FixedPoint32 type');
     }
 
-    return FixedPoint32.reified().new({
-      value: decodeFromFieldsWithTypes('u64', item.fields.value),
-    });
+    return FixedPoint32.reified().new({ value: decodeFromFieldsWithTypes('u64', item.fields.value) });
   }
 
   static fromBcs(data: Uint8Array): FixedPoint32 {
@@ -157,7 +152,7 @@ export class FixedPoint32 implements StructClass {
       return FixedPoint32.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

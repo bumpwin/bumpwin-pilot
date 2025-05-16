@@ -17,12 +17,7 @@ import {
   phantom,
   ToTypeStr as ToPhantom,
 } from '../../../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../../../_framework/util';
 import { Balance } from '../balance/structs';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
@@ -67,10 +62,7 @@ export class Kiosk implements StructClass {
   readonly allowExtensions: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: KioskFields) {
-    this.$fullTypeName = composeSuiType(
-      Kiosk.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::kiosk::Kiosk`;
+    this.$fullTypeName = composeSuiType(Kiosk.$typeName, ...typeArgs) as `${typeof PKG_V30}::kiosk::Kiosk`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -118,12 +110,7 @@ export class Kiosk implements StructClass {
     return bcs.struct('Kiosk', {
       id: UID.bcs,
       profits: Balance.bcs,
-      owner: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      owner: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       item_count: bcs.u32(),
       allow_extensions: bcs.bool(),
     });
@@ -146,10 +133,7 @@ export class Kiosk implements StructClass {
 
     return Kiosk.reified().new({
       id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id),
-      profits: decodeFromFieldsWithTypes(
-        Balance.reified(reified.phantom(SUI.reified())),
-        item.fields.profits
-      ),
+      profits: decodeFromFieldsWithTypes(Balance.reified(reified.phantom(SUI.reified())), item.fields.profits),
       owner: decodeFromFieldsWithTypes('address', item.fields.owner),
       itemCount: decodeFromFieldsWithTypes('u32', item.fields.item_count),
       allowExtensions: decodeFromFieldsWithTypes('bool', item.fields.allow_extensions),
@@ -214,7 +198,7 @@ export class Kiosk implements StructClass {
       return Kiosk.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -263,7 +247,7 @@ export class KioskOwnerCap implements StructClass {
   private constructor(typeArgs: [], fields: KioskOwnerCapFields) {
     this.$fullTypeName = composeSuiType(
       KioskOwnerCap.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::kiosk::KioskOwnerCap`;
     this.$typeArgs = typeArgs;
 
@@ -274,10 +258,7 @@ export class KioskOwnerCap implements StructClass {
   static reified(): KioskOwnerCapReified {
     return {
       typeName: KioskOwnerCap.$typeName,
-      fullTypeName: composeSuiType(
-        KioskOwnerCap.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::kiosk::KioskOwnerCap`,
+      fullTypeName: composeSuiType(KioskOwnerCap.$typeName, ...[]) as `${typeof PKG_V30}::kiosk::KioskOwnerCap`,
       typeArgs: [] as [],
       isPhantom: KioskOwnerCap.$isPhantom,
       reifiedTypeArgs: [],
@@ -385,7 +366,7 @@ export class KioskOwnerCap implements StructClass {
       return KioskOwnerCap.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -416,10 +397,7 @@ export interface PurchaseCapFields<T0 extends PhantomTypeArgument> {
   minPrice: ToField<'u64'>;
 }
 
-export type PurchaseCapReified<T0 extends PhantomTypeArgument> = Reified<
-  PurchaseCap<T0>,
-  PurchaseCapFields<T0>
->;
+export type PurchaseCapReified<T0 extends PhantomTypeArgument> = Reified<PurchaseCap<T0>, PurchaseCapFields<T0>>;
 
 export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -441,7 +419,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: PurchaseCapFields<T0>) {
     this.$fullTypeName = composeSuiType(
       PurchaseCap.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::kiosk::PurchaseCap<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -452,13 +430,13 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
   }
 
   static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PurchaseCapReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: PurchaseCap.$typeName,
       fullTypeName: composeSuiType(
         PurchaseCap.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::kiosk::PurchaseCap<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: PurchaseCap.$isPhantom,
@@ -484,7 +462,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<PurchaseCap<ToPhantomTypeArgument<T0>>>> {
     return phantom(PurchaseCap.reified(T0));
   }
@@ -503,7 +481,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     return PurchaseCap.reified(typeArg).new({
       id: decodeFromFields(UID.reified(), fields.id),
@@ -515,7 +493,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     if (!isPurchaseCap(item.type)) {
       throw new Error('not a PurchaseCap type');
@@ -532,7 +510,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     return PurchaseCap.fromFields(typeArg, PurchaseCap.bcs.parse(data));
   }
@@ -552,7 +530,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     return PurchaseCap.reified(typeArg).new({
       id: decodeFromJSONField(UID.reified(), field.id),
@@ -564,23 +542,19 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== PurchaseCap.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(PurchaseCap.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(PurchaseCap.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return PurchaseCap.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -593,7 +567,7 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): PurchaseCap<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isPurchaseCap(data.bcs.type)) {
@@ -602,16 +576,12 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return PurchaseCap.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -620,14 +590,14 @@ export class PurchaseCap<T0 extends PhantomTypeArgument> implements StructClass 
       return PurchaseCap.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<PurchaseCap<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -671,10 +641,7 @@ export class Borrow implements StructClass {
   readonly itemId: ToField<ID>;
 
   private constructor(typeArgs: [], fields: BorrowFields) {
-    this.$fullTypeName = composeSuiType(
-      Borrow.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::kiosk::Borrow`;
+    this.$fullTypeName = composeSuiType(Borrow.$typeName, ...typeArgs) as `${typeof PKG_V30}::kiosk::Borrow`;
     this.$typeArgs = typeArgs;
 
     this.kioskId = fields.kioskId;
@@ -792,7 +759,7 @@ export class Borrow implements StructClass {
       return Borrow.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -837,10 +804,7 @@ export class Item implements StructClass {
   readonly id: ToField<ID>;
 
   private constructor(typeArgs: [], fields: ItemFields) {
-    this.$fullTypeName = composeSuiType(
-      Item.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::kiosk::Item`;
+    this.$fullTypeName = composeSuiType(Item.$typeName, ...typeArgs) as `${typeof PKG_V30}::kiosk::Item`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -946,7 +910,7 @@ export class Item implements StructClass {
       return Item.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -993,10 +957,7 @@ export class Listing implements StructClass {
   readonly isExclusive: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: ListingFields) {
-    this.$fullTypeName = composeSuiType(
-      Listing.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::kiosk::Listing`;
+    this.$fullTypeName = composeSuiType(Listing.$typeName, ...typeArgs) as `${typeof PKG_V30}::kiosk::Listing`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -1114,7 +1075,7 @@ export class Listing implements StructClass {
       return Listing.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -1159,10 +1120,7 @@ export class Lock implements StructClass {
   readonly id: ToField<ID>;
 
   private constructor(typeArgs: [], fields: LockFields) {
-    this.$fullTypeName = composeSuiType(
-      Lock.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::kiosk::Lock`;
+    this.$fullTypeName = composeSuiType(Lock.$typeName, ...typeArgs) as `${typeof PKG_V30}::kiosk::Lock`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -1268,7 +1226,7 @@ export class Lock implements StructClass {
       return Lock.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -1298,10 +1256,7 @@ export interface ItemListedFields<T0 extends PhantomTypeArgument> {
   price: ToField<'u64'>;
 }
 
-export type ItemListedReified<T0 extends PhantomTypeArgument> = Reified<
-  ItemListed<T0>,
-  ItemListedFields<T0>
->;
+export type ItemListedReified<T0 extends PhantomTypeArgument> = Reified<ItemListed<T0>, ItemListedFields<T0>>;
 
 export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -1322,7 +1277,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ItemListedFields<T0>) {
     this.$fullTypeName = composeSuiType(
       ItemListed.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::kiosk::ItemListed<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -1331,14 +1286,12 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
     this.price = fields.price;
   }
 
-  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
-  ): ItemListedReified<ToPhantomTypeArgument<T0>> {
+  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(T0: T0): ItemListedReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: ItemListed.$typeName,
       fullTypeName: composeSuiType(
         ItemListed.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::kiosk::ItemListed<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: ItemListed.$isPhantom,
@@ -1364,7 +1317,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<ItemListed<ToPhantomTypeArgument<T0>>>> {
     return phantom(ItemListed.reified(T0));
   }
@@ -1382,7 +1335,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     return ItemListed.reified(typeArg).new({
       kiosk: decodeFromFields(ID.reified(), fields.kiosk),
@@ -1393,7 +1346,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     if (!isItemListed(item.type)) {
       throw new Error('not a ItemListed type');
@@ -1409,7 +1362,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     return ItemListed.fromFields(typeArg, ItemListed.bcs.parse(data));
   }
@@ -1428,7 +1381,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     return ItemListed.reified(typeArg).new({
       kiosk: decodeFromJSONField(ID.reified(), field.kiosk),
@@ -1439,23 +1392,19 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== ItemListed.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(ItemListed.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(ItemListed.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return ItemListed.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -1468,7 +1417,7 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): ItemListed<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isItemListed(data.bcs.type)) {
@@ -1477,16 +1426,12 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return ItemListed.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -1495,14 +1440,14 @@ export class ItemListed<T0 extends PhantomTypeArgument> implements StructClass {
       return ItemListed.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<ItemListed<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -1529,10 +1474,7 @@ export interface ItemPurchasedFields<T0 extends PhantomTypeArgument> {
   price: ToField<'u64'>;
 }
 
-export type ItemPurchasedReified<T0 extends PhantomTypeArgument> = Reified<
-  ItemPurchased<T0>,
-  ItemPurchasedFields<T0>
->;
+export type ItemPurchasedReified<T0 extends PhantomTypeArgument> = Reified<ItemPurchased<T0>, ItemPurchasedFields<T0>>;
 
 export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -1553,7 +1495,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ItemPurchasedFields<T0>) {
     this.$fullTypeName = composeSuiType(
       ItemPurchased.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::kiosk::ItemPurchased<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -1563,13 +1505,13 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
   }
 
   static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): ItemPurchasedReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: ItemPurchased.$typeName,
       fullTypeName: composeSuiType(
         ItemPurchased.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::kiosk::ItemPurchased<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: ItemPurchased.$isPhantom,
@@ -1595,7 +1537,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<ItemPurchased<ToPhantomTypeArgument<T0>>>> {
     return phantom(ItemPurchased.reified(T0));
   }
@@ -1613,7 +1555,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     return ItemPurchased.reified(typeArg).new({
       kiosk: decodeFromFields(ID.reified(), fields.kiosk),
@@ -1624,7 +1566,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     if (!isItemPurchased(item.type)) {
       throw new Error('not a ItemPurchased type');
@@ -1640,7 +1582,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     return ItemPurchased.fromFields(typeArg, ItemPurchased.bcs.parse(data));
   }
@@ -1659,7 +1601,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     return ItemPurchased.reified(typeArg).new({
       kiosk: decodeFromJSONField(ID.reified(), field.kiosk),
@@ -1670,23 +1612,21 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== ItemPurchased.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(ItemPurchased.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(ItemPurchased.$typeName, extractType(typeArg)), json.$typeArgs, [
+      typeArg,
+    ]);
 
     return ItemPurchased.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -1699,7 +1639,7 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): ItemPurchased<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isItemPurchased(data.bcs.type)) {
@@ -1708,16 +1648,12 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return ItemPurchased.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -1726,14 +1662,14 @@ export class ItemPurchased<T0 extends PhantomTypeArgument> implements StructClas
       return ItemPurchased.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<ItemPurchased<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -1759,10 +1695,7 @@ export interface ItemDelistedFields<T0 extends PhantomTypeArgument> {
   id: ToField<ID>;
 }
 
-export type ItemDelistedReified<T0 extends PhantomTypeArgument> = Reified<
-  ItemDelisted<T0>,
-  ItemDelistedFields<T0>
->;
+export type ItemDelistedReified<T0 extends PhantomTypeArgument> = Reified<ItemDelisted<T0>, ItemDelistedFields<T0>>;
 
 export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -1782,7 +1715,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ItemDelistedFields<T0>) {
     this.$fullTypeName = composeSuiType(
       ItemDelisted.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::kiosk::ItemDelisted<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -1791,13 +1724,13 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
   }
 
   static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): ItemDelistedReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: ItemDelisted.$typeName,
       fullTypeName: composeSuiType(
         ItemDelisted.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::kiosk::ItemDelisted<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: ItemDelisted.$isPhantom,
@@ -1823,7 +1756,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<ItemDelisted<ToPhantomTypeArgument<T0>>>> {
     return phantom(ItemDelisted.reified(T0));
   }
@@ -1840,7 +1773,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     return ItemDelisted.reified(typeArg).new({
       kiosk: decodeFromFields(ID.reified(), fields.kiosk),
@@ -1850,7 +1783,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     if (!isItemDelisted(item.type)) {
       throw new Error('not a ItemDelisted type');
@@ -1865,7 +1798,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     return ItemDelisted.fromFields(typeArg, ItemDelisted.bcs.parse(data));
   }
@@ -1883,7 +1816,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     return ItemDelisted.reified(typeArg).new({
       kiosk: decodeFromJSONField(ID.reified(), field.kiosk),
@@ -1893,23 +1826,19 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== ItemDelisted.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(ItemDelisted.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(ItemDelisted.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return ItemDelisted.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -1922,7 +1851,7 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): ItemDelisted<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isItemDelisted(data.bcs.type)) {
@@ -1931,16 +1860,12 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return ItemDelisted.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -1949,14 +1874,14 @@ export class ItemDelisted<T0 extends PhantomTypeArgument> implements StructClass
       return ItemDelisted.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<ItemDelisted<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

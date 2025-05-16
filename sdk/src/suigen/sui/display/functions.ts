@@ -4,11 +4,7 @@ import { obj, pure } from '../../_framework/util';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(tx: Transaction, typeArg: string, pub: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::display::new`,
-    typeArguments: [typeArg],
-    arguments: [obj(tx, pub)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::display::new`, typeArguments: [typeArg], arguments: [obj(tx, pub)] });
 }
 
 export interface NewWithFieldsArgs {
@@ -129,19 +125,11 @@ export function version(tx: Transaction, typeArg: string, d: TransactionObjectIn
 }
 
 export function fields(tx: Transaction, typeArg: string, d: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::display::fields`,
-    typeArguments: [typeArg],
-    arguments: [obj(tx, d)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::display::fields`, typeArguments: [typeArg], arguments: [obj(tx, d)] });
 }
 
 export function createInternal(tx: Transaction, typeArg: string) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::display::create_internal`,
-    typeArguments: [typeArg],
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::display::create_internal`, typeArguments: [typeArg], arguments: [] });
 }
 
 export interface AddInternalArgs {

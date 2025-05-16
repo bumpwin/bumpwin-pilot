@@ -30,29 +30,25 @@ export const editableCoinMetadata: EditableCoinMetadataFields[] = [
   {
     name: 'Dripfin',
     symbol: 'DRIP',
-    description:
-      'A tropical fish token that promises dripping rewards and evaporating APRs. Beautiful and brief.',
+    description: 'A tropical fish token that promises dripping rewards and evaporating APRs. Beautiful and brief.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900003/sample.jpg',
   },
   {
     name: 'Frogmentum',
     symbol: 'FGM',
-    description:
-      "Jumping 500% per hop, this frog lives on hope and hopium. The pump is real—until it's not.",
+    description: "Jumping 500% per hop, this frog lives on hope and hopium. The pump is real—until it's not.",
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900004/sample.jpg',
   },
   {
     name: 'Jelloo',
     symbol: 'JLOO',
-    description:
-      'A jellyfish coin for holders who stopped thinking. Soft, squishy, and drifts into top 100 overnight.',
+    description: 'A jellyfish coin for holders who stopped thinking. Soft, squishy, and drifts into top 100 overnight.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900005/sample.jpg',
   },
   {
     name: 'Memephibian',
     symbol: 'MEMB',
-    description:
-      'Neither frog nor fish. A hybrid meme creature that thrives in volatility and shitcoin soup.',
+    description: 'Neither frog nor fish. A hybrid meme creature that thrives in volatility and shitcoin soup.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900006/sample.jpg',
   },
   {
@@ -65,22 +61,19 @@ export const editableCoinMetadata: EditableCoinMetadataFields[] = [
   {
     name: 'Nyanomaly',
     symbol: 'NYAN',
-    description:
-      'Pixel cat anomaly from a forgotten blockchain. Pumps when the chart forms a rainbow.',
+    description: 'Pixel cat anomaly from a forgotten blockchain. Pumps when the chart forms a rainbow.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900008/sample.jpg',
   },
   {
     name: 'Purrdex',
     symbol: 'PURR',
-    description:
-      'A feline-powered decentralized exchange where trades are silent and exits are suspiciously elegant.',
+    description: 'A feline-powered decentralized exchange where trades are silent and exits are suspiciously elegant.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900009/sample.jpg',
   },
   {
     name: 'Rugtopus',
     symbol: 'RUGT',
-    description:
-      'Eight tentacles, eight tokens rugged. Master of multi-wallet rugpulling. Hugs your funds goodbye.',
+    description: 'Eight tentacles, eight tokens rugged. Master of multi-wallet rugpulling. Hugs your funds goodbye.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900010/sample.jpg',
   },
   {
@@ -93,8 +86,7 @@ export const editableCoinMetadata: EditableCoinMetadataFields[] = [
   {
     name: 'WagmiWhale',
     symbol: 'WGMW',
-    description:
-      'A baby whale who believes in you. And in the bag. The purest WAGMI energy in the memeverse.',
+    description: 'A baby whale who believes in you. And in the bag. The purest WAGMI energy in the memeverse.',
     iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1714900012/sample.jpg',
   },
 ] as const;

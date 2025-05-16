@@ -87,11 +87,7 @@ export interface V2EnableGlobalPauseArgs {
 export function v2EnableGlobalPause(tx: Transaction, args: V2EnableGlobalPauseArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v2_enable_global_pause`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -104,11 +100,7 @@ export interface V2DisableGlobalPauseArgs {
 export function v2DisableGlobalPause(tx: Transaction, args: V2DisableGlobalPauseArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v2_disable_global_pause`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -118,17 +110,10 @@ export interface V2IsGlobalPauseEnabledCurrentEpochArgs {
   perTypeKey: Array<number | TransactionArgument> | TransactionArgument;
 }
 
-export function v2IsGlobalPauseEnabledCurrentEpoch(
-  tx: Transaction,
-  args: V2IsGlobalPauseEnabledCurrentEpochArgs
-) {
+export function v2IsGlobalPauseEnabledCurrentEpoch(tx: Transaction, args: V2IsGlobalPauseEnabledCurrentEpochArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v2_is_global_pause_enabled_current_epoch`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -138,17 +123,10 @@ export interface V2IsGlobalPauseEnabledNextEpochArgs {
   perTypeKey: Array<number | TransactionArgument> | TransactionArgument;
 }
 
-export function v2IsGlobalPauseEnabledNextEpoch(
-  tx: Transaction,
-  args: V2IsGlobalPauseEnabledNextEpochArgs
-) {
+export function v2IsGlobalPauseEnabledNextEpoch(tx: Transaction, args: V2IsGlobalPauseEnabledNextEpochArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v2_is_global_pause_enabled_next_epoch`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -161,11 +139,7 @@ export interface MigrateV1ToV2Args {
 export function migrateV1ToV2(tx: Transaction, args: MigrateV1ToV2Args) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::migrate_v1_to_v2`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -178,11 +152,7 @@ export interface AddPerTypeConfigArgs {
 export function addPerTypeConfig(tx: Transaction, args: AddPerTypeConfigArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::add_per_type_config`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -195,11 +165,7 @@ export interface BorrowPerTypeConfigMutArgs {
 export function borrowPerTypeConfigMut(tx: Transaction, args: BorrowPerTypeConfigMutArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::borrow_per_type_config_mut`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -212,11 +178,7 @@ export interface BorrowPerTypeConfigArgs {
 export function borrowPerTypeConfig(tx: Transaction, args: BorrowPerTypeConfigArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::borrow_per_type_config`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -229,11 +191,7 @@ export interface PerTypeExistsArgs {
 export function perTypeExists(tx: Transaction, args: PerTypeExistsArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::per_type_exists`,
-    arguments: [
-      obj(tx, args.denyList),
-      pure(tx, args.perTypeIndex, `u64`),
-      pure(tx, args.perTypeKey, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.denyList), pure(tx, args.perTypeIndex, `u64`), pure(tx, args.perTypeKey, `vector<u8>`)],
   });
 }
 
@@ -265,11 +223,7 @@ export interface V1PerTypeListAddArgs {
 export function v1PerTypeListAdd(tx: Transaction, args: V1PerTypeListAddArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v1_per_type_list_add`,
-    arguments: [
-      obj(tx, args.list),
-      pure(tx, args.type, `vector<u8>`),
-      pure(tx, args.addr, `address`),
-    ],
+    arguments: [obj(tx, args.list), pure(tx, args.type, `vector<u8>`), pure(tx, args.addr, `address`)],
   });
 }
 
@@ -301,11 +255,7 @@ export interface V1PerTypeListRemoveArgs {
 export function v1PerTypeListRemove(tx: Transaction, args: V1PerTypeListRemoveArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v1_per_type_list_remove`,
-    arguments: [
-      obj(tx, args.list),
-      pure(tx, args.type, `vector<u8>`),
-      pure(tx, args.addr, `address`),
-    ],
+    arguments: [obj(tx, args.list), pure(tx, args.type, `vector<u8>`), pure(tx, args.addr, `address`)],
   });
 }
 
@@ -337,11 +287,7 @@ export interface V1PerTypeListContainsArgs {
 export function v1PerTypeListContains(tx: Transaction, args: V1PerTypeListContainsArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::deny_list::v1_per_type_list_contains`,
-    arguments: [
-      obj(tx, args.list),
-      pure(tx, args.type, `vector<u8>`),
-      pure(tx, args.addr, `address`),
-    ],
+    arguments: [obj(tx, args.list), pure(tx, args.type, `vector<u8>`), pure(tx, args.addr, `address`)],
   });
 }
 

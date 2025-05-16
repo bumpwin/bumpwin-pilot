@@ -69,23 +69,14 @@ export function create(tx: Transaction) {
 }
 
 export function loadInnerMut(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::authenticator_state::load_inner_mut`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::authenticator_state::load_inner_mut`, arguments: [obj(tx, self)] });
 }
 
 export function loadInner(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::authenticator_state::load_inner`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::authenticator_state::load_inner`, arguments: [obj(tx, self)] });
 }
 
-export function checkSorted(
-  tx: Transaction,
-  newActiveJwks: Array<TransactionObjectInput> | TransactionArgument
-) {
+export function checkSorted(tx: Transaction, newActiveJwks: Array<TransactionObjectInput> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::authenticator_state::check_sorted`,
     arguments: [vector(tx, `${ActiveJwk.$typeName}`, newActiveJwks)],
@@ -104,10 +95,7 @@ export function updateAuthenticatorState(tx: Transaction, args: UpdateAuthentica
   });
 }
 
-export function deduplicate(
-  tx: Transaction,
-  jwks: Array<TransactionObjectInput> | TransactionArgument
-) {
+export function deduplicate(tx: Transaction, jwks: Array<TransactionObjectInput> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::authenticator_state::deduplicate`,
     arguments: [vector(tx, `${ActiveJwk.$typeName}`, jwks)],
@@ -127,8 +115,5 @@ export function expireJwks(tx: Transaction, args: ExpireJwksArgs) {
 }
 
 export function getActiveJwks(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::authenticator_state::get_active_jwks`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::authenticator_state::get_active_jwks`, arguments: [obj(tx, self)] });
 }

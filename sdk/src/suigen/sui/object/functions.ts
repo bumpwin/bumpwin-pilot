@@ -4,10 +4,7 @@ import { ID } from './structs';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function idToBytes(tx: Transaction, id: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::id_to_bytes`,
-    arguments: [pure(tx, id, `${ID.$typeName}`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::id_to_bytes`, arguments: [pure(tx, id, `${ID.$typeName}`)] });
 }
 
 export function idToAddress(tx: Transaction, id: string | TransactionArgument) {
@@ -17,21 +14,12 @@ export function idToAddress(tx: Transaction, id: string | TransactionArgument) {
   });
 }
 
-export function idFromBytes(
-  tx: Transaction,
-  bytes: Array<number | TransactionArgument> | TransactionArgument
-) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::id_from_bytes`,
-    arguments: [pure(tx, bytes, `vector<u8>`)],
-  });
+export function idFromBytes(tx: Transaction, bytes: Array<number | TransactionArgument> | TransactionArgument) {
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::id_from_bytes`, arguments: [pure(tx, bytes, `vector<u8>`)] });
 }
 
 export function idFromAddress(tx: Transaction, bytes: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::id_from_address`,
-    arguments: [pure(tx, bytes, `address`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::id_from_address`, arguments: [pure(tx, bytes, `address`)] });
 }
 
 export function suiSystemState(tx: Transaction) {
@@ -59,31 +47,19 @@ export function bridge(tx: Transaction) {
 }
 
 export function uidAsInner(tx: Transaction, uid: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::uid_as_inner`,
-    arguments: [obj(tx, uid)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::uid_as_inner`, arguments: [obj(tx, uid)] });
 }
 
 export function uidToInner(tx: Transaction, uid: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::uid_to_inner`,
-    arguments: [obj(tx, uid)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::uid_to_inner`, arguments: [obj(tx, uid)] });
 }
 
 export function uidToBytes(tx: Transaction, uid: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::uid_to_bytes`,
-    arguments: [obj(tx, uid)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::uid_to_bytes`, arguments: [obj(tx, uid)] });
 }
 
 export function uidToAddress(tx: Transaction, uid: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::uid_to_address`,
-    arguments: [obj(tx, uid)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::uid_to_address`, arguments: [obj(tx, uid)] });
 }
 
 export function new_(tx: Transaction) {
@@ -135,22 +111,13 @@ export function borrowUid(tx: Transaction, typeArg: string, obj: GenericArg) {
 }
 
 export function newUidFromHash(tx: Transaction, bytes: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::new_uid_from_hash`,
-    arguments: [pure(tx, bytes, `address`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::new_uid_from_hash`, arguments: [pure(tx, bytes, `address`)] });
 }
 
 export function deleteImpl(tx: Transaction, id: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::delete_impl`,
-    arguments: [pure(tx, id, `address`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::delete_impl`, arguments: [pure(tx, id, `address`)] });
 }
 
 export function recordNewUid(tx: Transaction, id: string | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object::record_new_uid`,
-    arguments: [pure(tx, id, `address`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object::record_new_uid`, arguments: [pure(tx, id, `address`)] });
 }

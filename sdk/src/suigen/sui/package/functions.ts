@@ -19,10 +19,7 @@ export function claimAndKeep(tx: Transaction, typeArg: string, otw: GenericArg) 
 }
 
 export function burnPublisher(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::burn_publisher`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::burn_publisher`, arguments: [obj(tx, self)] });
 }
 
 export function fromPackage(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
@@ -42,24 +39,15 @@ export function fromModule(tx: Transaction, typeArg: string, self: TransactionOb
 }
 
 export function publishedModule(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::published_module`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::published_module`, arguments: [obj(tx, self)] });
 }
 
 export function publishedPackage(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::published_package`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::published_package`, arguments: [obj(tx, self)] });
 }
 
 export function upgradePackage(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::upgrade_package`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::upgrade_package`, arguments: [obj(tx, cap)] });
 }
 
 export function version(tx: Transaction, cap: TransactionObjectInput) {
@@ -67,45 +55,27 @@ export function version(tx: Transaction, cap: TransactionObjectInput) {
 }
 
 export function upgradePolicy(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::upgrade_policy`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::upgrade_policy`, arguments: [obj(tx, cap)] });
 }
 
 export function ticketPackage(tx: Transaction, ticket: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::ticket_package`,
-    arguments: [obj(tx, ticket)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::ticket_package`, arguments: [obj(tx, ticket)] });
 }
 
 export function ticketPolicy(tx: Transaction, ticket: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::ticket_policy`,
-    arguments: [obj(tx, ticket)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::ticket_policy`, arguments: [obj(tx, ticket)] });
 }
 
 export function receiptCap(tx: Transaction, receipt: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::receipt_cap`,
-    arguments: [obj(tx, receipt)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::receipt_cap`, arguments: [obj(tx, receipt)] });
 }
 
 export function receiptPackage(tx: Transaction, receipt: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::receipt_package`,
-    arguments: [obj(tx, receipt)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::receipt_package`, arguments: [obj(tx, receipt)] });
 }
 
 export function ticketDigest(tx: Transaction, ticket: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::ticket_digest`,
-    arguments: [obj(tx, ticket)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::ticket_digest`, arguments: [obj(tx, ticket)] });
 }
 
 export function compatiblePolicy(tx: Transaction) {
@@ -121,24 +91,15 @@ export function depOnlyPolicy(tx: Transaction) {
 }
 
 export function onlyAdditiveUpgrades(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::only_additive_upgrades`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::only_additive_upgrades`, arguments: [obj(tx, cap)] });
 }
 
 export function onlyDepUpgrades(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::only_dep_upgrades`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::only_dep_upgrades`, arguments: [obj(tx, cap)] });
 }
 
 export function makeImmutable(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::package::make_immutable`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::package::make_immutable`, arguments: [obj(tx, cap)] });
 }
 
 export interface AuthorizeUpgradeArgs {
@@ -150,11 +111,7 @@ export interface AuthorizeUpgradeArgs {
 export function authorizeUpgrade(tx: Transaction, args: AuthorizeUpgradeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::package::authorize_upgrade`,
-    arguments: [
-      obj(tx, args.cap),
-      pure(tx, args.policy, `u8`),
-      pure(tx, args.digest, `vector<u8>`),
-    ],
+    arguments: [obj(tx, args.cap), pure(tx, args.policy, `u8`), pure(tx, args.digest, `vector<u8>`)],
   });
 }
 

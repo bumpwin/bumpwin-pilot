@@ -77,11 +77,7 @@ export interface ExistsWithTypeArgs {
   name: GenericArg;
 }
 
-export function existsWithType(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: ExistsWithTypeArgs
-) {
+export function existsWithType(tx: Transaction, typeArgs: [string, string], args: ExistsWithTypeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_object_field::exists_with_type`,
     typeArguments: typeArgs,
@@ -125,11 +121,7 @@ export interface InternalBorrowArgs {
   name: GenericArg;
 }
 
-export function internalBorrow(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: InternalBorrowArgs
-) {
+export function internalBorrow(tx: Transaction, typeArgs: [string, string], args: InternalBorrowArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_object_field::internal_borrow`,
     typeArguments: typeArgs,
@@ -142,11 +134,7 @@ export interface InternalBorrowMutArgs {
   name: GenericArg;
 }
 
-export function internalBorrowMut(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: InternalBorrowMutArgs
-) {
+export function internalBorrowMut(tx: Transaction, typeArgs: [string, string], args: InternalBorrowMutArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_object_field::internal_borrow_mut`,
     typeArguments: typeArgs,
@@ -159,11 +147,7 @@ export interface InternalRemoveArgs {
   name: GenericArg;
 }
 
-export function internalRemove(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: InternalRemoveArgs
-) {
+export function internalRemove(tx: Transaction, typeArgs: [string, string], args: InternalRemoveArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_object_field::internal_remove`,
     typeArguments: typeArgs,
@@ -176,11 +160,7 @@ export interface InternalExistsWithTypeArgs {
   name: GenericArg;
 }
 
-export function internalExistsWithType(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: InternalExistsWithTypeArgs
-) {
+export function internalExistsWithType(tx: Transaction, typeArgs: [string, string], args: InternalExistsWithTypeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_object_field::internal_exists_with_type`,
     typeArguments: typeArgs,

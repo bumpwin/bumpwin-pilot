@@ -17,12 +17,7 @@ import {
   fieldToJSON,
   phantom,
 } from '../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { Vector } from '../../_framework/vector';
 import { PKG_V30 } from '../index';
 import { bcs } from '@mysten/sui/bcs';
@@ -59,21 +54,19 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
   private constructor(typeArgs: [PhantomToTypeStr<T>], fields: ElementFields<T>) {
     this.$fullTypeName = composeSuiType(
       Element.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::group_ops::Element<${PhantomToTypeStr<T>}>`;
     this.$typeArgs = typeArgs;
 
     this.bytes = fields.bytes;
   }
 
-  static reified<T extends PhantomReified<PhantomTypeArgument>>(
-    T: T
-  ): ElementReified<ToPhantomTypeArgument<T>> {
+  static reified<T extends PhantomReified<PhantomTypeArgument>>(T: T): ElementReified<ToPhantomTypeArgument<T>> {
     return {
       typeName: Element.$typeName,
       fullTypeName: composeSuiType(
         Element.$typeName,
-        ...[extractType(T)]
+        ...[extractType(T)],
       ) as `${typeof PKG_V30}::group_ops::Element<${PhantomToTypeStr<ToPhantomTypeArgument<T>>}>`,
       typeArgs: [extractType(T)] as [PhantomToTypeStr<ToPhantomTypeArgument<T>>],
       isPhantom: Element.$isPhantom,
@@ -99,7 +92,7 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
   }
 
   static phantom<T extends PhantomReified<PhantomTypeArgument>>(
-    T: T
+    T: T,
   ): PhantomReified<ToTypeStr<Element<ToPhantomTypeArgument<T>>>> {
     return phantom(Element.reified(T));
   }
@@ -115,30 +108,26 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
 
   static fromFields<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Element<ToPhantomTypeArgument<T>> {
-    return Element.reified(typeArg).new({
-      bytes: decodeFromFields(reified.vector('u8'), fields.bytes),
-    });
+    return Element.reified(typeArg).new({ bytes: decodeFromFields(reified.vector('u8'), fields.bytes) });
   }
 
   static fromFieldsWithTypes<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Element<ToPhantomTypeArgument<T>> {
     if (!isElement(item.type)) {
       throw new Error('not a Element type');
     }
     assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
-    return Element.reified(typeArg).new({
-      bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes),
-    });
+    return Element.reified(typeArg).new({ bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes) });
   }
 
   static fromBcs<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    data: Uint8Array
+    data: Uint8Array,
   ): Element<ToPhantomTypeArgument<T>> {
     return Element.fromFields(typeArg, Element.bcs.parse(data));
   }
@@ -155,32 +144,26 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
 
   static fromJSONField<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    field: any
+    field: any,
   ): Element<ToPhantomTypeArgument<T>> {
-    return Element.reified(typeArg).new({
-      bytes: decodeFromJSONField(reified.vector('u8'), field.bytes),
-    });
+    return Element.reified(typeArg).new({ bytes: decodeFromJSONField(reified.vector('u8'), field.bytes) });
   }
 
   static fromJSON<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Element<ToPhantomTypeArgument<T>> {
     if (json.$typeName !== Element.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Element.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Element.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return Element.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Element<ToPhantomTypeArgument<T>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -193,7 +176,7 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
 
   static fromSuiObjectData<T extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Element<ToPhantomTypeArgument<T>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isElement(data.bcs.type)) {
@@ -202,16 +185,12 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return Element.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -220,14 +199,14 @@ export class Element<T extends PhantomTypeArgument> implements StructClass {
       return Element.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T,
-    id: string
+    id: string,
   ): Promise<Element<ToPhantomTypeArgument<T>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

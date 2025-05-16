@@ -50,10 +50,7 @@ export class Random implements StructClass {
   readonly inner: ToField<Versioned>;
 
   private constructor(typeArgs: [], fields: RandomFields) {
-    this.$fullTypeName = composeSuiType(
-      Random.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::random::Random`;
+    this.$fullTypeName = composeSuiType(Random.$typeName, ...typeArgs) as `${typeof PKG_V30}::random::Random`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -171,7 +168,7 @@ export class Random implements StructClass {
       return Random.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -222,10 +219,7 @@ export class RandomInner implements StructClass {
   readonly randomBytes: ToField<Vector<'u8'>>;
 
   private constructor(typeArgs: [], fields: RandomInnerFields) {
-    this.$fullTypeName = composeSuiType(
-      RandomInner.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::random::RandomInner`;
+    this.$fullTypeName = composeSuiType(RandomInner.$typeName, ...typeArgs) as `${typeof PKG_V30}::random::RandomInner`;
     this.$typeArgs = typeArgs;
 
     this.version = fields.version;
@@ -237,10 +231,7 @@ export class RandomInner implements StructClass {
   static reified(): RandomInnerReified {
     return {
       typeName: RandomInner.$typeName,
-      fullTypeName: composeSuiType(
-        RandomInner.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::random::RandomInner`,
+      fullTypeName: composeSuiType(RandomInner.$typeName, ...[]) as `${typeof PKG_V30}::random::RandomInner`,
       typeArgs: [] as [],
       isPhantom: RandomInner.$isPhantom,
       reifiedTypeArgs: [],
@@ -358,7 +349,7 @@ export class RandomInner implements StructClass {
       return RandomInner.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -409,7 +400,7 @@ export class RandomGenerator implements StructClass {
   private constructor(typeArgs: [], fields: RandomGeneratorFields) {
     this.$fullTypeName = composeSuiType(
       RandomGenerator.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::random::RandomGenerator`;
     this.$typeArgs = typeArgs;
 
@@ -421,10 +412,7 @@ export class RandomGenerator implements StructClass {
   static reified(): RandomGeneratorReified {
     return {
       typeName: RandomGenerator.$typeName,
-      fullTypeName: composeSuiType(
-        RandomGenerator.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::random::RandomGenerator`,
+      fullTypeName: composeSuiType(RandomGenerator.$typeName, ...[]) as `${typeof PKG_V30}::random::RandomGenerator`,
       typeArgs: [] as [],
       isPhantom: RandomGenerator.$isPhantom,
       reifiedTypeArgs: [],
@@ -537,7 +525,7 @@ export class RandomGenerator implements StructClass {
       return RandomGenerator.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

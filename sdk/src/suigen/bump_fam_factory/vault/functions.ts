@@ -3,11 +3,7 @@ import { obj, pure } from '../../_framework/util';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(tx: Transaction, typeArg: string) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::vault::new`,
-    typeArguments: [typeArg],
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::vault::new`, typeArguments: [typeArg], arguments: [] });
 }
 
 export interface DepositArgs {

@@ -16,12 +16,7 @@ import {
   extractType,
   phantom,
 } from '../../../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../../../_framework/util';
 import { PKG_V30 } from '../index';
 import { Table } from '../table/structs';
 import { bcs } from '@mysten/sui/bcs';
@@ -39,10 +34,7 @@ export interface TableVecFields<T0 extends PhantomTypeArgument> {
   contents: ToField<Table<'u64', T0>>;
 }
 
-export type TableVecReified<T0 extends PhantomTypeArgument> = Reified<
-  TableVec<T0>,
-  TableVecFields<T0>
->;
+export type TableVecReified<T0 extends PhantomTypeArgument> = Reified<TableVec<T0>, TableVecFields<T0>>;
 
 export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -61,21 +53,19 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: TableVecFields<T0>) {
     this.$fullTypeName = composeSuiType(
       TableVec.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::table_vec::TableVec<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
     this.contents = fields.contents;
   }
 
-  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
-  ): TableVecReified<ToPhantomTypeArgument<T0>> {
+  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(T0: T0): TableVecReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: TableVec.$typeName,
       fullTypeName: composeSuiType(
         TableVec.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::table_vec::TableVec<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: TableVec.$isPhantom,
@@ -101,7 +91,7 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<TableVec<ToPhantomTypeArgument<T0>>>> {
     return phantom(TableVec.reified(T0));
   }
@@ -117,7 +107,7 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     return TableVec.reified(typeArg).new({
       contents: decodeFromFields(Table.reified(reified.phantom('u64'), typeArg), fields.contents),
@@ -126,7 +116,7 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     if (!isTableVec(item.type)) {
       throw new Error('not a TableVec type');
@@ -134,16 +124,13 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
     assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
     return TableVec.reified(typeArg).new({
-      contents: decodeFromFieldsWithTypes(
-        Table.reified(reified.phantom('u64'), typeArg),
-        item.fields.contents
-      ),
+      contents: decodeFromFieldsWithTypes(Table.reified(reified.phantom('u64'), typeArg), item.fields.contents),
     });
   }
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     return TableVec.fromFields(typeArg, TableVec.bcs.parse(data));
   }
@@ -160,7 +147,7 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     return TableVec.reified(typeArg).new({
       contents: decodeFromJSONField(Table.reified(reified.phantom('u64'), typeArg), field.contents),
@@ -169,23 +156,19 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== TableVec.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(TableVec.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(TableVec.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return TableVec.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -198,7 +181,7 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): TableVec<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isTableVec(data.bcs.type)) {
@@ -207,16 +190,12 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return TableVec.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -225,14 +204,14 @@ export class TableVec<T0 extends PhantomTypeArgument> implements StructClass {
       return TableVec.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<TableVec<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

@@ -52,7 +52,7 @@ export class MessageReceivedEvent implements StructClass {
   private constructor(typeArgs: [], fields: MessageReceivedEventFields) {
     this.$fullTypeName = composeSuiType(
       MessageReceivedEvent.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V1}::messaging::MessageReceivedEvent`;
     this.$typeArgs = typeArgs;
 
@@ -67,22 +67,19 @@ export class MessageReceivedEvent implements StructClass {
       typeName: MessageReceivedEvent.$typeName,
       fullTypeName: composeSuiType(
         MessageReceivedEvent.$typeName,
-        ...[]
+        ...[],
       ) as `${typeof PKG_V1}::messaging::MessageReceivedEvent`,
       typeArgs: [] as [],
       isPhantom: MessageReceivedEvent.$isPhantom,
       reifiedTypeArgs: [],
       fromFields: (fields: Record<string, any>) => MessageReceivedEvent.fromFields(fields),
-      fromFieldsWithTypes: (item: FieldsWithTypes) =>
-        MessageReceivedEvent.fromFieldsWithTypes(item),
+      fromFieldsWithTypes: (item: FieldsWithTypes) => MessageReceivedEvent.fromFieldsWithTypes(item),
       fromBcs: (data: Uint8Array) => MessageReceivedEvent.fromBcs(data),
       bcs: MessageReceivedEvent.bcs,
       fromJSONField: (field: any) => MessageReceivedEvent.fromJSONField(field),
       fromJSON: (json: Record<string, any>) => MessageReceivedEvent.fromJSON(json),
-      fromSuiParsedData: (content: SuiParsedData) =>
-        MessageReceivedEvent.fromSuiParsedData(content),
-      fromSuiObjectData: (content: SuiObjectData) =>
-        MessageReceivedEvent.fromSuiObjectData(content),
+      fromSuiParsedData: (content: SuiParsedData) => MessageReceivedEvent.fromSuiParsedData(content),
+      fromSuiObjectData: (content: SuiObjectData) => MessageReceivedEvent.fromSuiObjectData(content),
       fetch: async (client: SuiClient, id: string) => MessageReceivedEvent.fetch(client, id),
       new: (fields: MessageReceivedEventFields) => {
         return new MessageReceivedEvent([], fields);
@@ -106,16 +103,10 @@ export class MessageReceivedEvent implements StructClass {
     return bcs.struct('MessageReceivedEvent', {
       sender: bcs
         .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+        .transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       recipient: bcs
         .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+        .transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       text: String.bcs,
       amount: bcs.u64(),
     });
@@ -182,9 +173,7 @@ export class MessageReceivedEvent implements StructClass {
       throw new Error('not an object');
     }
     if (!isMessageReceivedEvent(content.type)) {
-      throw new Error(
-        `object at ${(content.fields as any).id} is not a MessageReceivedEvent object`
-      );
+      throw new Error(`object at ${(content.fields as any).id} is not a MessageReceivedEvent object`);
     }
     return MessageReceivedEvent.fromFieldsWithTypes(content);
   }
@@ -201,7 +190,7 @@ export class MessageReceivedEvent implements StructClass {
       return MessageReceivedEvent.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

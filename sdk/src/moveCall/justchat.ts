@@ -35,7 +35,7 @@ export class Justchat {
     args: {
       message: string;
       sender: string;
-    }
+    },
   ) {
     // Split coins for the message fee
     const [coin] = tx.splitCoins(tx.gas, [tx.pure.u64(MESSAGE_FEE)]);

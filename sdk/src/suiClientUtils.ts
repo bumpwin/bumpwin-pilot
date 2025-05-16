@@ -13,7 +13,7 @@ export const publish = (
   args: {
     moveBytecode: MoveBytecode;
     sender: string;
-  }
+  },
 ): void => {
   const modules = args.moveBytecode.modules.map(toBytes);
   const dependencies = [...args.moveBytecode.dependencies];

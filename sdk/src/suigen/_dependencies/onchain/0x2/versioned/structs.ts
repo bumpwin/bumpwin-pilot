@@ -46,10 +46,7 @@ export class Versioned implements StructClass {
   readonly version: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: VersionedFields) {
-    this.$fullTypeName = composeSuiType(
-      Versioned.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::versioned::Versioned`;
+    this.$fullTypeName = composeSuiType(Versioned.$typeName, ...typeArgs) as `${typeof PKG_V30}::versioned::Versioned`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -59,10 +56,7 @@ export class Versioned implements StructClass {
   static reified(): VersionedReified {
     return {
       typeName: Versioned.$typeName,
-      fullTypeName: composeSuiType(
-        Versioned.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::versioned::Versioned`,
+      fullTypeName: composeSuiType(Versioned.$typeName, ...[]) as `${typeof PKG_V30}::versioned::Versioned`,
       typeArgs: [] as [],
       isPhantom: Versioned.$isPhantom,
       reifiedTypeArgs: [],
@@ -170,7 +164,7 @@ export class Versioned implements StructClass {
       return Versioned.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -219,7 +213,7 @@ export class VersionChangeCap implements StructClass {
   private constructor(typeArgs: [], fields: VersionChangeCapFields) {
     this.$fullTypeName = composeSuiType(
       VersionChangeCap.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::versioned::VersionChangeCap`;
     this.$typeArgs = typeArgs;
 
@@ -232,7 +226,7 @@ export class VersionChangeCap implements StructClass {
       typeName: VersionChangeCap.$typeName,
       fullTypeName: composeSuiType(
         VersionChangeCap.$typeName,
-        ...[]
+        ...[],
       ) as `${typeof PKG_V30}::versioned::VersionChangeCap`,
       typeArgs: [] as [],
       isPhantom: VersionChangeCap.$isPhantom,
@@ -341,7 +335,7 @@ export class VersionChangeCap implements StructClass {
       return VersionChangeCap.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

@@ -17,12 +17,7 @@ import {
   phantom,
   toBcs,
 } from '../../../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../../../_framework/util';
 import { Vector } from '../../../../_framework/vector';
 import { PKG_V16 } from '../index';
 import { BcsType, bcs } from '@mysten/sui/bcs';
@@ -61,7 +56,7 @@ export class Option<T0 extends TypeArgument> implements StructClass {
   private constructor(typeArgs: [ToTypeStr<T0>], fields: OptionFields<T0>) {
     this.$fullTypeName = composeSuiType(
       Option.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V16}::option::Option<${ToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -73,7 +68,7 @@ export class Option<T0 extends TypeArgument> implements StructClass {
       typeName: Option.$typeName,
       fullTypeName: composeSuiType(
         Option.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V16}::option::Option<${ToTypeStr<ToTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [ToTypeStr<ToTypeArgument<T0>>],
       isPhantom: Option.$isPhantom,
@@ -98,9 +93,7 @@ export class Option<T0 extends TypeArgument> implements StructClass {
     return Option.reified;
   }
 
-  static phantom<T0 extends Reified<TypeArgument, any>>(
-    T0: T0
-  ): PhantomReified<ToTypeStr<Option<ToTypeArgument<T0>>>> {
+  static phantom<T0 extends Reified<TypeArgument, any>>(T0: T0): PhantomReified<ToTypeStr<Option<ToTypeArgument<T0>>>> {
     return phantom(Option.reified(T0));
   }
   static get p() {
@@ -116,31 +109,24 @@ export class Option<T0 extends TypeArgument> implements StructClass {
 
   static fromFields<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Option<ToTypeArgument<T0>> {
-    return Option.reified(typeArg).new({
-      vec: decodeFromFields(reified.vector(typeArg), fields.vec),
-    });
+    return Option.reified(typeArg).new({ vec: decodeFromFields(reified.vector(typeArg), fields.vec) });
   }
 
   static fromFieldsWithTypes<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Option<ToTypeArgument<T0>> {
     if (!isOption(item.type)) {
       throw new Error('not a Option type');
     }
     assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
-    return Option.reified(typeArg).new({
-      vec: decodeFromFieldsWithTypes(reified.vector(typeArg), item.fields.vec),
-    });
+    return Option.reified(typeArg).new({ vec: decodeFromFieldsWithTypes(reified.vector(typeArg), item.fields.vec) });
   }
 
-  static fromBcs<T0 extends Reified<TypeArgument, any>>(
-    typeArg: T0,
-    data: Uint8Array
-  ): Option<ToTypeArgument<T0>> {
+  static fromBcs<T0 extends Reified<TypeArgument, any>>(typeArg: T0, data: Uint8Array): Option<ToTypeArgument<T0>> {
     const typeArgs = [typeArg];
 
     return Option.fromFields(typeArg, Option.bcs(toBcs(typeArgs[0])).parse(data));
@@ -156,34 +142,25 @@ export class Option<T0 extends TypeArgument> implements StructClass {
     return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
   }
 
-  static fromJSONField<T0 extends Reified<TypeArgument, any>>(
-    typeArg: T0,
-    field: any
-  ): Option<ToTypeArgument<T0>> {
-    return Option.reified(typeArg).new({
-      vec: decodeFromJSONField(reified.vector(typeArg), field.vec),
-    });
+  static fromJSONField<T0 extends Reified<TypeArgument, any>>(typeArg: T0, field: any): Option<ToTypeArgument<T0>> {
+    return Option.reified(typeArg).new({ vec: decodeFromJSONField(reified.vector(typeArg), field.vec) });
   }
 
   static fromJSON<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Option<ToTypeArgument<T0>> {
     if (json.$typeName !== Option.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Option.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Option.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return Option.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Option<ToTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -196,7 +173,7 @@ export class Option<T0 extends TypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Option<ToTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isOption(data.bcs.type)) {
@@ -205,16 +182,12 @@ export class Option<T0 extends TypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return Option.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -223,14 +196,14 @@ export class Option<T0 extends TypeArgument> implements StructClass {
       return Option.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends Reified<TypeArgument, any>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<Option<ToTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

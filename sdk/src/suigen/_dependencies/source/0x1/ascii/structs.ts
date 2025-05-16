@@ -46,10 +46,7 @@ export class String implements StructClass {
   readonly bytes: ToField<Vector<'u8'>>;
 
   private constructor(typeArgs: [], fields: StringFields) {
-    this.$fullTypeName = composeSuiType(
-      String.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V16}::ascii::String`;
+    this.$fullTypeName = composeSuiType(String.$typeName, ...typeArgs) as `${typeof PKG_V16}::ascii::String`;
     this.$typeArgs = typeArgs;
 
     this.bytes = fields.bytes;
@@ -104,9 +101,7 @@ export class String implements StructClass {
       throw new Error('not a String type');
     }
 
-    return String.reified().new({
-      bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes),
-    });
+    return String.reified().new({ bytes: decodeFromFieldsWithTypes(reified.vector('u8'), item.fields.bytes) });
   }
 
   static fromBcs(data: Uint8Array): String {
@@ -157,7 +152,7 @@ export class String implements StructClass {
       return String.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -202,10 +197,7 @@ export class Char implements StructClass {
   readonly byte: ToField<'u8'>;
 
   private constructor(typeArgs: [], fields: CharFields) {
-    this.$fullTypeName = composeSuiType(
-      Char.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V16}::ascii::Char`;
+    this.$fullTypeName = composeSuiType(Char.$typeName, ...typeArgs) as `${typeof PKG_V16}::ascii::Char`;
     this.$typeArgs = typeArgs;
 
     this.byte = fields.byte;
@@ -311,7 +303,7 @@ export class Char implements StructClass {
       return Char.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

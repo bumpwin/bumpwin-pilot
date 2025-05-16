@@ -13,11 +13,7 @@ export function totalSupply(tx: Transaction, typeArg: string, cap: TransactionOb
   });
 }
 
-export function treasuryIntoSupply(
-  tx: Transaction,
-  typeArg: string,
-  treasury: TransactionObjectInput
-) {
+export function treasuryIntoSupply(tx: Transaction, typeArg: string, treasury: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::treasury_into_supply`,
     typeArguments: [typeArg],
@@ -42,11 +38,7 @@ export function supplyMut(tx: Transaction, typeArg: string, treasury: Transactio
 }
 
 export function value(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::coin::value`,
-    typeArguments: [typeArg],
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::coin::value`, typeArguments: [typeArg], arguments: [obj(tx, self)] });
 }
 
 export function balance(tx: Transaction, typeArg: string, coin: TransactionObjectInput) {
@@ -147,11 +139,7 @@ export function divideIntoN(tx: Transaction, typeArg: string, args: DivideIntoNA
 }
 
 export function zero(tx: Transaction, typeArg: string) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::coin::zero`,
-    typeArguments: [typeArg],
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::coin::zero`, typeArguments: [typeArg], arguments: [] });
 }
 
 export function destroyZero(tx: Transaction, typeArg: string, c: TransactionObjectInput) {
@@ -196,11 +184,7 @@ export interface CreateRegulatedCurrencyV2Args {
   allowGlobalPause: boolean | TransactionArgument;
 }
 
-export function createRegulatedCurrencyV2(
-  tx: Transaction,
-  typeArg: string,
-  args: CreateRegulatedCurrencyV2Args
-) {
+export function createRegulatedCurrencyV2(tx: Transaction, typeArg: string, args: CreateRegulatedCurrencyV2Args) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::create_regulated_currency_v2`,
     typeArguments: [typeArg],
@@ -222,11 +206,7 @@ export interface MigrateRegulatedCurrencyToV2Args {
   allowGlobalPause: boolean | TransactionArgument;
 }
 
-export function migrateRegulatedCurrencyToV2(
-  tx: Transaction,
-  typeArg: string,
-  args: MigrateRegulatedCurrencyToV2Args
-) {
+export function migrateRegulatedCurrencyToV2(tx: Transaction, typeArg: string, args: MigrateRegulatedCurrencyToV2Args) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::migrate_regulated_currency_to_v2`,
     typeArguments: [typeArg],
@@ -309,7 +289,7 @@ export interface DenyListV2ContainsCurrentEpochArgs {
 export function denyListV2ContainsCurrentEpoch(
   tx: Transaction,
   typeArg: string,
-  args: DenyListV2ContainsCurrentEpochArgs
+  args: DenyListV2ContainsCurrentEpochArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_contains_current_epoch`,
@@ -323,11 +303,7 @@ export interface DenyListV2ContainsNextEpochArgs {
   addr: string | TransactionArgument;
 }
 
-export function denyListV2ContainsNextEpoch(
-  tx: Transaction,
-  typeArg: string,
-  args: DenyListV2ContainsNextEpochArgs
-) {
+export function denyListV2ContainsNextEpoch(tx: Transaction, typeArg: string, args: DenyListV2ContainsNextEpochArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_contains_next_epoch`,
     typeArguments: [typeArg],
@@ -340,11 +316,7 @@ export interface DenyListV2EnableGlobalPauseArgs {
   denyCap: TransactionObjectInput;
 }
 
-export function denyListV2EnableGlobalPause(
-  tx: Transaction,
-  typeArg: string,
-  args: DenyListV2EnableGlobalPauseArgs
-) {
+export function denyListV2EnableGlobalPause(tx: Transaction, typeArg: string, args: DenyListV2EnableGlobalPauseArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_enable_global_pause`,
     typeArguments: [typeArg],
@@ -357,11 +329,7 @@ export interface DenyListV2DisableGlobalPauseArgs {
   denyCap: TransactionObjectInput;
 }
 
-export function denyListV2DisableGlobalPause(
-  tx: Transaction,
-  typeArg: string,
-  args: DenyListV2DisableGlobalPauseArgs
-) {
+export function denyListV2DisableGlobalPause(tx: Transaction, typeArg: string, args: DenyListV2DisableGlobalPauseArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_disable_global_pause`,
     typeArguments: [typeArg],
@@ -372,7 +340,7 @@ export function denyListV2DisableGlobalPause(
 export function denyListV2IsGlobalPauseEnabledCurrentEpoch(
   tx: Transaction,
   typeArg: string,
-  denyList: TransactionObjectInput
+  denyList: TransactionObjectInput,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_is_global_pause_enabled_current_epoch`,
@@ -384,7 +352,7 @@ export function denyListV2IsGlobalPauseEnabledCurrentEpoch(
 export function denyListV2IsGlobalPauseEnabledNextEpoch(
   tx: Transaction,
   typeArg: string,
-  denyList: TransactionObjectInput
+  denyList: TransactionObjectInput,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::deny_list_v2_is_global_pause_enabled_next_epoch`,
@@ -417,11 +385,7 @@ export function updateName(tx: Transaction, typeArg: string, args: UpdateNameArg
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::update_name`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.treasury),
-      obj(tx, args.metadata),
-      pure(tx, args.name, `${String.$typeName}`),
-    ],
+    arguments: [obj(tx, args.treasury), obj(tx, args.metadata), pure(tx, args.name, `${String.$typeName}`)],
   });
 }
 
@@ -435,11 +399,7 @@ export function updateSymbol(tx: Transaction, typeArg: string, args: UpdateSymbo
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::update_symbol`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.treasury),
-      obj(tx, args.metadata),
-      pure(tx, args.symbol, `${String1.$typeName}`),
-    ],
+    arguments: [obj(tx, args.treasury), obj(tx, args.metadata), pure(tx, args.symbol, `${String1.$typeName}`)],
   });
 }
 
@@ -453,11 +413,7 @@ export function updateDescription(tx: Transaction, typeArg: string, args: Update
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::update_description`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.treasury),
-      obj(tx, args.metadata),
-      pure(tx, args.description, `${String.$typeName}`),
-    ],
+    arguments: [obj(tx, args.treasury), obj(tx, args.metadata), pure(tx, args.description, `${String.$typeName}`)],
   });
 }
 
@@ -471,11 +427,7 @@ export function updateIconUrl(tx: Transaction, typeArg: string, args: UpdateIcon
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::update_icon_url`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.treasury),
-      obj(tx, args.metadata),
-      pure(tx, args.url, `${String1.$typeName}`),
-    ],
+    arguments: [obj(tx, args.treasury), obj(tx, args.metadata), pure(tx, args.url, `${String1.$typeName}`)],
   });
 }
 
@@ -536,11 +488,7 @@ export interface CreateRegulatedCurrencyArgs {
   iconUrl: TransactionObjectInput | TransactionArgument | null;
 }
 
-export function createRegulatedCurrency(
-  tx: Transaction,
-  typeArg: string,
-  args: CreateRegulatedCurrencyArgs
-) {
+export function createRegulatedCurrency(tx: Transaction, typeArg: string, args: CreateRegulatedCurrencyArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::coin::create_regulated_currency`,
     typeArguments: [typeArg],

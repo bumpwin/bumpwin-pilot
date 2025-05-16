@@ -57,7 +57,7 @@ export class VerifiedID implements StructClass {
   private constructor(typeArgs: [], fields: VerifiedIDFields) {
     this.$fullTypeName = composeSuiType(
       VerifiedID.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`;
     this.$typeArgs = typeArgs;
 
@@ -72,10 +72,7 @@ export class VerifiedID implements StructClass {
   static reified(): VerifiedIDReified {
     return {
       typeName: VerifiedID.$typeName,
-      fullTypeName: composeSuiType(
-        VerifiedID.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`,
+      fullTypeName: composeSuiType(VerifiedID.$typeName, ...[]) as `${typeof PKG_V30}::zklogin_verified_id::VerifiedID`,
       typeArgs: [] as [],
       isPhantom: VerifiedID.$isPhantom,
       reifiedTypeArgs: [],
@@ -109,12 +106,7 @@ export class VerifiedID implements StructClass {
   static get bcs() {
     return bcs.struct('VerifiedID', {
       id: UID.bcs,
-      owner: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      owner: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       key_claim_name: String.bcs,
       key_claim_value: String.bcs,
       issuer: String.bcs,
@@ -208,7 +200,7 @@ export class VerifiedID implements StructClass {
       return VerifiedID.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

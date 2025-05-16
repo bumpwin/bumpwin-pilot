@@ -13,14 +13,7 @@ export interface FieldsWithTypes {
 
 export type ObjectId = string;
 
-export type PureArg =
-  | bigint
-  | string
-  | number
-  | boolean
-  | null
-  | TransactionArgument
-  | Array<PureArg>;
+export type PureArg = bigint | string | number | boolean | null | TransactionArgument | Array<PureArg>;
 export type GenericArg =
   | TransactionObjectInput
   | PureArg
@@ -28,10 +21,7 @@ export type GenericArg =
   | Array<PureArg>
   | Array<GenericArg>;
 
-export function splitGenericParameters(
-  str: string,
-  genericSeparators: [string, string] = ['<', '>']
-) {
+export function splitGenericParameters(str: string, genericSeparators: [string, string] = ['<', '>']) {
   const [left, right] = genericSeparators;
   const tok: string[] = [];
   let word = '';
@@ -79,10 +69,7 @@ export function parseTypeName(name: string): { typeName: string; typeArgs: strin
   }
 
   const typeName = name.slice(0, l_bound);
-  const typeArgs = splitGenericParameters(name.slice(l_bound + 1, name.length - r_bound - 1), [
-    left,
-    right,
-  ]);
+  const typeArgs = splitGenericParameters(name.slice(l_bound + 1, name.length - r_bound - 1), [left, right]);
 
   return { typeName, typeArgs };
 }
@@ -276,9 +263,7 @@ export function generic(tx: Transaction, type: string, arg: GenericArg) {
 
       return tx.makeMoveVec({
         type: itemType,
-        elements: arg.map((item) =>
-          obj(tx, item as TransactionObjectInput)
-        ) as Array<TransactionObjectArgument>,
+        elements: arg.map((item) => obj(tx, item as TransactionObjectInput)) as Array<TransactionObjectArgument>,
       });
     } else {
       return obj(tx, arg as TransactionObjectInput);
@@ -286,11 +271,7 @@ export function generic(tx: Transaction, type: string, arg: GenericArg) {
   }
 }
 
-export function vector(
-  tx: Transaction,
-  itemType: string,
-  items: Array<GenericArg> | TransactionArgument
-) {
+export function vector(tx: Transaction, itemType: string, items: Array<GenericArg> | TransactionArgument) {
   if (typeof items === 'function') {
     throw new Error('Transaction plugins are not supported');
   }
@@ -302,9 +283,7 @@ export function vector(
   } else {
     const { typeName: itemTypeName, typeArgs: itemTypeArgs } = parseTypeName(itemType);
     if (itemTypeName === '0x1::option::Option') {
-      const elements = items.map((item) =>
-        option(tx, itemTypeArgs[0], item)
-      ) as Array<TransactionObjectArgument>;
+      const elements = items.map((item) => option(tx, itemTypeArgs[0], item)) as Array<TransactionObjectArgument>;
       return tx.makeMoveVec({
         type: itemType,
         elements,
