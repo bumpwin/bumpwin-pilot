@@ -2,6 +2,7 @@
   "recommendations": [
     "mysten.move",
     "mysten.prettier-move",
-    "mysten.move-trace-debug"
+    "mysten.move-trace-debug",
+    "gruntfuggly.todo-tree"
   ]
 }
