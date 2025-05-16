@@ -5,6 +5,10 @@ use round_manager::round_number::RoundNumber;
 use round_manager::wsui::WSUI;
 use sui::balance::{Self, Balance};
 use sui::table::{Self, Table};
+use round_manager::sealed_tx_board::SealedTxBoard;
+
+const EInvalidNullifier: u64 = 0;
+const ESealedTxNotFound: u64 = 1;
 
 public struct Account has key, store {
     id: UID,
@@ -40,7 +44,19 @@ public fun create_position(self: &mut Account, round_number: RoundNumber, ctx: &
 public fun switch_position(self: &mut Account, round_number: RoundNumber) {
 }
 
-// TODO: Implement expiration data
-public fun commit_txs(self: &mut Account, txs: vector<DarkBatchTx>) {
-    self.dark_batch_tx_board.add(txs);
+
+public fun switch_position_with_sealed_tx(
+    self: &mut Account,
+    amount: u64,
+    round_number: RoundNumber,
+    nullifier: u256,
+    sealed_tx_board: &SealedTxBoard,
+    ctx: &TxContext,
+) {
+    let expected_nullifier = sealed_tx_board.get_nullifier(ctx.sender());
+    assert!(expected_nullifier.is_some(), ESealedTxNotFound);
+    assert!(expected_nullifier.borrow() == nullifier, EInvalidNullifier);
+
+
+    self.switch_position(round_number);
 }
