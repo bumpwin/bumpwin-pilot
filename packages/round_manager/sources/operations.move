@@ -1,6 +1,6 @@
 module round_manager::operations;
 
-use round_manager::battle_market::{Self, BattleMarket};
+use round_manager::battle_market::BattleMarket;
 use round_manager::battle_round::BattleRound;
 use round_manager::champ_amm::{Self, ChampAMM};
 use round_manager::claim_box::{Self, ClaimBox};

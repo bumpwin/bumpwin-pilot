@@ -1,7 +1,7 @@
 module round_manager::account;
 
 use round_manager::position::{Self, Position};
-use round_manager::round_number::{Self, RoundNumber};
+use round_manager::round_number::RoundNumber;
 use round_manager::wsui::WSUI;
 use sui::balance::{Self, Balance};
 use sui::table::{Self, Table};

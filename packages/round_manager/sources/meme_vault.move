@@ -27,7 +27,7 @@ public struct MemeVault<phantom CoinT> has key, store {
     reserve: Balance<CoinT>,
 }
 
-public fun new<CoinT> (
+public fun new<CoinT>(
     treasury_cap: TreasuryCap<CoinT>,
     metadata: CoinMetadata<CoinT>,
     ctx: &mut TxContext,
@@ -81,12 +81,14 @@ public fun withdraw_two_half_supply<CoinT>(
     (balance1, balance2)
 }
 
+// TODO: Verify this is correct
+#[allow(lint(share_owned))]
 public fun destroy<CoinT>(self: MemeVault<CoinT>): Balance<CoinT> {
     let MemeVault {
         id,
         metadata,
         treasury,
-        links,
+        links: _links,
         reserve,
     } = self;
     id.delete();

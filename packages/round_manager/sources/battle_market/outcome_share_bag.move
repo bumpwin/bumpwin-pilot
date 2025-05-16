@@ -2,8 +2,7 @@ module round_manager::outcome_share_bag;
 
 use round_manager::outcome_share_coin::{Self, OutcomeShare};
 use sui::bag::{Self, Bag};
-use sui::balance::{Self, Supply, Balance};
-use sui::transfer::public_freeze_object;
+use sui::balance::{Supply, Balance};
 
 const ESupplyNotFound: u64 = 0;
 const EAlreadyRegistered: u64 = 1;
