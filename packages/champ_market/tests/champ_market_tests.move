@@ -16,17 +16,18 @@ fun test_cpmm_swap_flow() {
     let test = &mut scenario;
 
     // === Step 0: Setup initial Pool ===
-    test.next_tx(ALICE); {
+    test.next_tx(ALICE);
+    {
         let coin_x = coin::mint_for_testing<SUI>(INIT_X, test.ctx());
         let coin_y = coin::mint_for_testing<SUI>(INIT_Y, test.ctx());
-        champ_market::cpmm::create_pool(coin_x, coin_y, test.ctx());
+        champ_market::cpmm::share_pool(coin_x, coin_y, test.ctx());
     };
 
     // === Step 1: BOB does swap_x_to_y ===
-    test.next_tx(BOB); {
+    test.next_tx(BOB);
+    {
         let mut pool = test.take_shared<champ_market::cpmm::Pool<SUI, SUI>>();
         let coin_in = coin::mint_for_testing<SUI>(SWAP_IN_AMOUNT, test.ctx());
-
         let coin_out = pool.swap_x_to_y(coin_in, test.ctx());
 
         let amount_out = coin_out.value();
@@ -39,5 +40,5 @@ fun test_cpmm_swap_flow() {
         test::return_shared(pool);
     };
 
-    test::end(scenario);
+    scenario.end();
 }
