@@ -37,9 +37,3 @@ public(package) fun new(round: u64, start_timestamp_ms: u64, ctx: &mut TxContext
 public fun phase(self: &BattleRound, clock: &Clock): RoundPhase {
     round_phase::round_phase(self.start_timestamp_ms, clock)
 }
-
-public fun withdraw_winner_balances<CoinT>(
-    self: &mut BattleRound,
-): (Balance<CoinT>, Balance<CoinT>) {
-    self.meme_registry.borrow_mut_vault<CoinT>().withdraw_two_half_supply()
-}
