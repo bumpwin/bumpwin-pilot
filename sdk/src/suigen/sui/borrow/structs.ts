@@ -17,12 +17,7 @@ import {
   phantom,
   toBcs,
 } from '../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { ID } from '../object/structs';
 import { BcsType, bcs } from '@mysten/sui/bcs';
@@ -61,7 +56,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
   private constructor(typeArgs: [ToTypeStr<T>], fields: ReferentFields<T>) {
     this.$fullTypeName = composeSuiType(
       Referent.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::borrow::Referent<${ToTypeStr<T>}>`;
     this.$typeArgs = typeArgs;
 
@@ -74,7 +69,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
       typeName: Referent.$typeName,
       fullTypeName: composeSuiType(
         Referent.$typeName,
-        ...[extractType(T)]
+        ...[extractType(T)],
       ) as `${typeof PKG_V30}::borrow::Referent<${ToTypeStr<ToTypeArgument<T>>}>`,
       typeArgs: [extractType(T)] as [ToTypeStr<ToTypeArgument<T>>],
       isPhantom: Referent.$isPhantom,
@@ -99,9 +94,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
     return Referent.reified;
   }
 
-  static phantom<T extends Reified<TypeArgument, any>>(
-    T: T
-  ): PhantomReified<ToTypeStr<Referent<ToTypeArgument<T>>>> {
+  static phantom<T extends Reified<TypeArgument, any>>(T: T): PhantomReified<ToTypeStr<Referent<ToTypeArgument<T>>>> {
     return phantom(Referent.reified(T));
   }
   static get p() {
@@ -111,19 +104,14 @@ export class Referent<T extends TypeArgument> implements StructClass {
   static get bcs() {
     return <T extends BcsType<any>>(T: T) =>
       bcs.struct(`Referent<${T.name}>`, {
-        id: bcs
-          .bytes(32)
-          .transform({
-            input: (val: string) => fromHEX(val),
-            output: (val: Uint8Array) => toHEX(val),
-          }),
+        id: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
         value: Option.bcs(T),
       });
   }
 
   static fromFields<T extends Reified<TypeArgument, any>>(
     typeArg: T,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Referent<ToTypeArgument<T>> {
     return Referent.reified(typeArg).new({
       id: decodeFromFields('address', fields.id),
@@ -133,7 +121,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
 
   static fromFieldsWithTypes<T extends Reified<TypeArgument, any>>(
     typeArg: T,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Referent<ToTypeArgument<T>> {
     if (!isReferent(item.type)) {
       throw new Error('not a Referent type');
@@ -146,10 +134,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
     });
   }
 
-  static fromBcs<T extends Reified<TypeArgument, any>>(
-    typeArg: T,
-    data: Uint8Array
-  ): Referent<ToTypeArgument<T>> {
+  static fromBcs<T extends Reified<TypeArgument, any>>(typeArg: T, data: Uint8Array): Referent<ToTypeArgument<T>> {
     const typeArgs = [typeArg];
 
     return Referent.fromFields(typeArg, Referent.bcs(toBcs(typeArgs[0])).parse(data));
@@ -166,10 +151,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
     return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
   }
 
-  static fromJSONField<T extends Reified<TypeArgument, any>>(
-    typeArg: T,
-    field: any
-  ): Referent<ToTypeArgument<T>> {
+  static fromJSONField<T extends Reified<TypeArgument, any>>(typeArg: T, field: any): Referent<ToTypeArgument<T>> {
     return Referent.reified(typeArg).new({
       id: decodeFromJSONField('address', field.id),
       value: decodeFromJSONField(Option.reified(typeArg), field.value),
@@ -178,23 +160,19 @@ export class Referent<T extends TypeArgument> implements StructClass {
 
   static fromJSON<T extends Reified<TypeArgument, any>>(
     typeArg: T,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Referent<ToTypeArgument<T>> {
     if (json.$typeName !== Referent.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Referent.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Referent.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return Referent.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T extends Reified<TypeArgument, any>>(
     typeArg: T,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Referent<ToTypeArgument<T>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -207,7 +185,7 @@ export class Referent<T extends TypeArgument> implements StructClass {
 
   static fromSuiObjectData<T extends Reified<TypeArgument, any>>(
     typeArg: T,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Referent<ToTypeArgument<T>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isReferent(data.bcs.type)) {
@@ -216,16 +194,12 @@ export class Referent<T extends TypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return Referent.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -234,14 +208,14 @@ export class Referent<T extends TypeArgument> implements StructClass {
       return Referent.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T extends Reified<TypeArgument, any>>(
     client: SuiClient,
     typeArg: T,
-    id: string
+    id: string,
   ): Promise<Referent<ToTypeArgument<T>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -285,10 +259,7 @@ export class Borrow implements StructClass {
   readonly obj: ToField<ID>;
 
   private constructor(typeArgs: [], fields: BorrowFields) {
-    this.$fullTypeName = composeSuiType(
-      Borrow.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::borrow::Borrow`;
+    this.$fullTypeName = composeSuiType(Borrow.$typeName, ...typeArgs) as `${typeof PKG_V30}::borrow::Borrow`;
     this.$typeArgs = typeArgs;
 
     this.ref = fields.ref;
@@ -331,12 +302,7 @@ export class Borrow implements StructClass {
 
   static get bcs() {
     return bcs.struct('Borrow', {
-      ref: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      ref: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       obj: ID.bcs,
     });
   }
@@ -411,7 +377,7 @@ export class Borrow implements StructClass {
       return Borrow.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

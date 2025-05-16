@@ -54,10 +54,7 @@ export class TxContext implements StructClass {
   readonly idsCreated: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: TxContextFields) {
-    this.$fullTypeName = composeSuiType(
-      TxContext.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::tx_context::TxContext`;
+    this.$fullTypeName = composeSuiType(TxContext.$typeName, ...typeArgs) as `${typeof PKG_V30}::tx_context::TxContext`;
     this.$typeArgs = typeArgs;
 
     this.sender = fields.sender;
@@ -70,10 +67,7 @@ export class TxContext implements StructClass {
   static reified(): TxContextReified {
     return {
       typeName: TxContext.$typeName,
-      fullTypeName: composeSuiType(
-        TxContext.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::tx_context::TxContext`,
+      fullTypeName: composeSuiType(TxContext.$typeName, ...[]) as `${typeof PKG_V30}::tx_context::TxContext`,
       typeArgs: [] as [],
       isPhantom: TxContext.$isPhantom,
       reifiedTypeArgs: [],
@@ -108,10 +102,7 @@ export class TxContext implements StructClass {
     return bcs.struct('TxContext', {
       sender: bcs
         .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+        .transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       tx_hash: bcs.vector(bcs.u8()),
       epoch: bcs.u64(),
       epoch_timestamp_ms: bcs.u64(),
@@ -201,7 +192,7 @@ export class TxContext implements StructClass {
       return TxContext.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

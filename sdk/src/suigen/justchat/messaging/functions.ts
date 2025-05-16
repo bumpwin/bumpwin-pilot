@@ -12,10 +12,6 @@ export interface SendMessageArgs {
 export function sendMessage(tx: Transaction, args: SendMessageArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::messaging::send_message`,
-    arguments: [
-      obj(tx, args.messageFeeCap),
-      pure(tx, args.string, `${String.$typeName}`),
-      obj(tx, args.coin),
-    ],
+    arguments: [obj(tx, args.messageFeeCap), pure(tx, args.string, `${String.$typeName}`), obj(tx, args.coin)],
   });
 }

@@ -43,10 +43,7 @@ export class ID implements StructClass {
   readonly bytes: ToField<'address'>;
 
   private constructor(typeArgs: [], fields: IDFields) {
-    this.$fullTypeName = composeSuiType(
-      ID.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::object::ID`;
+    this.$fullTypeName = composeSuiType(ID.$typeName, ...typeArgs) as `${typeof PKG_V30}::object::ID`;
     this.$typeArgs = typeArgs;
 
     this.bytes = fields.bytes;
@@ -88,12 +85,7 @@ export class ID implements StructClass {
 
   static get bcs() {
     return bcs.struct('ID', {
-      bytes: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      bytes: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
     });
   }
 
@@ -157,7 +149,7 @@ export class ID implements StructClass {
       return ID.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -202,10 +194,7 @@ export class UID implements StructClass {
   readonly id: ToField<ID>;
 
   private constructor(typeArgs: [], fields: UIDFields) {
-    this.$fullTypeName = composeSuiType(
-      UID.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::object::UID`;
+    this.$fullTypeName = composeSuiType(UID.$typeName, ...typeArgs) as `${typeof PKG_V30}::object::UID`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -311,7 +300,7 @@ export class UID implements StructClass {
       return UID.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

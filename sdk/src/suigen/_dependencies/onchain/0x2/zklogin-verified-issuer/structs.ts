@@ -51,7 +51,7 @@ export class VerifiedIssuer implements StructClass {
   private constructor(typeArgs: [], fields: VerifiedIssuerFields) {
     this.$fullTypeName = composeSuiType(
       VerifiedIssuer.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::zklogin_verified_issuer::VerifiedIssuer`;
     this.$typeArgs = typeArgs;
 
@@ -65,7 +65,7 @@ export class VerifiedIssuer implements StructClass {
       typeName: VerifiedIssuer.$typeName,
       fullTypeName: composeSuiType(
         VerifiedIssuer.$typeName,
-        ...[]
+        ...[],
       ) as `${typeof PKG_V30}::zklogin_verified_issuer::VerifiedIssuer`,
       typeArgs: [] as [],
       isPhantom: VerifiedIssuer.$isPhantom,
@@ -100,12 +100,7 @@ export class VerifiedIssuer implements StructClass {
   static get bcs() {
     return bcs.struct('VerifiedIssuer', {
       id: UID.bcs,
-      owner: bcs
-        .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+      owner: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
       issuer: String.bcs,
     });
   }
@@ -184,7 +179,7 @@ export class VerifiedIssuer implements StructClass {
       return VerifiedIssuer.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

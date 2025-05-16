@@ -11,11 +11,7 @@ export interface Secp256r1EcrecoverArgs {
 export function secp256r1Ecrecover(tx: Transaction, args: Secp256r1EcrecoverArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::ecdsa_r1::secp256r1_ecrecover`,
-    arguments: [
-      pure(tx, args.signature, `vector<u8>`),
-      pure(tx, args.msg, `vector<u8>`),
-      pure(tx, args.hash, `u8`),
-    ],
+    arguments: [pure(tx, args.signature, `vector<u8>`), pure(tx, args.msg, `vector<u8>`), pure(tx, args.hash, `u8`)],
   });
 }
 

@@ -48,10 +48,7 @@ export class MessageFeeCap implements StructClass {
   readonly recipient: ToField<'address'>;
 
   private constructor(typeArgs: [], fields: MessageFeeCapFields) {
-    this.$fullTypeName = composeSuiType(
-      MessageFeeCap.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V1}::cap::MessageFeeCap`;
+    this.$fullTypeName = composeSuiType(MessageFeeCap.$typeName, ...typeArgs) as `${typeof PKG_V1}::cap::MessageFeeCap`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -62,10 +59,7 @@ export class MessageFeeCap implements StructClass {
   static reified(): MessageFeeCapReified {
     return {
       typeName: MessageFeeCap.$typeName,
-      fullTypeName: composeSuiType(
-        MessageFeeCap.$typeName,
-        ...[]
-      ) as `${typeof PKG_V1}::cap::MessageFeeCap`,
+      fullTypeName: composeSuiType(MessageFeeCap.$typeName, ...[]) as `${typeof PKG_V1}::cap::MessageFeeCap`,
       typeArgs: [] as [],
       isPhantom: MessageFeeCap.$isPhantom,
       reifiedTypeArgs: [],
@@ -102,10 +96,7 @@ export class MessageFeeCap implements StructClass {
       message_fee: bcs.u64(),
       recipient: bcs
         .bytes(32)
-        .transform({
-          input: (val: string) => fromHEX(val),
-          output: (val: Uint8Array) => toHEX(val),
-        }),
+        .transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
     });
   }
 
@@ -183,7 +174,7 @@ export class MessageFeeCap implements StructClass {
       return MessageFeeCap.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -228,10 +219,7 @@ export class AdminCap implements StructClass {
   readonly id: ToField<UID>;
 
   private constructor(typeArgs: [], fields: AdminCapFields) {
-    this.$fullTypeName = composeSuiType(
-      AdminCap.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V1}::cap::AdminCap`;
+    this.$fullTypeName = composeSuiType(AdminCap.$typeName, ...typeArgs) as `${typeof PKG_V1}::cap::AdminCap`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -337,7 +325,7 @@ export class AdminCap implements StructClass {
       return AdminCap.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

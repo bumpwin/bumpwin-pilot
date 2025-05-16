@@ -74,12 +74,7 @@ export function lock(tx: Transaction, typeArg: string, args: LockArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::kiosk::lock`,
     typeArguments: [typeArg],
-    arguments: [
-      obj(tx, args.self),
-      obj(tx, args.cap),
-      obj(tx, args.policy),
-      generic(tx, `${typeArg}`, args.item),
-    ],
+    arguments: [obj(tx, args.self), obj(tx, args.cap), obj(tx, args.policy), generic(tx, `${typeArg}`, args.item)],
   });
 }
 
@@ -172,11 +167,7 @@ export interface ListWithPurchaseCapArgs {
   minPrice: bigint | TransactionArgument;
 }
 
-export function listWithPurchaseCap(
-  tx: Transaction,
-  typeArg: string,
-  args: ListWithPurchaseCapArgs
-) {
+export function listWithPurchaseCap(tx: Transaction, typeArg: string, args: ListWithPurchaseCapArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::kiosk::list_with_purchase_cap`,
     typeArguments: [typeArg],
@@ -225,11 +216,7 @@ export interface WithdrawArgs {
 export function withdraw(tx: Transaction, args: WithdrawArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::kiosk::withdraw`,
-    arguments: [
-      obj(tx, args.self),
-      obj(tx, args.cap),
-      pure(tx, args.amount, `${Option.$typeName}<u64>`),
-    ],
+    arguments: [obj(tx, args.self), obj(tx, args.cap), pure(tx, args.amount, `${Option.$typeName}<u64>`)],
   });
 }
 
@@ -260,10 +247,7 @@ export function placeInternal(tx: Transaction, typeArg: string, args: PlaceInter
 }
 
 export function uidMutInternal(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::kiosk::uid_mut_internal`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::uid_mut_internal`, arguments: [obj(tx, self)] });
 }
 
 export interface HasItemArgs {
@@ -381,10 +365,7 @@ export function itemCount(tx: Transaction, self: TransactionObjectInput) {
 }
 
 export function profitsAmount(tx: Transaction, self: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::kiosk::profits_amount`,
-    arguments: [obj(tx, self)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::profits_amount`, arguments: [obj(tx, self)] });
 }
 
 export interface ProfitsMutArgs {
@@ -456,10 +437,7 @@ export function returnVal(tx: Transaction, typeArg: string, args: ReturnValArgs)
 }
 
 export function kioskOwnerCapFor(tx: Transaction, cap: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::kiosk::kiosk_owner_cap_for`,
-    arguments: [obj(tx, cap)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::kiosk::kiosk_owner_cap_for`, arguments: [obj(tx, cap)] });
 }
 
 export function purchaseCapKiosk(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
@@ -478,11 +456,7 @@ export function purchaseCapItem(tx: Transaction, typeArg: string, self: Transact
   });
 }
 
-export function purchaseCapMinPrice(
-  tx: Transaction,
-  typeArg: string,
-  self: TransactionObjectInput
-) {
+export function purchaseCapMinPrice(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::kiosk::purchase_cap_min_price`,
     typeArguments: [typeArg],

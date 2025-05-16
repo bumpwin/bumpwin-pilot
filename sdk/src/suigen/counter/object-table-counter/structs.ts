@@ -51,7 +51,7 @@ export class Counter implements StructClass {
   private constructor(typeArgs: [], fields: CounterFields) {
     this.$fullTypeName = composeSuiType(
       Counter.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V1}::object_table_counter::Counter`;
     this.$typeArgs = typeArgs;
 
@@ -62,10 +62,7 @@ export class Counter implements StructClass {
   static reified(): CounterReified {
     return {
       typeName: Counter.$typeName,
-      fullTypeName: composeSuiType(
-        Counter.$typeName,
-        ...[]
-      ) as `${typeof PKG_V1}::object_table_counter::Counter`,
+      fullTypeName: composeSuiType(Counter.$typeName, ...[]) as `${typeof PKG_V1}::object_table_counter::Counter`,
       typeArgs: [] as [],
       isPhantom: Counter.$isPhantom,
       reifiedTypeArgs: [],
@@ -173,7 +170,7 @@ export class Counter implements StructClass {
       return Counter.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -220,10 +217,7 @@ export class Root implements StructClass {
   readonly counters: ToField<ObjectTable<ToPhantom<ID>, ToPhantom<Counter>>>;
 
   private constructor(typeArgs: [], fields: RootFields) {
-    this.$fullTypeName = composeSuiType(
-      Root.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V1}::object_table_counter::Root`;
+    this.$fullTypeName = composeSuiType(Root.$typeName, ...typeArgs) as `${typeof PKG_V1}::object_table_counter::Root`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -233,10 +227,7 @@ export class Root implements StructClass {
   static reified(): RootReified {
     return {
       typeName: Root.$typeName,
-      fullTypeName: composeSuiType(
-        Root.$typeName,
-        ...[]
-      ) as `${typeof PKG_V1}::object_table_counter::Root`,
+      fullTypeName: composeSuiType(Root.$typeName, ...[]) as `${typeof PKG_V1}::object_table_counter::Root`,
       typeArgs: [] as [],
       isPhantom: Root.$isPhantom,
       reifiedTypeArgs: [],
@@ -279,7 +270,7 @@ export class Root implements StructClass {
       id: decodeFromFields(UID.reified(), fields.id),
       counters: decodeFromFields(
         ObjectTable.reified(reified.phantom(ID.reified()), reified.phantom(Counter.reified())),
-        fields.counters
+        fields.counters,
       ),
     });
   }
@@ -293,7 +284,7 @@ export class Root implements StructClass {
       id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id),
       counters: decodeFromFieldsWithTypes(
         ObjectTable.reified(reified.phantom(ID.reified()), reified.phantom(Counter.reified())),
-        item.fields.counters
+        item.fields.counters,
       ),
     });
   }
@@ -318,7 +309,7 @@ export class Root implements StructClass {
       id: decodeFromJSONField(UID.reified(), field.id),
       counters: decodeFromJSONField(
         ObjectTable.reified(reified.phantom(ID.reified()), reified.phantom(Counter.reified())),
-        field.counters
+        field.counters,
       ),
     });
   }
@@ -353,7 +344,7 @@ export class Root implements StructClass {
       return Root.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -400,7 +391,7 @@ export class NewCounterEvent implements StructClass {
   private constructor(typeArgs: [], fields: NewCounterEventFields) {
     this.$fullTypeName = composeSuiType(
       NewCounterEvent.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V1}::object_table_counter::NewCounterEvent`;
     this.$typeArgs = typeArgs;
 
@@ -412,7 +403,7 @@ export class NewCounterEvent implements StructClass {
       typeName: NewCounterEvent.$typeName,
       fullTypeName: composeSuiType(
         NewCounterEvent.$typeName,
-        ...[]
+        ...[],
       ) as `${typeof PKG_V1}::object_table_counter::NewCounterEvent`,
       typeArgs: [] as [],
       isPhantom: NewCounterEvent.$isPhantom,
@@ -459,9 +450,7 @@ export class NewCounterEvent implements StructClass {
       throw new Error('not a NewCounterEvent type');
     }
 
-    return NewCounterEvent.reified().new({
-      id: decodeFromFieldsWithTypes(ID.reified(), item.fields.id),
-    });
+    return NewCounterEvent.reified().new({ id: decodeFromFieldsWithTypes(ID.reified(), item.fields.id) });
   }
 
   static fromBcs(data: Uint8Array): NewCounterEvent {
@@ -512,7 +501,7 @@ export class NewCounterEvent implements StructClass {
       return NewCounterEvent.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -559,7 +548,7 @@ export class IncrementEvent implements StructClass {
   private constructor(typeArgs: [], fields: IncrementEventFields) {
     this.$fullTypeName = composeSuiType(
       IncrementEvent.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V1}::object_table_counter::IncrementEvent`;
     this.$typeArgs = typeArgs;
 
@@ -571,7 +560,7 @@ export class IncrementEvent implements StructClass {
       typeName: IncrementEvent.$typeName,
       fullTypeName: composeSuiType(
         IncrementEvent.$typeName,
-        ...[]
+        ...[],
       ) as `${typeof PKG_V1}::object_table_counter::IncrementEvent`,
       typeArgs: [] as [],
       isPhantom: IncrementEvent.$isPhantom,
@@ -618,9 +607,7 @@ export class IncrementEvent implements StructClass {
       throw new Error('not a IncrementEvent type');
     }
 
-    return IncrementEvent.reified().new({
-      id: decodeFromFieldsWithTypes(ID.reified(), item.fields.id),
-    });
+    return IncrementEvent.reified().new({ id: decodeFromFieldsWithTypes(ID.reified(), item.fields.id) });
   }
 
   static fromBcs(data: Uint8Array): IncrementEvent {
@@ -671,7 +658,7 @@ export class IncrementEvent implements StructClass {
       return IncrementEvent.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

@@ -3,11 +3,7 @@ import { GenericArg, generic, obj } from '../../_framework/util';
 import { Transaction, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function new_(tx: Transaction, typeArgs: [string, string]) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::object_table::new`,
-    typeArguments: typeArgs,
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::object_table::new`, typeArguments: typeArgs, arguments: [] });
 }
 
 export interface AddArgs {
@@ -20,11 +16,7 @@ export function add(tx: Transaction, typeArgs: [string, string], args: AddArgs) 
   return tx.moveCall({
     target: `${PUBLISHED_AT}::object_table::add`,
     typeArguments: typeArgs,
-    arguments: [
-      obj(tx, args.table),
-      generic(tx, `${typeArgs[0]}`, args.k),
-      generic(tx, `${typeArgs[1]}`, args.v),
-    ],
+    arguments: [obj(tx, args.table), generic(tx, `${typeArgs[0]}`, args.k), generic(tx, `${typeArgs[1]}`, args.v)],
   });
 }
 
@@ -88,11 +80,7 @@ export function length(tx: Transaction, typeArgs: [string, string], table: Trans
   });
 }
 
-export function isEmpty(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function isEmpty(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::object_table::is_empty`,
     typeArguments: typeArgs,
@@ -100,11 +88,7 @@ export function isEmpty(
   });
 }
 
-export function destroyEmpty(
-  tx: Transaction,
-  typeArgs: [string, string],
-  table: TransactionObjectInput
-) {
+export function destroyEmpty(tx: Transaction, typeArgs: [string, string], table: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::object_table::destroy_empty`,
     typeArguments: typeArgs,

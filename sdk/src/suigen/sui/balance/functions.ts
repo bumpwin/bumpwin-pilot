@@ -53,11 +53,7 @@ export function decreaseSupply(tx: Transaction, typeArg: string, args: DecreaseS
 }
 
 export function zero(tx: Transaction, typeArg: string) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::balance::zero`,
-    typeArguments: [typeArg],
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::balance::zero`, typeArguments: [typeArg], arguments: [] });
 }
 
 export interface JoinArgs {
@@ -102,11 +98,7 @@ export function destroyZero(tx: Transaction, typeArg: string, balance: Transacti
   });
 }
 
-export function createStakingRewards(
-  tx: Transaction,
-  typeArg: string,
-  value: bigint | TransactionArgument
-) {
+export function createStakingRewards(tx: Transaction, typeArg: string, value: bigint | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::balance::create_staking_rewards`,
     typeArguments: [typeArg],
@@ -114,11 +106,7 @@ export function createStakingRewards(
   });
 }
 
-export function destroyStorageRebates(
-  tx: Transaction,
-  typeArg: string,
-  self: TransactionObjectInput
-) {
+export function destroyStorageRebates(tx: Transaction, typeArg: string, self: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::balance::destroy_storage_rebates`,
     typeArguments: [typeArg],

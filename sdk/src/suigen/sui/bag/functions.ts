@@ -16,11 +16,7 @@ export function add(tx: Transaction, typeArgs: [string, string], args: AddArgs) 
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bag::add`,
     typeArguments: typeArgs,
-    arguments: [
-      obj(tx, args.bag),
-      generic(tx, `${typeArgs[0]}`, args.k),
-      generic(tx, `${typeArgs[1]}`, args.v),
-    ],
+    arguments: [obj(tx, args.bag), generic(tx, `${typeArgs[0]}`, args.k), generic(tx, `${typeArgs[1]}`, args.v)],
   });
 }
 
@@ -81,11 +77,7 @@ export interface ContainsWithTypeArgs {
   k: GenericArg;
 }
 
-export function containsWithType(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: ContainsWithTypeArgs
-) {
+export function containsWithType(tx: Transaction, typeArgs: [string, string], args: ContainsWithTypeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::bag::contains_with_type`,
     typeArguments: typeArgs,

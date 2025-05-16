@@ -77,11 +77,7 @@ export interface RemoveIfExistsArgs {
   name: GenericArg;
 }
 
-export function removeIfExists(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: RemoveIfExistsArgs
-) {
+export function removeIfExists(tx: Transaction, typeArgs: [string, string], args: RemoveIfExistsArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_field::remove_if_exists`,
     typeArguments: typeArgs,
@@ -94,11 +90,7 @@ export interface ExistsWithTypeArgs {
   name: GenericArg;
 }
 
-export function existsWithType(
-  tx: Transaction,
-  typeArgs: [string, string],
-  args: ExistsWithTypeArgs
-) {
+export function existsWithType(tx: Transaction, typeArgs: [string, string], args: ExistsWithTypeArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_field::exists_with_type`,
     typeArguments: typeArgs,
@@ -176,11 +168,7 @@ export interface BorrowChildObjectMutArgs {
   id: string | TransactionArgument;
 }
 
-export function borrowChildObjectMut(
-  tx: Transaction,
-  typeArg: string,
-  args: BorrowChildObjectMutArgs
-) {
+export function borrowChildObjectMut(tx: Transaction, typeArg: string, args: BorrowChildObjectMutArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_field::borrow_child_object_mut`,
     typeArguments: [typeArg],
@@ -218,11 +206,7 @@ export interface HasChildObjectWithTyArgs {
   id: string | TransactionArgument;
 }
 
-export function hasChildObjectWithTy(
-  tx: Transaction,
-  typeArg: string,
-  args: HasChildObjectWithTyArgs
-) {
+export function hasChildObjectWithTy(tx: Transaction, typeArg: string, args: HasChildObjectWithTyArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::dynamic_field::has_child_object_with_ty`,
     typeArguments: [typeArg],

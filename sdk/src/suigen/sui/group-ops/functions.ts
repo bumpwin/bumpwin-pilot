@@ -34,11 +34,7 @@ export function fromBytes(tx: Transaction, typeArg: string, args: FromBytesArgs)
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::from_bytes`,
     typeArguments: [typeArg],
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.bytes, `vector<u8>`),
-      pure(tx, args.isTrusted, `bool`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.bytes, `vector<u8>`), pure(tx, args.isTrusted, `bool`)],
   });
 }
 
@@ -120,7 +116,7 @@ export interface MultiScalarMultiplicationArgs {
 export function multiScalarMultiplication(
   tx: Transaction,
   typeArgs: [string, string],
-  args: MultiScalarMultiplicationArgs
+  args: MultiScalarMultiplicationArgs,
 ) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::multi_scalar_multiplication`,
@@ -170,10 +166,7 @@ export function sum(tx: Transaction, typeArg: string, args: SumArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::sum`,
     typeArguments: [typeArg],
-    arguments: [
-      pure(tx, args.type, `u8`),
-      vector(tx, `${Element.$typeName}<${typeArg}>`, args.terms),
-    ],
+    arguments: [pure(tx, args.type, `u8`), vector(tx, `${Element.$typeName}<${typeArg}>`, args.terms)],
   });
 }
 
@@ -198,11 +191,7 @@ export interface InternalAddArgs {
 export function internalAdd(tx: Transaction, args: InternalAddArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_add`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.e1, `vector<u8>`),
-      pure(tx, args.e2, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.e1, `vector<u8>`), pure(tx, args.e2, `vector<u8>`)],
   });
 }
 
@@ -215,11 +204,7 @@ export interface InternalSubArgs {
 export function internalSub(tx: Transaction, args: InternalSubArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_sub`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.e1, `vector<u8>`),
-      pure(tx, args.e2, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.e1, `vector<u8>`), pure(tx, args.e2, `vector<u8>`)],
   });
 }
 
@@ -232,11 +217,7 @@ export interface InternalMulArgs {
 export function internalMul(tx: Transaction, args: InternalMulArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_mul`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.e1, `vector<u8>`),
-      pure(tx, args.e2, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.e1, `vector<u8>`), pure(tx, args.e2, `vector<u8>`)],
   });
 }
 
@@ -249,11 +230,7 @@ export interface InternalDivArgs {
 export function internalDiv(tx: Transaction, args: InternalDivArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_div`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.e1, `vector<u8>`),
-      pure(tx, args.e2, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.e1, `vector<u8>`), pure(tx, args.e2, `vector<u8>`)],
   });
 }
 
@@ -278,11 +255,7 @@ export interface InternalMultiScalarMulArgs {
 export function internalMultiScalarMul(tx: Transaction, args: InternalMultiScalarMulArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_multi_scalar_mul`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.scalars, `vector<u8>`),
-      pure(tx, args.elements, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.scalars, `vector<u8>`), pure(tx, args.elements, `vector<u8>`)],
   });
 }
 
@@ -295,11 +268,7 @@ export interface InternalPairingArgs {
 export function internalPairing(tx: Transaction, args: InternalPairingArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_pairing`,
-    arguments: [
-      pure(tx, args.type, `u8`),
-      pure(tx, args.e1, `vector<u8>`),
-      pure(tx, args.e2, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.type, `u8`), pure(tx, args.e1, `vector<u8>`), pure(tx, args.e2, `vector<u8>`)],
   });
 }
 
@@ -312,11 +281,7 @@ export interface InternalConvertArgs {
 export function internalConvert(tx: Transaction, args: InternalConvertArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::internal_convert`,
-    arguments: [
-      pure(tx, args.fromType, `u8`),
-      pure(tx, args.toType, `u8`),
-      pure(tx, args.e, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.fromType, `u8`), pure(tx, args.toType, `u8`), pure(tx, args.e, `vector<u8>`)],
   });
 }
 
@@ -341,10 +306,6 @@ export interface SetAsPrefixArgs {
 export function setAsPrefix(tx: Transaction, args: SetAsPrefixArgs) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::group_ops::set_as_prefix`,
-    arguments: [
-      pure(tx, args.x, `u64`),
-      pure(tx, args.bigEndian, `bool`),
-      pure(tx, args.buffer, `vector<u8>`),
-    ],
+    arguments: [pure(tx, args.x, `u64`), pure(tx, args.bigEndian, `bool`), pure(tx, args.buffer, `vector<u8>`)],
   });
 }

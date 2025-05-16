@@ -16,12 +16,7 @@ import {
   phantom,
   toBcs,
 } from '../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
 import { BcsType, bcs } from '@mysten/sui/bcs';
@@ -62,13 +57,10 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
   readonly name: ToField<Name>;
   readonly value: ToField<Value>;
 
-  private constructor(
-    typeArgs: [ToTypeStr<Name>, ToTypeStr<Value>],
-    fields: FieldFields<Name, Value>
-  ) {
+  private constructor(typeArgs: [ToTypeStr<Name>, ToTypeStr<Value>], fields: FieldFields<Name, Value>) {
     this.$fullTypeName = composeSuiType(
       Field.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::dynamic_field::Field<${ToTypeStr<Name>}, ${ToTypeStr<Value>}>`;
     this.$typeArgs = typeArgs;
 
@@ -79,13 +71,13 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
 
   static reified<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     Name: Name,
-    Value: Value
+    Value: Value,
   ): FieldReified<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     return {
       typeName: Field.$typeName,
       fullTypeName: composeSuiType(
         Field.$typeName,
-        ...[extractType(Name), extractType(Value)]
+        ...[extractType(Name), extractType(Value)],
       ) as `${typeof PKG_V30}::dynamic_field::Field<${ToTypeStr<ToTypeArgument<Name>>}, ${ToTypeStr<ToTypeArgument<Value>>}>`,
       typeArgs: [extractType(Name), extractType(Value)] as [
         ToTypeStr<ToTypeArgument<Name>>,
@@ -94,16 +86,13 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
       isPhantom: Field.$isPhantom,
       reifiedTypeArgs: [Name, Value],
       fromFields: (fields: Record<string, any>) => Field.fromFields([Name, Value], fields),
-      fromFieldsWithTypes: (item: FieldsWithTypes) =>
-        Field.fromFieldsWithTypes([Name, Value], item),
+      fromFieldsWithTypes: (item: FieldsWithTypes) => Field.fromFieldsWithTypes([Name, Value], item),
       fromBcs: (data: Uint8Array) => Field.fromBcs([Name, Value], data),
       bcs: Field.bcs(toBcs(Name), toBcs(Value)),
       fromJSONField: (field: any) => Field.fromJSONField([Name, Value], field),
       fromJSON: (json: Record<string, any>) => Field.fromJSON([Name, Value], json),
-      fromSuiParsedData: (content: SuiParsedData) =>
-        Field.fromSuiParsedData([Name, Value], content),
-      fromSuiObjectData: (content: SuiObjectData) =>
-        Field.fromSuiObjectData([Name, Value], content),
+      fromSuiParsedData: (content: SuiParsedData) => Field.fromSuiParsedData([Name, Value], content),
+      fromSuiObjectData: (content: SuiObjectData) => Field.fromSuiObjectData([Name, Value], content),
       fetch: async (client: SuiClient, id: string) => Field.fetch(client, [Name, Value], id),
       new: (fields: FieldFields<ToTypeArgument<Name>, ToTypeArgument<Value>>) => {
         return new Field([extractType(Name), extractType(Value)], fields);
@@ -118,7 +107,7 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
 
   static phantom<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     Name: Name,
-    Value: Value
+    Value: Value,
   ): PhantomReified<ToTypeStr<Field<ToTypeArgument<Name>, ToTypeArgument<Value>>>> {
     return phantom(Field.reified(Name, Value));
   }
@@ -135,12 +124,9 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
       });
   }
 
-  static fromFields<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static fromFields<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     return Field.reified(typeArgs[0], typeArgs[1]).new({
       id: decodeFromFields(UID.reified(), fields.id),
@@ -149,12 +135,9 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
     });
   }
 
-  static fromFieldsWithTypes<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static fromFieldsWithTypes<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     if (!isField(item.type)) {
       throw new Error('not a Field type');
@@ -170,12 +153,9 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
 
   static fromBcs<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    data: Uint8Array
+    data: Uint8Array,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
-    return Field.fromFields(
-      typeArgs,
-      Field.bcs(toBcs(typeArgs[0]), toBcs(typeArgs[1])).parse(data)
-    );
+    return Field.fromFields(typeArgs, Field.bcs(toBcs(typeArgs[0]), toBcs(typeArgs[1])).parse(data));
   }
 
   toJSONField() {
@@ -190,10 +170,10 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
     return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
   }
 
-  static fromJSONField<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(typeArgs: [Name, Value], field: any): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
+  static fromJSONField<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
+    typeArgs: [Name, Value],
+    field: any,
+  ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     return Field.reified(typeArgs[0], typeArgs[1]).new({
       id: decodeFromJSONField(UID.reified(), field.id),
       name: decodeFromJSONField(typeArgs[0], field.name),
@@ -201,31 +181,21 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
     });
   }
 
-  static fromJSON<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static fromJSON<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     if (json.$typeName !== Field.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Field.$typeName, ...typeArgs.map(extractType)),
-      json.$typeArgs,
-      typeArgs
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Field.$typeName, ...typeArgs.map(extractType)), json.$typeArgs, typeArgs);
 
     return Field.fromJSONField(typeArgs, json);
   }
 
-  static fromSuiParsedData<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static fromSuiParsedData<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -236,12 +206,9 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
     return Field.fromFieldsWithTypes(typeArgs, content);
   }
 
-  static fromSuiObjectData<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static fromSuiObjectData<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     typeArgs: [Name, Value],
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Field<ToTypeArgument<Name>, ToTypeArgument<Value>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isField(data.bcs.type)) {
@@ -250,16 +217,14 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 2) {
-        throw new Error(
-          `type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`
-        );
+        throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`);
       }
       for (let i = 0; i < 2; i++) {
         const gotTypeArg = compressSuiType(gotTypeArgs[i]);
         const expectedTypeArg = compressSuiType(extractType(typeArgs[i]));
         if (gotTypeArg !== expectedTypeArg) {
           throw new Error(
-            `type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
+            `type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`,
           );
         }
       }
@@ -270,17 +235,14 @@ export class Field<Name extends TypeArgument, Value extends TypeArgument> implem
       return Field.fromSuiParsedData(typeArgs, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
-  static async fetch<
-    Name extends Reified<TypeArgument, any>,
-    Value extends Reified<TypeArgument, any>,
-  >(
+  static async fetch<Name extends Reified<TypeArgument, any>, Value extends Reified<TypeArgument, any>>(
     client: SuiClient,
     typeArgs: [Name, Value],
-    id: string
+    id: string,
   ): Promise<Field<ToTypeArgument<Name>, ToTypeArgument<Value>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

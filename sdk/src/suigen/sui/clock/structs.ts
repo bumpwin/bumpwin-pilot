@@ -46,10 +46,7 @@ export class Clock implements StructClass {
   readonly timestampMs: ToField<'u64'>;
 
   private constructor(typeArgs: [], fields: ClockFields) {
-    this.$fullTypeName = composeSuiType(
-      Clock.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::clock::Clock`;
+    this.$fullTypeName = composeSuiType(Clock.$typeName, ...typeArgs) as `${typeof PKG_V30}::clock::Clock`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -167,7 +164,7 @@ export class Clock implements StructClass {
       return Clock.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

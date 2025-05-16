@@ -55,10 +55,7 @@ export function sqrt(tx: Transaction, x: bigint | TransactionArgument) {
 }
 
 export function sqrtU128(tx: Transaction, x: bigint | TransactionArgument) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::math::sqrt_u128`,
-    arguments: [pure(tx, x, `u128`)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::math::sqrt_u128`, arguments: [pure(tx, x, `u128`)] });
 }
 
 export interface DivideAndRoundUpArgs {

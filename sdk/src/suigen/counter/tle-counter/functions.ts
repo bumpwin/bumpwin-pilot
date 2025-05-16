@@ -7,10 +7,7 @@ export function shareCounter(tx: Transaction) {
 }
 
 export function increment(tx: Transaction, counter: TransactionObjectInput) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::tle_counter::increment`,
-    arguments: [obj(tx, counter)],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::tle_counter::increment`, arguments: [obj(tx, counter)] });
 }
 
 export interface AddArgs {

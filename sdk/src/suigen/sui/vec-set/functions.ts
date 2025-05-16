@@ -3,11 +3,7 @@ import { GenericArg, generic, obj, vector } from '../../_framework/util';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 
 export function empty(tx: Transaction, typeArg: string) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::vec_set::empty`,
-    typeArguments: [typeArg],
-    arguments: [],
-  });
+  return tx.moveCall({ target: `${PUBLISHED_AT}::vec_set::empty`, typeArguments: [typeArg], arguments: [] });
 }
 
 export function singleton(tx: Transaction, typeArg: string, key: GenericArg) {
@@ -81,11 +77,7 @@ export function intoKeys(tx: Transaction, typeArg: string, self: TransactionObje
   });
 }
 
-export function fromKeys(
-  tx: Transaction,
-  typeArg: string,
-  keys: Array<GenericArg> | TransactionArgument
-) {
+export function fromKeys(tx: Transaction, typeArg: string, keys: Array<GenericArg> | TransactionArgument) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::vec_set::from_keys`,
     typeArguments: [typeArg],

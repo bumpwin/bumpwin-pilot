@@ -87,11 +87,7 @@ export function publicReceive(tx: Transaction, typeArg: string, args: PublicRece
   });
 }
 
-export function receivingObjectId(
-  tx: Transaction,
-  typeArg: string,
-  receiving: TransactionObjectInput
-) {
+export function receivingObjectId(tx: Transaction, typeArg: string, receiving: TransactionObjectInput) {
   return tx.moveCall({
     target: `${PUBLISHED_AT}::transfer::receiving_object_id`,
     typeArguments: [typeArg],

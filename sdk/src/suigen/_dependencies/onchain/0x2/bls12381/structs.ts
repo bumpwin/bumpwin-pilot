@@ -43,10 +43,7 @@ export class Scalar implements StructClass {
   readonly dummyField: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: ScalarFields) {
-    this.$fullTypeName = composeSuiType(
-      Scalar.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bls12381::Scalar`;
+    this.$fullTypeName = composeSuiType(Scalar.$typeName, ...typeArgs) as `${typeof PKG_V30}::bls12381::Scalar`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -55,10 +52,7 @@ export class Scalar implements StructClass {
   static reified(): ScalarReified {
     return {
       typeName: Scalar.$typeName,
-      fullTypeName: composeSuiType(
-        Scalar.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::bls12381::Scalar`,
+      fullTypeName: composeSuiType(Scalar.$typeName, ...[]) as `${typeof PKG_V30}::bls12381::Scalar`,
       typeArgs: [] as [],
       isPhantom: Scalar.$isPhantom,
       reifiedTypeArgs: [],
@@ -104,9 +98,7 @@ export class Scalar implements StructClass {
       throw new Error('not a Scalar type');
     }
 
-    return Scalar.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return Scalar.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): Scalar {
@@ -157,7 +149,7 @@ export class Scalar implements StructClass {
       return Scalar.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -202,10 +194,7 @@ export class G1 implements StructClass {
   readonly dummyField: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: G1Fields) {
-    this.$fullTypeName = composeSuiType(
-      G1.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bls12381::G1`;
+    this.$fullTypeName = composeSuiType(G1.$typeName, ...typeArgs) as `${typeof PKG_V30}::bls12381::G1`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -260,9 +249,7 @@ export class G1 implements StructClass {
       throw new Error('not a G1 type');
     }
 
-    return G1.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return G1.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): G1 {
@@ -313,7 +300,7 @@ export class G1 implements StructClass {
       return G1.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -358,10 +345,7 @@ export class G2 implements StructClass {
   readonly dummyField: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: G2Fields) {
-    this.$fullTypeName = composeSuiType(
-      G2.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bls12381::G2`;
+    this.$fullTypeName = composeSuiType(G2.$typeName, ...typeArgs) as `${typeof PKG_V30}::bls12381::G2`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -416,9 +400,7 @@ export class G2 implements StructClass {
       throw new Error('not a G2 type');
     }
 
-    return G2.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return G2.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): G2 {
@@ -469,7 +451,7 @@ export class G2 implements StructClass {
       return G2.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -514,10 +496,7 @@ export class GT implements StructClass {
   readonly dummyField: ToField<'bool'>;
 
   private constructor(typeArgs: [], fields: GTFields) {
-    this.$fullTypeName = composeSuiType(
-      GT.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::bls12381::GT`;
+    this.$fullTypeName = composeSuiType(GT.$typeName, ...typeArgs) as `${typeof PKG_V30}::bls12381::GT`;
     this.$typeArgs = typeArgs;
 
     this.dummyField = fields.dummyField;
@@ -572,9 +551,7 @@ export class GT implements StructClass {
       throw new Error('not a GT type');
     }
 
-    return GT.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return GT.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): GT {
@@ -625,7 +602,7 @@ export class GT implements StructClass {
       return GT.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -672,7 +649,7 @@ export class UncompressedG1 implements StructClass {
   private constructor(typeArgs: [], fields: UncompressedG1Fields) {
     this.$fullTypeName = composeSuiType(
       UncompressedG1.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::bls12381::UncompressedG1`;
     this.$typeArgs = typeArgs;
 
@@ -682,10 +659,7 @@ export class UncompressedG1 implements StructClass {
   static reified(): UncompressedG1Reified {
     return {
       typeName: UncompressedG1.$typeName,
-      fullTypeName: composeSuiType(
-        UncompressedG1.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::bls12381::UncompressedG1`,
+      fullTypeName: composeSuiType(UncompressedG1.$typeName, ...[]) as `${typeof PKG_V30}::bls12381::UncompressedG1`,
       typeArgs: [] as [],
       isPhantom: UncompressedG1.$isPhantom,
       reifiedTypeArgs: [],
@@ -723,9 +697,7 @@ export class UncompressedG1 implements StructClass {
   }
 
   static fromFields(fields: Record<string, any>): UncompressedG1 {
-    return UncompressedG1.reified().new({
-      dummyField: decodeFromFields('bool', fields.dummy_field),
-    });
+    return UncompressedG1.reified().new({ dummyField: decodeFromFields('bool', fields.dummy_field) });
   }
 
   static fromFieldsWithTypes(item: FieldsWithTypes): UncompressedG1 {
@@ -733,9 +705,7 @@ export class UncompressedG1 implements StructClass {
       throw new Error('not a UncompressedG1 type');
     }
 
-    return UncompressedG1.reified().new({
-      dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field),
-    });
+    return UncompressedG1.reified().new({ dummyField: decodeFromFieldsWithTypes('bool', item.fields.dummy_field) });
   }
 
   static fromBcs(data: Uint8Array): UncompressedG1 {
@@ -753,9 +723,7 @@ export class UncompressedG1 implements StructClass {
   }
 
   static fromJSONField(field: any): UncompressedG1 {
-    return UncompressedG1.reified().new({
-      dummyField: decodeFromJSONField('bool', field.dummyField),
-    });
+    return UncompressedG1.reified().new({ dummyField: decodeFromJSONField('bool', field.dummyField) });
   }
 
   static fromJSON(json: Record<string, any>): UncompressedG1 {
@@ -788,7 +756,7 @@ export class UncompressedG1 implements StructClass {
       return UncompressedG1.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

@@ -37,9 +37,7 @@ export class StructClassLoader {
   reified<T extends Primitive>(type: T): T;
   reified(type: `vector<${string}>`): VectorClassReified<VectorClass, any>;
   reified(type: string): StructClassReified<StructClass, any>;
-  reified(
-    type: string
-  ): StructClassReified<StructClass, any> | VectorClassReified<VectorClass, any> | string {
+  reified(type: string): StructClassReified<StructClass, any> | VectorClassReified<VectorClass, any> | string {
     const { typeName, typeArgs } = parseTypeName(compressSuiType(type));
     switch (typeName) {
       case 'bool':
@@ -65,13 +63,10 @@ export class StructClassLoader {
 
     const cls = this.map.get(typeName)!;
     if (cls.$numTypeParams !== typeArgs.length) {
-      throw new Error(
-        `Type ${typeName} expects ${cls.$numTypeParams} type arguments, but got ${typeArgs.length}`
-      );
+      throw new Error(`Type ${typeName} expects ${cls.$numTypeParams} type arguments, but got ${typeArgs.length}`);
     }
 
-    const reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<PhantomTypeArgument>> =
-      [];
+    const reifiedTypeArgs: Array<Reified<TypeArgument, any> | PhantomReified<PhantomTypeArgument>> = [];
     for (let i = 0; i < typeArgs.length; i++) {
       if (cls.$isPhantom[i]) {
         reifiedTypeArgs.push(phantom(typeArgs[i]));

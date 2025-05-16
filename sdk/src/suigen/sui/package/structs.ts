@@ -52,10 +52,7 @@ export class Publisher implements StructClass {
   readonly moduleName: ToField<String>;
 
   private constructor(typeArgs: [], fields: PublisherFields) {
-    this.$fullTypeName = composeSuiType(
-      Publisher.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::package::Publisher`;
+    this.$fullTypeName = composeSuiType(Publisher.$typeName, ...typeArgs) as `${typeof PKG_V30}::package::Publisher`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -66,10 +63,7 @@ export class Publisher implements StructClass {
   static reified(): PublisherReified {
     return {
       typeName: Publisher.$typeName,
-      fullTypeName: composeSuiType(
-        Publisher.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::package::Publisher`,
+      fullTypeName: composeSuiType(Publisher.$typeName, ...[]) as `${typeof PKG_V30}::package::Publisher`,
       typeArgs: [] as [],
       isPhantom: Publisher.$isPhantom,
       reifiedTypeArgs: [],
@@ -182,7 +176,7 @@ export class Publisher implements StructClass {
       return Publisher.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -233,10 +227,7 @@ export class UpgradeCap implements StructClass {
   readonly policy: ToField<'u8'>;
 
   private constructor(typeArgs: [], fields: UpgradeCapFields) {
-    this.$fullTypeName = composeSuiType(
-      UpgradeCap.$typeName,
-      ...typeArgs
-    ) as `${typeof PKG_V30}::package::UpgradeCap`;
+    this.$fullTypeName = composeSuiType(UpgradeCap.$typeName, ...typeArgs) as `${typeof PKG_V30}::package::UpgradeCap`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
@@ -248,10 +239,7 @@ export class UpgradeCap implements StructClass {
   static reified(): UpgradeCapReified {
     return {
       typeName: UpgradeCap.$typeName,
-      fullTypeName: composeSuiType(
-        UpgradeCap.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::package::UpgradeCap`,
+      fullTypeName: composeSuiType(UpgradeCap.$typeName, ...[]) as `${typeof PKG_V30}::package::UpgradeCap`,
       typeArgs: [] as [],
       isPhantom: UpgradeCap.$isPhantom,
       reifiedTypeArgs: [],
@@ -369,7 +357,7 @@ export class UpgradeCap implements StructClass {
       return UpgradeCap.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -422,7 +410,7 @@ export class UpgradeTicket implements StructClass {
   private constructor(typeArgs: [], fields: UpgradeTicketFields) {
     this.$fullTypeName = composeSuiType(
       UpgradeTicket.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::package::UpgradeTicket`;
     this.$typeArgs = typeArgs;
 
@@ -435,10 +423,7 @@ export class UpgradeTicket implements StructClass {
   static reified(): UpgradeTicketReified {
     return {
       typeName: UpgradeTicket.$typeName,
-      fullTypeName: composeSuiType(
-        UpgradeTicket.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::package::UpgradeTicket`,
+      fullTypeName: composeSuiType(UpgradeTicket.$typeName, ...[]) as `${typeof PKG_V30}::package::UpgradeTicket`,
       typeArgs: [] as [],
       isPhantom: UpgradeTicket.$isPhantom,
       reifiedTypeArgs: [],
@@ -556,7 +541,7 @@ export class UpgradeTicket implements StructClass {
       return UpgradeTicket.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
@@ -605,7 +590,7 @@ export class UpgradeReceipt implements StructClass {
   private constructor(typeArgs: [], fields: UpgradeReceiptFields) {
     this.$fullTypeName = composeSuiType(
       UpgradeReceipt.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::package::UpgradeReceipt`;
     this.$typeArgs = typeArgs;
 
@@ -616,10 +601,7 @@ export class UpgradeReceipt implements StructClass {
   static reified(): UpgradeReceiptReified {
     return {
       typeName: UpgradeReceipt.$typeName,
-      fullTypeName: composeSuiType(
-        UpgradeReceipt.$typeName,
-        ...[]
-      ) as `${typeof PKG_V30}::package::UpgradeReceipt`,
+      fullTypeName: composeSuiType(UpgradeReceipt.$typeName, ...[]) as `${typeof PKG_V30}::package::UpgradeReceipt`,
       typeArgs: [] as [],
       isPhantom: UpgradeReceipt.$isPhantom,
       reifiedTypeArgs: [],
@@ -727,7 +709,7 @@ export class UpgradeReceipt implements StructClass {
       return UpgradeReceipt.fromSuiParsedData(data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 

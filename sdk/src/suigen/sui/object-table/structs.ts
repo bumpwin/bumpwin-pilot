@@ -15,12 +15,7 @@ import {
   extractType,
   phantom,
 } from '../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
 import { bcs } from '@mysten/sui/bcs';
@@ -39,14 +34,12 @@ export interface ObjectTableFields<K extends PhantomTypeArgument, V extends Phan
   size: ToField<'u64'>;
 }
 
-export type ObjectTableReified<
-  K extends PhantomTypeArgument,
-  V extends PhantomTypeArgument,
-> = Reified<ObjectTable<K, V>, ObjectTableFields<K, V>>;
+export type ObjectTableReified<K extends PhantomTypeArgument, V extends PhantomTypeArgument> = Reified<
+  ObjectTable<K, V>,
+  ObjectTableFields<K, V>
+>;
 
-export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArgument>
-  implements StructClass
-{
+export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArgument> implements StructClass {
   __StructClass = true as const;
 
   static readonly $typeName = `${PKG_V30}::object_table::ObjectTable`;
@@ -61,13 +54,10 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
   readonly id: ToField<UID>;
   readonly size: ToField<'u64'>;
 
-  private constructor(
-    typeArgs: [PhantomToTypeStr<K>, PhantomToTypeStr<V>],
-    fields: ObjectTableFields<K, V>
-  ) {
+  private constructor(typeArgs: [PhantomToTypeStr<K>, PhantomToTypeStr<V>], fields: ObjectTableFields<K, V>) {
     this.$fullTypeName = composeSuiType(
       ObjectTable.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::object_table::ObjectTable<${PhantomToTypeStr<K>}, ${PhantomToTypeStr<V>}>`;
     this.$typeArgs = typeArgs;
 
@@ -75,15 +65,15 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     this.size = fields.size;
   }
 
-  static reified<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(K: K, V: V): ObjectTableReified<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
+  static reified<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
+    K: K,
+    V: V,
+  ): ObjectTableReified<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     return {
       typeName: ObjectTable.$typeName,
       fullTypeName: composeSuiType(
         ObjectTable.$typeName,
-        ...[extractType(K), extractType(V)]
+        ...[extractType(K), extractType(V)],
       ) as `${typeof PKG_V30}::object_table::ObjectTable<${PhantomToTypeStr<ToPhantomTypeArgument<K>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<V>>}>`,
       typeArgs: [extractType(K), extractType(V)] as [
         PhantomToTypeStr<ToPhantomTypeArgument<K>>,
@@ -111,12 +101,9 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     return ObjectTable.reified;
   }
 
-  static phantom<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(
+  static phantom<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
     K: K,
-    V: V
+    V: V,
   ): PhantomReified<ToTypeStr<ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>>>> {
     return phantom(ObjectTable.reified(K, V));
   }
@@ -131,12 +118,9 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     });
   }
 
-  static fromFields<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(
+  static fromFields<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
     typeArgs: [K, V],
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     return ObjectTable.reified(typeArgs[0], typeArgs[1]).new({
       id: decodeFromFields(UID.reified(), fields.id),
@@ -147,10 +131,7 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
   static fromFieldsWithTypes<
     K extends PhantomReified<PhantomTypeArgument>,
     V extends PhantomReified<PhantomTypeArgument>,
-  >(
-    typeArgs: [K, V],
-    item: FieldsWithTypes
-  ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
+  >(typeArgs: [K, V], item: FieldsWithTypes): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     if (!isObjectTable(item.type)) {
       throw new Error('not a ObjectTable type');
     }
@@ -162,12 +143,9 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     });
   }
 
-  static fromBcs<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(
+  static fromBcs<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
     typeArgs: [K, V],
-    data: Uint8Array
+    data: Uint8Array,
   ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     return ObjectTable.fromFields(typeArgs, ObjectTable.bcs.parse(data));
   }
@@ -183,22 +161,19 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
   }
 
-  static fromJSONField<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(typeArgs: [K, V], field: any): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
+  static fromJSONField<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
+    typeArgs: [K, V],
+    field: any,
+  ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     return ObjectTable.reified(typeArgs[0], typeArgs[1]).new({
       id: decodeFromJSONField(UID.reified(), field.id),
       size: decodeFromJSONField('u64', field.size),
     });
   }
 
-  static fromJSON<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(
+  static fromJSON<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
     typeArgs: [K, V],
-    json: Record<string, any>
+    json: Record<string, any>,
   ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     if (json.$typeName !== ObjectTable.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
@@ -206,7 +181,7 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
     assertReifiedTypeArgsMatch(
       composeSuiType(ObjectTable.$typeName, ...typeArgs.map(extractType)),
       json.$typeArgs,
-      typeArgs
+      typeArgs,
     );
 
     return ObjectTable.fromJSONField(typeArgs, json);
@@ -215,10 +190,7 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
   static fromSuiParsedData<
     K extends PhantomReified<PhantomTypeArgument>,
     V extends PhantomReified<PhantomTypeArgument>,
-  >(
-    typeArgs: [K, V],
-    content: SuiParsedData
-  ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
+  >(typeArgs: [K, V], content: SuiParsedData): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
     }
@@ -231,10 +203,7 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
   static fromSuiObjectData<
     K extends PhantomReified<PhantomTypeArgument>,
     V extends PhantomReified<PhantomTypeArgument>,
-  >(
-    typeArgs: [K, V],
-    data: SuiObjectData
-  ): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
+  >(typeArgs: [K, V], data: SuiObjectData): ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isObjectTable(data.bcs.type)) {
         throw new Error(`object at is not a ObjectTable object`);
@@ -242,16 +211,14 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 2) {
-        throw new Error(
-          `type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`
-        );
+        throw new Error(`type argument mismatch: expected 2 type arguments but got ${gotTypeArgs.length}`);
       }
       for (let i = 0; i < 2; i++) {
         const gotTypeArg = compressSuiType(gotTypeArgs[i]);
         const expectedTypeArg = compressSuiType(extractType(typeArgs[i]));
         if (gotTypeArg !== expectedTypeArg) {
           throw new Error(
-            `type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
+            `type argument mismatch at position ${i}: expected '${expectedTypeArg}' but got '${gotTypeArg}'`,
           );
         }
       }
@@ -262,17 +229,14 @@ export class ObjectTable<K extends PhantomTypeArgument, V extends PhantomTypeArg
       return ObjectTable.fromSuiParsedData(typeArgs, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
-  static async fetch<
-    K extends PhantomReified<PhantomTypeArgument>,
-    V extends PhantomReified<PhantomTypeArgument>,
-  >(
+  static async fetch<K extends PhantomReified<PhantomTypeArgument>, V extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArgs: [K, V],
-    id: string
+    id: string,
   ): Promise<ObjectTable<ToPhantomTypeArgument<K>, ToPhantomTypeArgument<V>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

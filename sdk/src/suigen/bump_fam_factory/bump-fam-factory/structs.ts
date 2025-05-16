@@ -18,12 +18,7 @@ import {
   extractType,
   phantom,
 } from '../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { PKG_V1 } from '../index';
 import { bcs } from '@mysten/sui/bcs';
 import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
@@ -68,7 +63,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: CreateCoinEventFields<T0>) {
     this.$fullTypeName = composeSuiType(
       CreateCoinEvent.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V1}::bump_fam_factory::CreateCoinEvent<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -79,13 +74,13 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
   }
 
   static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): CreateCoinEventReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: CreateCoinEvent.$typeName,
       fullTypeName: composeSuiType(
         CreateCoinEvent.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V1}::bump_fam_factory::CreateCoinEvent<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: CreateCoinEvent.$isPhantom,
@@ -111,7 +106,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<CreateCoinEvent<ToPhantomTypeArgument<T0>>>> {
     return phantom(CreateCoinEvent.reified(T0));
   }
@@ -130,7 +125,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     return CreateCoinEvent.reified(typeArg).new({
       name: decodeFromFields(String.reified(), fields.name),
@@ -142,7 +137,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     if (!isCreateCoinEvent(item.type)) {
       throw new Error('not a CreateCoinEvent type');
@@ -159,7 +154,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     return CreateCoinEvent.fromFields(typeArg, CreateCoinEvent.bcs.parse(data));
   }
@@ -179,7 +174,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     return CreateCoinEvent.reified(typeArg).new({
       name: decodeFromJSONField(String.reified(), field.name),
@@ -191,23 +186,21 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== CreateCoinEvent.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(CreateCoinEvent.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(CreateCoinEvent.$typeName, extractType(typeArg)), json.$typeArgs, [
+      typeArg,
+    ]);
 
     return CreateCoinEvent.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -220,7 +213,7 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): CreateCoinEvent<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isCreateCoinEvent(data.bcs.type)) {
@@ -229,16 +222,12 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return CreateCoinEvent.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -247,14 +236,14 @@ export class CreateCoinEvent<T0 extends PhantomTypeArgument> implements StructCl
       return CreateCoinEvent.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<CreateCoinEvent<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {

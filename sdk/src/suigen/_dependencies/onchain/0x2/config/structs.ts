@@ -19,12 +19,7 @@ import {
   phantom,
   toBcs,
 } from '../../../../_framework/reified';
-import {
-  FieldsWithTypes,
-  composeSuiType,
-  compressSuiType,
-  parseTypeName,
-} from '../../../../_framework/util';
+import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../../../_framework/util';
 import { Option } from '../../0x1/option/structs';
 import { PKG_V30 } from '../index';
 import { UID } from '../object/structs';
@@ -62,21 +57,19 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
   private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ConfigFields<T0>) {
     this.$fullTypeName = composeSuiType(
       Config.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::config::Config<${PhantomToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
     this.id = fields.id;
   }
 
-  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
-  ): ConfigReified<ToPhantomTypeArgument<T0>> {
+  static reified<T0 extends PhantomReified<PhantomTypeArgument>>(T0: T0): ConfigReified<ToPhantomTypeArgument<T0>> {
     return {
       typeName: Config.$typeName,
       fullTypeName: composeSuiType(
         Config.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::config::Config<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>],
       isPhantom: Config.$isPhantom,
@@ -102,7 +95,7 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
   }
 
   static phantom<T0 extends PhantomReified<PhantomTypeArgument>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<Config<ToPhantomTypeArgument<T0>>>> {
     return phantom(Config.reified(T0));
   }
@@ -118,28 +111,26 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromFields<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Config<ToPhantomTypeArgument<T0>> {
     return Config.reified(typeArg).new({ id: decodeFromFields(UID.reified(), fields.id) });
   }
 
   static fromFieldsWithTypes<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Config<ToPhantomTypeArgument<T0>> {
     if (!isConfig(item.type)) {
       throw new Error('not a Config type');
     }
     assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
-    return Config.reified(typeArg).new({
-      id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id),
-    });
+    return Config.reified(typeArg).new({ id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) });
   }
 
   static fromBcs<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): Config<ToPhantomTypeArgument<T0>> {
     return Config.fromFields(typeArg, Config.bcs.parse(data));
   }
@@ -156,30 +147,26 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromJSONField<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): Config<ToPhantomTypeArgument<T0>> {
     return Config.reified(typeArg).new({ id: decodeFromJSONField(UID.reified(), field.id) });
   }
 
   static fromJSON<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Config<ToPhantomTypeArgument<T0>> {
     if (json.$typeName !== Config.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Config.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Config.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return Config.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Config<ToPhantomTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -192,7 +179,7 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends PhantomReified<PhantomTypeArgument>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Config<ToPhantomTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isConfig(data.bcs.type)) {
@@ -201,16 +188,12 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return Config.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -219,14 +202,14 @@ export class Config<T0 extends PhantomTypeArgument> implements StructClass {
       return Config.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends PhantomReified<PhantomTypeArgument>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<Config<ToPhantomTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -270,21 +253,19 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
   private constructor(typeArgs: [ToTypeStr<T0>], fields: SettingFields<T0>) {
     this.$fullTypeName = composeSuiType(
       Setting.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::config::Setting<${ToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
     this.data = fields.data;
   }
 
-  static reified<T0 extends Reified<TypeArgument, any>>(
-    T0: T0
-  ): SettingReified<ToTypeArgument<T0>> {
+  static reified<T0 extends Reified<TypeArgument, any>>(T0: T0): SettingReified<ToTypeArgument<T0>> {
     return {
       typeName: Setting.$typeName,
       fullTypeName: composeSuiType(
         Setting.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::config::Setting<${ToTypeStr<ToTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [ToTypeStr<ToTypeArgument<T0>>],
       isPhantom: Setting.$isPhantom,
@@ -310,7 +291,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
   }
 
   static phantom<T0 extends Reified<TypeArgument, any>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<Setting<ToTypeArgument<T0>>>> {
     return phantom(Setting.reified(T0));
   }
@@ -327,7 +308,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
 
   static fromFields<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): Setting<ToTypeArgument<T0>> {
     return Setting.reified(typeArg).new({
       data: decodeFromFields(Option.reified(SettingData.reified(typeArg)), fields.data),
@@ -336,7 +317,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
 
   static fromFieldsWithTypes<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): Setting<ToTypeArgument<T0>> {
     if (!isSetting(item.type)) {
       throw new Error('not a Setting type');
@@ -344,17 +325,11 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
     assertFieldsWithTypesArgsMatch(item, [typeArg]);
 
     return Setting.reified(typeArg).new({
-      data: decodeFromFieldsWithTypes(
-        Option.reified(SettingData.reified(typeArg)),
-        item.fields.data
-      ),
+      data: decodeFromFieldsWithTypes(Option.reified(SettingData.reified(typeArg)), item.fields.data),
     });
   }
 
-  static fromBcs<T0 extends Reified<TypeArgument, any>>(
-    typeArg: T0,
-    data: Uint8Array
-  ): Setting<ToTypeArgument<T0>> {
+  static fromBcs<T0 extends Reified<TypeArgument, any>>(typeArg: T0, data: Uint8Array): Setting<ToTypeArgument<T0>> {
     const typeArgs = [typeArg];
 
     return Setting.fromFields(typeArg, Setting.bcs(toBcs(typeArgs[0])).parse(data));
@@ -364,7 +339,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
     return {
       data: fieldToJSON<Option<SettingData<T0>>>(
         `${Option.$typeName}<${SettingData.$typeName}<${this.$typeArgs[0]}>>`,
-        this.data
+        this.data,
       ),
     };
   }
@@ -373,10 +348,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
     return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
   }
 
-  static fromJSONField<T0 extends Reified<TypeArgument, any>>(
-    typeArg: T0,
-    field: any
-  ): Setting<ToTypeArgument<T0>> {
+  static fromJSONField<T0 extends Reified<TypeArgument, any>>(typeArg: T0, field: any): Setting<ToTypeArgument<T0>> {
     return Setting.reified(typeArg).new({
       data: decodeFromJSONField(Option.reified(SettingData.reified(typeArg)), field.data),
     });
@@ -384,23 +356,19 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
 
   static fromJSON<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): Setting<ToTypeArgument<T0>> {
     if (json.$typeName !== Setting.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(Setting.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(Setting.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return Setting.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): Setting<ToTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -413,7 +381,7 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): Setting<ToTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isSetting(data.bcs.type)) {
@@ -422,16 +390,12 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return Setting.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -440,14 +404,14 @@ export class Setting<T0 extends TypeArgument> implements StructClass {
       return Setting.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends Reified<TypeArgument, any>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<Setting<ToTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
@@ -474,10 +438,7 @@ export interface SettingDataFields<T0 extends TypeArgument> {
   olderValueOpt: ToField<Option<T0>>;
 }
 
-export type SettingDataReified<T0 extends TypeArgument> = Reified<
-  SettingData<T0>,
-  SettingDataFields<T0>
->;
+export type SettingDataReified<T0 extends TypeArgument> = Reified<SettingData<T0>, SettingDataFields<T0>>;
 
 export class SettingData<T0 extends TypeArgument> implements StructClass {
   __StructClass = true as const;
@@ -498,7 +459,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
   private constructor(typeArgs: [ToTypeStr<T0>], fields: SettingDataFields<T0>) {
     this.$fullTypeName = composeSuiType(
       SettingData.$typeName,
-      ...typeArgs
+      ...typeArgs,
     ) as `${typeof PKG_V30}::config::SettingData<${ToTypeStr<T0>}>`;
     this.$typeArgs = typeArgs;
 
@@ -507,14 +468,12 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
     this.olderValueOpt = fields.olderValueOpt;
   }
 
-  static reified<T0 extends Reified<TypeArgument, any>>(
-    T0: T0
-  ): SettingDataReified<ToTypeArgument<T0>> {
+  static reified<T0 extends Reified<TypeArgument, any>>(T0: T0): SettingDataReified<ToTypeArgument<T0>> {
     return {
       typeName: SettingData.$typeName,
       fullTypeName: composeSuiType(
         SettingData.$typeName,
-        ...[extractType(T0)]
+        ...[extractType(T0)],
       ) as `${typeof PKG_V30}::config::SettingData<${ToTypeStr<ToTypeArgument<T0>>}>`,
       typeArgs: [extractType(T0)] as [ToTypeStr<ToTypeArgument<T0>>],
       isPhantom: SettingData.$isPhantom,
@@ -540,7 +499,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
   }
 
   static phantom<T0 extends Reified<TypeArgument, any>>(
-    T0: T0
+    T0: T0,
   ): PhantomReified<ToTypeStr<SettingData<ToTypeArgument<T0>>>> {
     return phantom(SettingData.reified(T0));
   }
@@ -559,7 +518,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
   static fromFields<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    fields: Record<string, any>
+    fields: Record<string, any>,
   ): SettingData<ToTypeArgument<T0>> {
     return SettingData.reified(typeArg).new({
       newerValueEpoch: decodeFromFields('u64', fields.newer_value_epoch),
@@ -570,7 +529,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
   static fromFieldsWithTypes<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    item: FieldsWithTypes
+    item: FieldsWithTypes,
   ): SettingData<ToTypeArgument<T0>> {
     if (!isSettingData(item.type)) {
       throw new Error('not a SettingData type');
@@ -580,16 +539,13 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
     return SettingData.reified(typeArg).new({
       newerValueEpoch: decodeFromFieldsWithTypes('u64', item.fields.newer_value_epoch),
       newerValue: decodeFromFieldsWithTypes(Option.reified(typeArg), item.fields.newer_value),
-      olderValueOpt: decodeFromFieldsWithTypes(
-        Option.reified(typeArg),
-        item.fields.older_value_opt
-      ),
+      olderValueOpt: decodeFromFieldsWithTypes(Option.reified(typeArg), item.fields.older_value_opt),
     });
   }
 
   static fromBcs<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    data: Uint8Array
+    data: Uint8Array,
   ): SettingData<ToTypeArgument<T0>> {
     const typeArgs = [typeArg];
 
@@ -599,14 +555,8 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
   toJSONField() {
     return {
       newerValueEpoch: this.newerValueEpoch.toString(),
-      newerValue: fieldToJSON<Option<T0>>(
-        `${Option.$typeName}<${this.$typeArgs[0]}>`,
-        this.newerValue
-      ),
-      olderValueOpt: fieldToJSON<Option<T0>>(
-        `${Option.$typeName}<${this.$typeArgs[0]}>`,
-        this.olderValueOpt
-      ),
+      newerValue: fieldToJSON<Option<T0>>(`${Option.$typeName}<${this.$typeArgs[0]}>`, this.newerValue),
+      olderValueOpt: fieldToJSON<Option<T0>>(`${Option.$typeName}<${this.$typeArgs[0]}>`, this.olderValueOpt),
     };
   }
 
@@ -616,7 +566,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
   static fromJSONField<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    field: any
+    field: any,
   ): SettingData<ToTypeArgument<T0>> {
     return SettingData.reified(typeArg).new({
       newerValueEpoch: decodeFromJSONField('u64', field.newerValueEpoch),
@@ -627,23 +577,19 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
   static fromJSON<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    json: Record<string, any>
+    json: Record<string, any>,
   ): SettingData<ToTypeArgument<T0>> {
     if (json.$typeName !== SettingData.$typeName) {
       throw new Error('not a WithTwoGenerics json object');
     }
-    assertReifiedTypeArgsMatch(
-      composeSuiType(SettingData.$typeName, extractType(typeArg)),
-      json.$typeArgs,
-      [typeArg]
-    );
+    assertReifiedTypeArgsMatch(composeSuiType(SettingData.$typeName, extractType(typeArg)), json.$typeArgs, [typeArg]);
 
     return SettingData.fromJSONField(typeArg, json);
   }
 
   static fromSuiParsedData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    content: SuiParsedData
+    content: SuiParsedData,
   ): SettingData<ToTypeArgument<T0>> {
     if (content.dataType !== 'moveObject') {
       throw new Error('not an object');
@@ -656,7 +602,7 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
   static fromSuiObjectData<T0 extends Reified<TypeArgument, any>>(
     typeArg: T0,
-    data: SuiObjectData
+    data: SuiObjectData,
   ): SettingData<ToTypeArgument<T0>> {
     if (data.bcs) {
       if (data.bcs.dataType !== 'moveObject' || !isSettingData(data.bcs.type)) {
@@ -665,16 +611,12 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
 
       const gotTypeArgs = parseTypeName(data.bcs.type).typeArgs;
       if (gotTypeArgs.length !== 1) {
-        throw new Error(
-          `type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`
-        );
+        throw new Error(`type argument mismatch: expected 1 type argument but got '${gotTypeArgs.length}'`);
       }
       const gotTypeArg = compressSuiType(gotTypeArgs[0]);
       const expectedTypeArg = compressSuiType(extractType(typeArg));
       if (gotTypeArg !== compressSuiType(extractType(typeArg))) {
-        throw new Error(
-          `type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`
-        );
+        throw new Error(`type argument mismatch: expected '${expectedTypeArg}' but got '${gotTypeArg}'`);
       }
 
       return SettingData.fromBcs(typeArg, fromB64(data.bcs.bcsBytes));
@@ -683,14 +625,14 @@ export class SettingData<T0 extends TypeArgument> implements StructClass {
       return SettingData.fromSuiParsedData(typeArg, data.content);
     }
     throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.'
+      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
     );
   }
 
   static async fetch<T0 extends Reified<TypeArgument, any>>(
     client: SuiClient,
     typeArg: T0,
-    id: string
+    id: string,
   ): Promise<SettingData<ToTypeArgument<T0>>> {
     const res = await client.getObject({ id, options: { showBcs: true } });
     if (res.error) {
