@@ -1,11 +1,12 @@
 module champ_market::cpmm;
 
-use sui::{balance::Balance, coin::Coin};
+use sui::balance::Balance;
+use sui::coin::Coin;
 use sui::event;
 
 /// Error codes
-const ERR_ZERO_INPUT: u64 = 0;
-const ERR_ZERO_OUTPUT: u64 = 1;
+const EZeroInput: u64 = 0;
+const EZeroOutput: u64 = 1;
 
 public struct Pool<phantom X, phantom Y> has key, store {
     id: UID,
@@ -20,11 +21,7 @@ public struct SwapEvent has copy, drop, store {
     amount_out: u64,
 }
 
-public fun create_pool<X, Y>(
-    coin_x: Coin<X>,
-    coin_y: Coin<Y>,
-    ctx: &mut TxContext
-) {
+public fun share_pool<X, Y>(coin_x: Coin<X>, coin_y: Coin<Y>, ctx: &mut TxContext) {
     let pool = Pool {
         id: object::new(ctx),
         reserve_x: coin_x.into_balance(),
@@ -42,27 +39,26 @@ public fun reserve_amount_y<X, Y>(pool: &Pool<X, Y>): u64 {
     pool.reserve_y.value()
 }
 
-
 fun compute_swap_amount<In, Out>(
     reserve_in: &Balance<In>,
     reserve_out: &Balance<Out>,
-    amount_in: u64
+    amount_in: u64,
 ): u64 {
     let k = reserve_in.value() * reserve_out.value();
     let new_reserve_in = reserve_in.value() + amount_in;
     let new_reserve_out = k / new_reserve_in;
     let amount_out = reserve_out.value() - new_reserve_out;
-    assert!(amount_out > 0, ERR_ZERO_OUTPUT);
+    assert!(amount_out > 0, EZeroOutput);
     amount_out
 }
 
 public fun swap_x_to_y<X, Y>(
     pool: &mut Pool<X, Y>,
     coin_in: Coin<X>,
-    ctx: &mut TxContext
+    ctx: &mut TxContext,
 ): Coin<Y> {
     let amount_in = coin_in.value();
-    assert!(amount_in > 0, ERR_ZERO_INPUT);
+    assert!(amount_in > 0, EZeroInput);
 
     pool.reserve_x.join(coin_in.into_balance());
     let amount_out = compute_swap_amount(&pool.reserve_x, &pool.reserve_y, amount_in);
@@ -81,10 +77,10 @@ public fun swap_x_to_y<X, Y>(
 public fun swap_y_to_x<X, Y>(
     pool: &mut Pool<X, Y>,
     coin_in: Coin<Y>,
-    ctx: &mut TxContext
+    ctx: &mut TxContext,
 ): Coin<X> {
     let amount_in = coin_in.value();
-    assert!(amount_in > 0, ERR_ZERO_INPUT);
+    assert!(amount_in > 0, EZeroInput);
 
     pool.reserve_y.join(coin_in.into_balance());
     let amount_out = compute_swap_amount(&pool.reserve_y, &pool.reserve_x, amount_in);
