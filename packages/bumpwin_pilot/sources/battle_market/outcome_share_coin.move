@@ -1,4 +1,4 @@
-module bumpwin_pilot::outcome_share_coin;
+module bumpwin_pilot::outcome_share;
 
 use sui::balance::{Self, Supply};
 

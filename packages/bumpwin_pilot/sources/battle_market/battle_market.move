@@ -1,9 +1,9 @@
 module bumpwin_pilot::battle_market;
 
 use bumpwin_pilot::battle_market_math;
-use bumpwin_pilot::outcome_share_bag::{Self, SupplyBag};
-use bumpwin_pilot::outcome_share_coin::OutcomeShare;
+use bumpwin_pilot::outcome_share::OutcomeShare;
 use bumpwin_pilot::round_number::RoundNumber;
+use bumpwin_pilot::share_supply_bag::{Self, ShareSupplyBag};
 use bumpwin_pilot::wsui::WSUI;
 use sui::balance::{Self, Balance, Supply};
 use sui::coin::Coin;
@@ -12,7 +12,7 @@ public struct BattleMarket has key, store {
     id: UID,
     round_number: RoundNumber,
     reserve_wsui: Balance<WSUI>,
-    supply_bag: SupplyBag,
+    supply_bag: ShareSupplyBag,
 }
 
 public fun new(round_number: RoundNumber, ctx: &mut TxContext): BattleMarket {
@@ -20,7 +20,7 @@ public fun new(round_number: RoundNumber, ctx: &mut TxContext): BattleMarket {
         id: object::new(ctx),
         round_number,
         reserve_wsui: balance::zero(),
-        supply_bag: outcome_share_bag::new(ctx),
+        supply_bag: share_supply_bag::new(ctx),
     }
 }
 
@@ -38,7 +38,7 @@ public fun destroy<Outcome>(self: BattleMarket): (Balance<WSUI>, Supply<OutcomeS
     (reserve_wsui, winner_supply)
 }
 
-public fun register_meme<Outcome>(self: &mut BattleMarket, ctx: &mut TxContext) {
+public fun register_meme<Outcome>(self: &mut BattleMarket) {
     self.supply_bag.register_outcome<Outcome>();
 }
 
