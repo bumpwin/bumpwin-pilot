@@ -34,12 +34,10 @@ const { packageId, coinMetadataID, treasuryCapID } = await (async () => {
 
   return {
     packageId: (result.objectChanges?.find((c) => c.type === 'published') as any)?.packageId,
-    coinMetadataID: (
-      result.objectChanges?.find((c) => c.type === 'created' && isCoinMetadata(c.objectType)) as any
-    )?.objectId,
-    treasuryCapID: (
-      result.objectChanges?.find((c) => c.type === 'created' && isTreasuryCap(c.objectType)) as any
-    )?.objectId,
+    coinMetadataID: (result.objectChanges?.find((c) => c.type === 'created' && isCoinMetadata(c.objectType)) as any)
+      ?.objectId,
+    treasuryCapID: (result.objectChanges?.find((c) => c.type === 'created' && isTreasuryCap(c.objectType)) as any)
+      ?.objectId,
   };
 })();
 

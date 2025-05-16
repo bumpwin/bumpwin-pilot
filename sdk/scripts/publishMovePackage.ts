@@ -42,13 +42,11 @@ console.log('🔍 View on SuiScan:', `https://suiscan.xyz/devnet/object/${publis
 console.log(result);
 
 const coinMetadataID = result.objectChanges?.find(
-  (c) => c.type === 'created' && isCoinMetadata(c.objectType)
+  (c) => c.type === 'created' && isCoinMetadata(c.objectType),
 )?.objectId;
 console.log('Coin Metadata:', coinMetadataID);
 console.log('🔍 View on SuiScan:', `https://suiscan.xyz/devnet/object/${coinMetadataID}`);
 
-const treasuryCapID = result.objectChanges?.find(
-  (c) => c.type === 'created' && isTreasuryCap(c.objectType)
-)?.objectId;
+const treasuryCapID = result.objectChanges?.find((c) => c.type === 'created' && isTreasuryCap(c.objectType))?.objectId;
 console.log('Treasury Cap:', treasuryCapID);
 console.log('🔍 View on SuiScan:', `https://suiscan.xyz/devnet/object/${treasuryCapID}`);

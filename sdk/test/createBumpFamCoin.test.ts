@@ -10,9 +10,7 @@ describe('BumpFamCoin Creation Tests', () => {
   const client = new SuiClient({ url: getFullnodeUrl('testnet') });
   const aliceKeyInfo = getKeyInfoFromAlias('alice');
   if (!aliceKeyInfo) throw new Error('Alice key info not found');
-  const keypair = Ed25519Keypair.fromSecretKey(
-    Buffer.from(aliceKeyInfo.privateKey, 'base64').slice(1)
-  );
+  const keypair = Ed25519Keypair.fromSecretKey(Buffer.from(aliceKeyInfo.privateKey, 'base64').slice(1));
   const address = aliceKeyInfo.address;
 
   it('should publish BumpFamCoin package and create coin', async () => {
@@ -31,12 +29,9 @@ describe('BumpFamCoin Creation Tests', () => {
 
     expect(result1.effects?.status.status).toBe('success');
 
-    const packageId = (result1.objectChanges?.find((c) => c.type === 'published') as any)
-      ?.packageId;
+    const packageId = (result1.objectChanges?.find((c) => c.type === 'published') as any)?.packageId;
     const coinMetadataID = (
-      result1.objectChanges?.find(
-        (c) => c.type === 'created' && isCoinMetadata(c.objectType)
-      ) as any
+      result1.objectChanges?.find((c) => c.type === 'created' && isCoinMetadata(c.objectType)) as any
     )?.objectId;
     const treasuryCapID = (
       result1.objectChanges?.find((c) => c.type === 'created' && isTreasuryCap(c.objectType)) as any

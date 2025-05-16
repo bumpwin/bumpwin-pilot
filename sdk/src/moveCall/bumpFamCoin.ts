@@ -9,7 +9,7 @@ export class BumpFamCoin {
     tx: Transaction,
     args: {
       sender: string;
-    }
+    },
   ) {
     publish(tx, {
       moveBytecode: BUMP_FAM_COIN_MOVE_BYTECODE,
@@ -27,7 +27,7 @@ export class BumpFamCoin {
       symbol: string;
       description: string;
       iconUrl: string | null;
-    }
+    },
   ) {
     createCoin(tx, typeArg, {
       treasuryCap: args.treasuryCapID,
