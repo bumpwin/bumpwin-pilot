@@ -25,7 +25,6 @@ const FULLNODE_URL = getFullnodeUrl('testnet');
 let SHARED_BOARD: {
   sealedTx: Uint8Array;
   unlockTimestampMs: bigint;
-  // signedTxは含めない - セキュリティ上の理由から削除
 };
 
 {

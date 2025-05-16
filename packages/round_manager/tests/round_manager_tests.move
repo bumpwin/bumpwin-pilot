@@ -14,12 +14,15 @@ public fun test_season_config() {
 
     clock::create_for_testing(test.ctx()).share_for_testing();
 
+    mockcoins::red::init_for_testing(test.ctx());
+    mockcoins::green::init_for_testing(test.ctx());
+    mockcoins::blue::init_for_testing(test.ctx());
+
     test.next_tx(ALICE);
     {
         let clock = test.take_shared<clock::Clock>();
 
         let season_config = season_config::new(1, 10, clock, test.ctx());
-
     };
 
     scenario.end();

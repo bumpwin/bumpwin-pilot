@@ -1,8 +1,6 @@
-# https://suiscan.xyz/testnet/tx/9wrRmf2jj114Uv5XizfvsuGC1YA34WyXLvZXNjHDCDaU
-
 [package]
-name = "round_manager"
-edition = "2024.beta"  # edition = "legacy" to use legacy (pre-2024) Move
+name = "Mockcoins"
+edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
@@ -21,7 +19,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-round_manager = "0x0"
+mockcoins = "0x0"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
@@ -31,7 +29,6 @@ round_manager = "0x0"
 # The dev-dependencies section allows overriding dependencies for `--test` and
 # `--dev` modes. You can introduce test-only dependencies here.
 # Local = { local = "../path/to/dev-build" }
-Mockcoins = { local = "../mockcoins" }
 
 [dev-addresses]
 # The dev-addresses section allows overwriting named addresses for the `--test`
