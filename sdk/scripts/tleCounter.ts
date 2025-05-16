@@ -27,7 +27,7 @@ const FULLNODE_URL = getFullnodeUrl("testnet");
 let SHARED_BOARD: {
 	sealedTx: Uint8Array;
 	unlockTimestampMs: bigint;
-	signedTx: { bytes: string; signature: string }; // 署名済みトランザクションの情報
+	// signedTxは含めない - セキュリティ上の理由から削除
 };
 
 {
@@ -56,9 +56,10 @@ let SHARED_BOARD: {
 	// === Aliceがトランザクションに署名 ===
 	const signedTx = await alice.signTransaction(txBytes);
 	console.log("Transaction signed by Alice");
+	console.log("Signature:", signedTx.signature);
 
 	// === 時限 ID を構成 ===
-	const unlockTimestampMs = BigInt(Date.now() + 30 * 1000); // 30 seconds later - give more time
+	const unlockTimestampMs = BigInt(Date.now() + 10 * 1000); // 10 seconds later
 	const idBytes = bcs.u64().serialize(unlockTimestampMs).toBytes();
 	const idHex = `0x${Buffer.from(idBytes).toString("hex")}`;
 	console.log(`Current time: ${Date.now()} (${new Date().toISOString()})`);
@@ -73,25 +74,29 @@ let SHARED_BOARD: {
 		verifyKeyServers: false,
 	});
 
+	// トランザクションのバイト列と署名を一緒に暗号化するために結合
+	const dataToEncrypt = {
+		txBytes: Buffer.from(txBytes).toString("hex"),
+		signature: signedTx.signature,
+	};
+	const serializedData = JSON.stringify(dataToEncrypt);
+
 	// 署名済みトランザクションを暗号化
 	const { encryptedObject } = await sealClient.encrypt({
 		threshold: 1,
 		packageId: PACKAGE_ID,
 		id: idHex,
-		data: new Uint8Array(Buffer.from(signedTx.bytes, "base64")), // 署名済みトランザクションのバイト列を暗号化
+		data: new TextEncoder().encode(serializedData),
 	});
 	console.log(`Encrypted object: ${encryptedObject}`);
 	console.log(
 		`Encrypted object size: ${prettyBytes(Buffer.from(encryptedObject).length)}`,
 	);
 
+	// 暗号化されたデータのみを共有（署名済みトランザクションは含めない）
 	SHARED_BOARD = {
 		sealedTx: encryptedObject,
 		unlockTimestampMs: unlockTimestampMs,
-		signedTx: {
-			bytes: signedTx.bytes,
-			signature: signedTx.signature,
-		},
 	};
 }
 {
@@ -109,12 +114,18 @@ let SHARED_BOARD: {
 	const sessionKey = new SessionKey({
 		address: bob.toSuiAddress(),
 		packageId: PACKAGE_ID,
-		ttlMin: 10,
+		ttlMin: 30, // TTLを30分に設定（最大値）
+		signer: bob, // 重要: signerパラメータを追加
 	});
-	const personalMessage = sessionKey.getPersonalMessage();
-	const { signature } = await bob.signPersonalMessage(personalMessage);
-	sessionKey.setPersonalMessageSignature(signature);
+
+	// セッションキーの初期化と状態を確認
 	console.log("Session key ready for Bob");
+	console.log("Session key details:", {
+		address: bob.toSuiAddress(),
+		packageId: PACKAGE_ID,
+		ttlMin: 30,
+		isInitialized: true,
+	});
 
 	// Aliceが使用したのと同じタイムスタンプを使用する
 	const idBytes2 = bcs
@@ -139,40 +150,69 @@ let SHARED_BOARD: {
 		onlyTransactionKind: true,
 	});
 	console.log("Approval tx bytes ready");
+	console.log("Session key state at error:", {
+		address: bob.toSuiAddress(),
+		packageId: PACKAGE_ID,
+		ttlMin: 30,
+		currentTime: Date.now(),
+	});
 
 	// === 復号 & 実行ループ ===
-	try {
-		// SealClientを作成
-		const keyServerIds2 = await getAllowlistedKeyServers("testnet");
-		const sealClient2 = new SealClient({
-			suiClient,
-			serverObjectIds: keyServerIds2,
-			verifyKeyServers: false,
-		});
+	while (true) {
+		await new Promise((resolve) => setTimeout(resolve, 5_000)); // wait 5 seconds
 
-		// 暗号化されたトランザクションを復号
-		const decryptParams: SealClientDecryptParams = {
-			data: SHARED_BOARD.sealedTx,
-			sessionKey,
-			txBytes: approvalTxBytes,
-		};
+		try {
+			// SealClientを作成
+			const keyServerIds2 = await getAllowlistedKeyServers("testnet");
+			const sealClient2 = new SealClient({
+				suiClient,
+				serverObjectIds: keyServerIds2,
+				verifyKeyServers: false,
+			});
 
-		const decryptedTxBytes = await sealClient2.decrypt(decryptParams);
-		console.log("Decrypted tx bytes retrieved");
+			// 暗号化されたトランザクションを復号
+			const decryptParams: SealClientDecryptParams = {
+				data: SHARED_BOARD.sealedTx,
+				sessionKey,
+				txBytes: approvalTxBytes,
+			};
 
-		// 復号された署名済みトランザクションを実行
-		const result = await suiClient.executeTransactionBlock({
-			transactionBlock: SHARED_BOARD.signedTx.bytes,
-			signature: SHARED_BOARD.signedTx.signature,
-			requestType: "WaitForEffectsCert",
-			options: { showEffects: true },
-		});
+			console.log(
+				"Current time before decrypt:",
+				Date.now(),
+				new Date().toISOString(),
+			);
 
-		console.log(
-			`Transaction executed successfully (Alice signed, Bob executed): ${JSON.stringify(result.effects)}`,
-		);
-	} catch (error) {
-		console.log(`Current time: ${Date.now()} (${new Date().toISOString()})`);
-		console.error("Error:", error);
+			const decrypted = await sealClient2.decrypt(decryptParams);
+			console.log("Decrypted tx bytes retrieved");
+			console.log({ decrypted });
+
+			// 復号されたデータをJSONとしてパース
+			const decryptedText = new TextDecoder().decode(decrypted);
+			const decryptedData = JSON.parse(decryptedText);
+			console.log("decryptedData", decryptedData);
+
+			// トランザクションデータと署名を取得
+			const txBytes = Buffer.from(decryptedData.txBytes, "hex");
+			const signature = decryptedData.signature;
+
+			console.log("Retrieved signature:", signature);
+
+			// 署名付きトランザクションを実行
+			const result = await suiClient.executeTransactionBlock({
+				transactionBlock: Buffer.from(txBytes).toString("base64"),
+				signature,
+				requestType: "WaitForEffectsCert",
+				options: { showEffects: true },
+			});
+
+			console.log(
+				`Transaction executed successfully (Alice signed, Bob executed): ${JSON.stringify(result.effects)}`,
+			);
+			break;
+		} catch (error) {
+			console.log(`Current time: ${Date.now()} (${new Date().toISOString()})`);
+			console.error("Error details:", error);
+		}
 	}
 }
