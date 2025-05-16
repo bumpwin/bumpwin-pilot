@@ -22,6 +22,9 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 
 [addresses]
 bumpwin_pilot = "0x0"
+alice = "_"
+bob = "_"
+carol = "_"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
@@ -34,6 +37,7 @@ bumpwin_pilot = "0x0"
 Mockcoins = { local = "../mockcoins" }
 
 [dev-addresses]
-# The dev-addresses section allows overwriting named addresses for the `--test`
-# and `--dev` modes.
-# alice = "0xB0B"
+# The dev-addresses section allows overwriting named addresses for the `--test` and `--dev` modes.
+alice = "0xa11ce"
+bob = "0xb0b"
+carol = "0xca401"
