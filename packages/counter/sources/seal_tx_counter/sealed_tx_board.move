@@ -1,5 +1,6 @@
 module counter::sealed_tx_board;
 
+use std::option::{Self, Option};
 use sui::bcs;
 use sui::clock::Clock;
 use sui::table::{Self, Table};
@@ -7,14 +8,12 @@ use sui::table::{Self, Table};
 const ENoAccess: u64 = 0;
 const EInvalidNonce: u64 = 1;
 
-public enum SealedTxSlot has store {
-    Null,
-    SealedTx(vector<u8>),
-}
+// TODO: Implement it using a nullifier
 
 public struct SealedTx has store {
-    id: ID, // not UID
-    slot: SealedTxSlot,
+    nullifier: u256,
+    data: vector<u8>,
+    unlock_timestamp_ms: u64,
 }
 
 // public struct SealedTxBoard has store {
