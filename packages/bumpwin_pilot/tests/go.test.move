@@ -9,6 +9,7 @@ use bumpwin_pilot::wsui::{Self, WSUI};
 use mockcoins::cyan::CYAN;
 use mockcoins::pink::PINK;
 use mockcoins::yellow::YELLOW;
+use std::debug;
 use sui::clock;
 use sui::coin::{Self, TreasuryCap, Coin};
 use sui::test_scenario::{Self as test, ctx};
@@ -54,9 +55,19 @@ public fun test_battle_market() {
     test.next_tx(@alice);
     {
         let mut battle_market = test.take_shared<battle_market::BattleMarket>();
-        let wsui_in = coin::mint_for_testing<WSUI>(100, test.ctx());
+        let wsui_in = coin::mint_for_testing<WSUI>(1000, test.ctx());
         let share = battle_market.buy_shares<PINK>(wsui_in, test.ctx());
         transfer::public_transfer(share, @alice);
+
+        test::return_shared(battle_market);
+    };
+
+    test.next_tx(@bob);
+    {
+        let mut battle_market = test.take_shared<battle_market::BattleMarket>();
+        let wsui_in = coin::mint_for_testing<WSUI>(2000, test.ctx());
+        let share = battle_market.buy_shares<PINK>(wsui_in, test.ctx());
+        transfer::public_transfer(share, @bob);
         test::return_shared(battle_market);
     };
 

@@ -5,14 +5,23 @@ use bumpwin_pilot::outcome_share::OutcomeShare;
 use bumpwin_pilot::round_number::RoundNumber;
 use bumpwin_pilot::share_supply_bag::{Self, ShareSupplyBag};
 use bumpwin_pilot::wsui::WSUI;
+use std::debug::{Self, print};
+use std::string::{Self, utf8};
+use std::uq64_64::UQ64_64;
 use sui::balance::{Self, Balance, Supply};
 use sui::coin::Coin;
+
+const EInvalidAmountOut: u64 = 1;
 
 public struct BattleMarket has key, store {
     id: UID,
     round_number: RoundNumber,
     reserve_wsui: Balance<WSUI>,
     supply_bag: ShareSupplyBag,
+}
+
+public fun supply_bag(self: &BattleMarket): &ShareSupplyBag {
+    &self.supply_bag
 }
 
 public fun new(round_number: RoundNumber, ctx: &mut TxContext): BattleMarket {
@@ -58,6 +67,16 @@ fun burn_shares<Outcome>(self: &mut BattleMarket, balance: Balance<OutcomeShare<
     self.supply_bag.decrease_supply<Outcome>(balance)
 }
 
+public fun supply_value<Outcome>(self: &BattleMarket): u64 {
+    self.supply_bag.supply_value<Outcome>()
+}
+
+public fun price<Outcome>(self: &BattleMarket): UQ64_64 {
+    let sum_q = self.supply_bag.supply_value<Outcome>();
+    let num_outcomes = self.supply_bag.num_outcomes();
+    battle_market_math::price(sum_q, num_outcomes)
+}
+
 public fun buy_shares<Outcome>(
     self: &mut BattleMarket,
     coin_in: Coin<WSUI>,
@@ -69,6 +88,14 @@ public fun buy_shares<Outcome>(
         coin_in.value(),
         self.supply_bag.num_outcomes(),
     );
+
+    print(&utf8(b"amount_in"));
+    print(&coin_in.value());
+
+    print(&utf8(b"amount_out"));
+    print(&amount_out);
+
+    assert!(amount_out > 0, EInvalidAmountOut);
 
     self.deposit_numeraire(coin_in.into_balance());
 

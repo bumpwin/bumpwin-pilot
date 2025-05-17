@@ -53,7 +53,7 @@
 
 module bumpwin_pilot::battle_market_math;
 
-use std::uq64_64;
+use std::uq64_64::{Self, UQ64_64};
 
 const EInvalidMarket: u64 = 1; // n == 0
 
@@ -82,15 +82,14 @@ public fun cost(sum_q: u64, sum_q_sq: u128, num_outcomes: u64): u64 {
 /// Computes the marginal price pᵢ(q) = ∂C/∂qᵢ
 /// pᵢ(q) = (1/8)(3qᵢ − ∑_{j≠i} qⱼ) + 1/4
 /// Output is unscaled numeraire units
-public fun price(sum_q: u64, qi: u64): u64 {
+public fun price(sum_q: u64, qi: u64): UQ64_64 {
     // Compute sum_other = sum_q - qi
     let sum_other = safemath::u64_safe::sub(sum_q, qi);
 
     // price = (1/8)(3qi - sum_other) + 1/4
-    let price = uq64_64::from_quotient(3 * (qi as u128), 8)
+    uq64_64::from_quotient(3 * (qi as u128), 8)
         .sub(uq64_64::from_quotient(sum_other as u128, 8))
-        .add(uq64_64::from_quotient(1, 4));
-    price.to_int()
+        .add(uq64_64::from_quotient(1, 4))
 }
 
 /// Converts amount_in (Δz) to amount_out (Δxᵢ)

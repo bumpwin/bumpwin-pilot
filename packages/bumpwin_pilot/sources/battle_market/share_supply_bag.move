@@ -1,7 +1,7 @@
 module bumpwin_pilot::share_supply_bag;
 
 use bumpwin_pilot::outcome_share::{Self, OutcomeShare};
-use std::debug;
+use std::ascii;
 use sui::bag::{Self, Bag};
 use sui::balance::{Supply, Balance};
 
@@ -22,24 +22,30 @@ public fun new(ctx: &mut TxContext): ShareSupplyBag {
     }
 }
 
+public fun inner(self: &ShareSupplyBag): &Bag {
+    &self.inner
+}
+
+public fun get_key<Outcome>(): ascii::String {
+    let type_name = std::type_name::get<OutcomeShare<Outcome>>();
+    type_name.into_string()
+}
+
 public fun destroy<Outcome>(self: ShareSupplyBag): Supply<OutcomeShare<Outcome>> {
     let ShareSupplyBag { inner: mut inner, .. } = self;
 
     // TODO: Improve this
 
-    let type_name = std::type_name::get<OutcomeShare<Outcome>>();
-    let key = type_name.into_string();
+    let key = get_key<Outcome>();
     let supply = inner.remove<_, Supply<OutcomeShare<Outcome>>>(key);
-
     transfer::public_freeze_object(inner);
 
     supply
 }
 
 public fun register_outcome<Outcome>(self: &mut ShareSupplyBag) {
-    let type_name = std::type_name::get<OutcomeShare<Outcome>>();
+    let key = get_key<Outcome>();
     let supply = outcome_share::new_supply<Outcome>();
-    let key = type_name.into_string();
     assert!(
         !self.inner.contains_with_type<_, Supply<OutcomeShare<Outcome>>>(key),
         EAlreadyRegistered,
@@ -54,10 +60,8 @@ public fun num_outcomes(self: &ShareSupplyBag): u64 {
 }
 
 public fun contains_supply<Outcome>(self: &ShareSupplyBag): bool {
-    let type_name = std::type_name::get<OutcomeShare<Outcome>>();
-    let key = type_name.into_string();
-    debug::print(&key);
-    self.inner.contains(key)
+    let key = get_key<Outcome>();
+    self.inner.contains_with_type<_, Supply<OutcomeShare<Outcome>>>(key)
 }
 
 public fun assert_contains_supply<Outcome>(self: &ShareSupplyBag) {
@@ -65,9 +69,7 @@ public fun assert_contains_supply<Outcome>(self: &ShareSupplyBag) {
 }
 
 public fun borrow_supply<Outcome>(self: &ShareSupplyBag): &Supply<OutcomeShare<Outcome>> {
-    let type_name = std::type_name::get<Outcome>();
-    let key = type_name.into_string();
-
+    let key = get_key<Outcome>();
     self.assert_contains_supply<Outcome>();
     self.inner.borrow(key)
 }
@@ -75,9 +77,7 @@ public fun borrow_supply<Outcome>(self: &ShareSupplyBag): &Supply<OutcomeShare<O
 public fun borrow_mut_supply<Outcome>(
     self: &mut ShareSupplyBag,
 ): &mut Supply<OutcomeShare<Outcome>> {
-    let type_name = std::type_name::get<Outcome>();
-    let key = type_name.into_string();
-
+    let key = get_key<Outcome>();
     self.assert_contains_supply<Outcome>();
     self.inner.borrow_mut(key)
 }
