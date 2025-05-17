@@ -4,7 +4,6 @@ use std::ascii;
 use std::string;
 use sui::balance::Balance;
 use sui::coin::{TreasuryCap, CoinMetadata};
-use sui::event;
 use sui::url;
 
 const TOTAL_SUPPLY: u64 = 1_000_000_000_000_000; // 1 billion coins (10^9), with 6 decimals → 10^(9+6) base units
@@ -15,9 +14,10 @@ const EInvalidSupply: u64 = 1;
 const EInvalidDecimals: u64 = 2;
 const EInvalidReserve: u64 = 3;
 
-public struct NewMemeVaultEvent<phantom CoinT> has copy, drop {
-    id: ID,
-}
+// TODO: Metadata update should be restricted to:
+// 1. Only creator can update metadata
+// 2. Updates are only allowed before round starts
+// 3. Consider using UpgradeCap pattern for metadata updates
 
 public struct MemeVault<phantom CoinT> has key, store {
     id: UID,
@@ -25,6 +25,7 @@ public struct MemeVault<phantom CoinT> has key, store {
     treasury: TreasuryCap<CoinT>,
     links: vector<url::Url>,
     reserve: Balance<CoinT>,
+    creator: address,
 }
 
 public fun new<CoinT>(
@@ -38,24 +39,28 @@ public fun new<CoinT>(
     let mut treasury = treasury_cap;
     let total_balance = treasury.mint(TOTAL_SUPPLY, ctx).into_balance();
 
-    // transfer::public_freeze_object(treasury);
-
     let vault = MemeVault<CoinT> {
         id: object::new(ctx),
         metadata,
         treasury,
         links: vector[],
         reserve: total_balance,
+        creator: ctx.sender(),
     };
-
-    event::emit(NewMemeVaultEvent<CoinT> {
-        id: vault.id.to_inner(),
-    });
 
     vault
 }
 
-public(package) fun update_metadata<CoinT>(
+#[allow(lint(share_owned))]
+public fun share<CoinT>(
+    treasury_cap: TreasuryCap<CoinT>,
+    metadata: CoinMetadata<CoinT>,
+    ctx: &mut TxContext,
+) {
+    transfer::public_share_object(new(treasury_cap, metadata, ctx));
+}
+
+public fun update_metadata<CoinT>(
     self: &mut MemeVault<CoinT>,
     name: string::String,
     symbol: ascii::String,
@@ -70,17 +75,6 @@ public(package) fun update_metadata<CoinT>(
     cap.update_icon_url(metadata, icon_url.inner_url());
 }
 
-public fun withdraw_two_half_supply<CoinT>(
-    self: &mut MemeVault<CoinT>,
-): (Balance<CoinT>, Balance<CoinT>) {
-    let balance1 = self.reserve.split(HALF_TOTAL_SUPPLY);
-    let balance2 = self.reserve.split(HALF_TOTAL_SUPPLY);
-
-    assert!(self.reserve.value() == 0, EInvalidReserve);
-
-    (balance1, balance2)
-}
-
 // TODO: Verify this is correct
 #[allow(lint(share_owned))]
 public fun destroy<CoinT>(self: MemeVault<CoinT>): Balance<CoinT> {
@@ -90,11 +84,12 @@ public fun destroy<CoinT>(self: MemeVault<CoinT>): Balance<CoinT> {
         treasury,
         links: _links,
         reserve,
+        creator: _,
     } = self;
     id.delete();
 
-    transfer::public_share_object(treasury);
-    transfer::public_share_object(metadata);
+    transfer::public_freeze_object(treasury);
+    transfer::public_freeze_object(metadata);
 
     reserve
 }

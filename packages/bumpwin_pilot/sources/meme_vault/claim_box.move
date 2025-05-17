@@ -1,6 +1,6 @@
 module bumpwin_pilot::claim_box;
 
-use bumpwin_pilot::outcome_share_coin::OutcomeShare;
+use bumpwin_pilot::outcome_share::OutcomeShare;
 use std::uq64_64::{Self, UQ64_64};
 use sui::balance::{Balance, Supply};
 use sui::coin::{Self, Coin};

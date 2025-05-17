@@ -2,9 +2,10 @@
 
 [move]
 version = 3
-manifest_digest = "016A6A90F5470EA3006804287E89B6339765B7043F1E7B205E0CAD652CFF7897"
-deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
+manifest_digest = "E017026D66917B4A11FCF41E53F3B2BFB9ECAC119B5D71299F3626CCFB9B87CC"
+deps_digest = "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3"
 dependencies = [
+  { id = "Safemath", name = "Safemath" },
   { id = "Sui", name = "Sui" },
 ]
 dev-dependencies = [
@@ -22,6 +23,14 @@ dependencies = [
 [[move.package]]
 id = "MoveStdlib"
 source = { git = "https://github.com/MystenLabs/sui.git", rev = "framework/testnet", subdir = "crates/sui-framework/packages/move-stdlib" }
+
+[[move.package]]
+id = "Safemath"
+source = { local = "../safemath" }
+
+dependencies = [
+  { id = "Sui", name = "Sui" },
+]
 
 [[move.package]]
 id = "Sui"
