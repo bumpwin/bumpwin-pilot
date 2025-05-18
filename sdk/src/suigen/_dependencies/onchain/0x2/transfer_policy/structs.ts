@@ -20,7 +20,7 @@ import {
 import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../../../_framework/util';
 import { TypeName } from '../../0x1/type_name/structs';
 import { Balance } from '../balance/structs';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { ID, UID } from '../object/structs';
 import { SUI } from '../sui/structs';
 import { VecSet } from '../vec_set/structs';

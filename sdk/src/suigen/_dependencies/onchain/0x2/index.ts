@@ -1,6 +1,5 @@
-export const PACKAGE_ID = '0x2';
-export const PUBLISHED_AT = '0x2';
-export const PKG_V30 = '0x2';
+// Re-export package constants
+export * from './constants';
 
 // Module exports
 export * as address from './address';

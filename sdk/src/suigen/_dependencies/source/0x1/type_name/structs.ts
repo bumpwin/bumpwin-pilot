@@ -11,7 +11,7 @@ import {
 } from '../../../../_framework/reified';
 import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
 import { String } from '../ascii/structs';
-import { PKG_V16 } from '../index';
+import { PKG_V16 } from '../constants';
 import { bcs } from '@mysten/sui/bcs';
 import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
 import { fromB64 } from '@mysten/sui/utils';

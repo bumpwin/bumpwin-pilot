@@ -15,7 +15,7 @@ import {
 import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
 import { Vector } from '../../_framework/vector';
 import { Bag } from '../bag/structs';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { ID, UID } from '../object/structs';
 import { Table } from '../table/structs';
 import { VecSet } from '../vec_set/structs';

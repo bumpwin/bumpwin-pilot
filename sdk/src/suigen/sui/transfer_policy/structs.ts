@@ -20,7 +20,7 @@ import {
 } from '../../_framework/reified';
 import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { Balance } from '../balance/structs';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { ID, UID } from '../object/structs';
 import { SUI } from '../sui/structs';
 import { VecSet } from '../vec_set/structs';

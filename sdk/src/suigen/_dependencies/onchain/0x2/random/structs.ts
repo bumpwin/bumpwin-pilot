@@ -13,7 +13,7 @@ import {
 } from '../../../../_framework/reified';
 import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../../../_framework/util';
 import { Vector } from '../../../../_framework/vector';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { UID } from '../object/structs';
 import { Versioned } from '../versioned/structs';
 import { bcs } from '@mysten/sui/bcs';

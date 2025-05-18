@@ -17,7 +17,7 @@ import {
   phantom,
 } from '../../_framework/reified';
 import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { Table } from '../table/structs';
 import { bcs } from '@mysten/sui/bcs';
 import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
