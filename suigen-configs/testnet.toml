@@ -8,4 +8,6 @@ justchat = { id = "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2
 
 counter = { id = "0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38" }
 
-mockcoins = { id = "0x84b0b1b9ea49b1238a9177567250b63b6943b0e813ed6f5d1971be7905ef279a" } # https://suiscan.xyz/testnet/tx/9wrRmf2jj114Uv5XizfvsuGC1YA34WyXLvZXNjHDCDaU
+mockcoins = { id = "0xd8aa123529475b8bd51712972d49215a4bc75edc4bc15484ee5a019adbd27af8" } # https://testnet.suivision.xyz/txblock/97TJBv2zMGNQzPAkEpQT3ktkw527GUyBPivjHG5S28Tn?tab=Changes
+
+champ_market = { id = "0x41f17137266d55fe4a1c954e081fe12505a846313fae514c5064abd5e6c7181d" } # https://testnet.suivision.xyz/txblock/8PEBmDbw7envc3xChMbB4MtHgPZEF7i8cjfwTU1vLLVM

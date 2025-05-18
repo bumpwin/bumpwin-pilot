@@ -9,6 +9,10 @@ install-cli:
     # Install sui-client-gen
     cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
 
+install-suigen:
+    cargo install --locked --git https://github.com/fuyutarow/suigen
+
+
 # Generate Sui client code for testnet
 suigen-testnet:
     cd sdk && bun run suigen:testnet

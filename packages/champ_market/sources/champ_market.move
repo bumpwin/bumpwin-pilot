@@ -21,14 +21,16 @@ public struct SwapEvent has copy, drop, store {
     amount_out: u64,
 }
 
-public fun share_pool<X, Y>(coin_x: Coin<X>, coin_y: Coin<Y>, ctx: &mut TxContext) {
+public fun share_pool<X, Y>(coin_x: Coin<X>, coin_y: Coin<Y>, ctx: &mut TxContext): ID {
     let pool = Pool {
         id: object::new(ctx),
         reserve_x: coin_x.into_balance(),
         reserve_y: coin_y.into_balance(),
     };
+    let id = pool.id.to_inner();
 
     transfer::public_share_object(pool);
+    id
 }
 
 public fun reserve_amount_x<X, Y>(pool: &Pool<X, Y>): u64 {

@@ -1,3 +1,5 @@
+# https://testnet.suivision.xyz/txblock/8PEBmDbw7envc3xChMbB4MtHgPZEF7i8cjfwTU1vLLVM
+
 [package]
 name = "champ_market"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
