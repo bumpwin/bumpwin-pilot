@@ -1,6 +1,6 @@
 import { PUBLISHED_AT } from '..';
 import { obj, pure, vector } from '../../_framework/util';
-import { Element } from '../group-ops/structs';
+import { Element } from '../group_ops/structs';
 import { G1, G2, Scalar, UncompressedG1 } from './structs';
 import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
 

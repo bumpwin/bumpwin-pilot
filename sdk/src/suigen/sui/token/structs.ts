@@ -1,6 +1,6 @@
 import { Option } from '../../_dependencies/source/0x1/option/structs';
 import { String } from '../../_dependencies/source/0x1/string/structs';
-import { TypeName } from '../../_dependencies/source/0x1/type-name/structs';
+import { TypeName } from '../../_dependencies/source/0x1/type_name/structs';
 import {
   PhantomReified,
   PhantomToTypeStr,
@@ -23,8 +23,8 @@ import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from 
 import { Balance } from '../balance/structs';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
-import { VecMap } from '../vec-map/structs';
-import { VecSet } from '../vec-set/structs';
+import { VecMap } from '../vec_map/structs';
+import { VecSet } from '../vec_set/structs';
 import { bcs } from '@mysten/sui/bcs';
 import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
 import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';

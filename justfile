@@ -37,23 +37,16 @@ faucet-devnet:
     sui client faucet
     sui client balance
 
+faucet-testnet:
+    open https://faucet.sui.io/?network=testnet
 
-# Create New Address
 create-new-address:
     # sui client new-address secp256k1
     sui client new-address ed25519
 
 
-# Switch Active Address
 switch-active-address ADDRESS:
     sui client switch --address {{ADDRESS}}
-
-# Request Sui from Faucet
-request-sui ADDRESS:
-    curl --location --request POST 'https://faucet.testnet.sui.io/gas' \
-    --header 'Content-Type: application/json' \
-    --data-raw '{ "FixedAmountRequest": { "recipient": "{{ADDRESS}}" } }'
-
 
 sdk-format:
     cd sdk && bun run format
@@ -99,13 +92,13 @@ FEE_CAP_ID := "0xd5c0f61d9c02a72ce8af482d1dcb9e47ead607d9ae23904ebb0c1696852e684
 send-message NETWORK="testnet":
     sui client switch --env {{NETWORK}}
     sui client ptb \
-      --split-coins gas '[1000]' \
-      --assign fee_coin \
-      --move-call {{MESSAGING_PACKAGE_ID}}::messaging::send_message \
-      @{{FEE_CAP_ID}} \
-      '"Hello, suisui!"' \
-      fee_coin \
-      --gas-budget 100000000
+        --split-coins gas '[1000]' \
+        --assign fee_coin \
+        --move-call {{MESSAGING_PACKAGE_ID}}::messaging::send_message \
+        @{{FEE_CAP_ID}} \
+        '"Hello, suisui!"' \
+        fee_coin \
+        --gas-budget 100000000
 
 
 script-sendChat:
@@ -114,6 +107,6 @@ script-sendChat:
 poll-justchat-events:
     cd sdk && bunx tsx scripts/listenChatEvent.ts
 
-
 memo:
     bunx @mysten/prettier-plugin-move  --use-module-label=true  -w meme_registry.move
+

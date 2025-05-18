@@ -1,3 +1,7 @@
 export const PACKAGE_ID = '0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058';
 export const PUBLISHED_AT = '0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058';
 export const PKG_V1 = '0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058';
+
+// Module exports
+export * as bump_fam_factory from './bump_fam_factory';
+export * as vault from './vault';

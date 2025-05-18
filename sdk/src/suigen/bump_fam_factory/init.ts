@@ -1,4 +1,4 @@
-import * as bumpFamFactory from './bump-fam-factory/structs';
+import * as bumpFamFactory from './bump_fam_factory/structs';
 import * as vault from './vault/structs';
 import { StructClassLoader } from '../_framework/loader';
 

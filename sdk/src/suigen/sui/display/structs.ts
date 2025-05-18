@@ -19,7 +19,7 @@ import {
 import { FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName } from '../../_framework/util';
 import { PKG_V30 } from '../index';
 import { ID, UID } from '../object/structs';
-import { VecMap } from '../vec-map/structs';
+import { VecMap } from '../vec_map/structs';
 import { bcs } from '@mysten/sui/bcs';
 import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
 import { fromB64 } from '@mysten/sui/utils';
