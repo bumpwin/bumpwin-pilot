@@ -1,7 +1,3 @@
-// src/index.ts
-export const hello = () => 'Hello SDK world';
-
-export * from './moveCall/bumpFamCoin';
-export * from './moveCall/justchat';
-
 export * from './events/justchat';
+export * as suigen from './suigen';
+export * from './objectIds';

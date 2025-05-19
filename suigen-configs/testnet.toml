@@ -3,9 +3,11 @@ rpc = "https://fullnode.testnet.sui.io:443"
 
 [packages]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
-bump_fam_factory = { id = "0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058" }
+# bump_fam_factory = { id = "0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058" }
 justchat = { id = "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3" }
 
 counter = { id = "0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38" }
 
-mockcoins = { id = "0x84b0b1b9ea49b1238a9177567250b63b6943b0e813ed6f5d1971be7905ef279a" } # https://suiscan.xyz/testnet/tx/9wrRmf2jj114Uv5XizfvsuGC1YA34WyXLvZXNjHDCDaU
+mockcoins = { id = "0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e" } # https://testnet.suivision.xyz/txblock/2kDJoo6KVwWTfreW1DawehYb2bUf5WE6zRAfBqxPxRmN
+
+champ_market = { id = "0x271c2fd30fd48ed9cf5b9bb903ccfbe19398becb2cab3c65026149a6a4a956b4" } # https://testnet.suivision.xyz/txblock/BbJSH4mkK1gyQW6FoA7DBAivYPqqWc8MxKRAPs6NtViu

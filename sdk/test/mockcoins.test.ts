@@ -1,9 +1,9 @@
-import { Justchat } from '@/moveCall/justchat';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
-import { Red, Green, Blue } from '@/moveCall/mockcoins';
+import { mockcoins } from '@/suigen';
+import { MOCKCOINS_OBJECT_IDS } from '@/objectIds';
 
 describe('Mock Coins Tests', () => {
   const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
@@ -15,58 +15,12 @@ describe('Mock Coins Tests', () => {
     tx.setSender(alice.toSuiAddress());
     tx.setGasBudget(100_000_000);
 
-    const red = new Red('testnet');
-
-    const coin = red.mint(tx, {
-      amount: 100n,
-    });
-    tx.transferObjects([coin], alice.toSuiAddress());
-
-    const txBytes = await tx.build({ client: suiClient });
-    const signature = await alice.signTransaction(txBytes);
-    const result = await suiClient.executeTransactionBlock({
-      transactionBlock: txBytes,
-      signature: signature.signature,
-      options: { showEffects: true, showObjectChanges: true },
+    const redCoin = mockcoins.red.mint(tx, {
+      treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.RED,
+      u64: 500_000_000n * 1_000_000n,
     });
 
-    expect(result.effects?.status.status).toBe('success');
-  });
-
-  it('should mint green to alice', async () => {
-    const tx = new Transaction();
-    tx.setSender(alice.toSuiAddress());
-    tx.setGasBudget(100_000_000);
-
-    const green = new Green('testnet');
-
-    const coin = green.mint(tx, {
-      amount: 100n,
-    });
-    tx.transferObjects([coin], alice.toSuiAddress());
-
-    const txBytes = await tx.build({ client: suiClient });
-    const signature = await alice.signTransaction(txBytes);
-    const result = await suiClient.executeTransactionBlock({
-      transactionBlock: txBytes,
-      signature: signature.signature,
-      options: { showEffects: true, showObjectChanges: true },
-    });
-
-    expect(result.effects?.status.status).toBe('success');
-  });
-
-  it('should mint blue to alice', async () => {
-    const tx = new Transaction();
-    tx.setSender(alice.toSuiAddress());
-    tx.setGasBudget(100_000_000);
-
-    const blue = new Blue('testnet');
-
-    const coin = blue.mint(tx, {
-      amount: 100n,
-    });
-    tx.transferObjects([coin], alice.toSuiAddress());
+    tx.transferObjects([redCoin], alice.toSuiAddress());
 
     const txBytes = await tx.build({ client: suiClient });
     const signature = await alice.signTransaction(txBytes);

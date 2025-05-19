@@ -1,3 +1,5 @@
+# https://testnet.suivision.xyz/txblock/97TJBv2zMGNQzPAkEpQT3ktkw527GUyBPivjHG5S28Tn
+
 [package]
 name = "Mockcoins"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move

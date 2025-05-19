@@ -42,3 +42,31 @@ fun test_cpmm_swap_flow() {
 
     scenario.end();
 }
+
+#[test]
+fun test_cpmm_swap_y_to_x_flow() {
+    let mut scenario = test::begin(@0x1);
+    let test = &mut scenario;
+
+    // === Step 0: Setup initial Pool with specified reserves ===
+    test.next_tx(ALICE);
+    {
+        let coin_x = coin::mint_for_testing<SUI>(500_000_000_000_000, test.ctx());
+        let coin_y = coin::mint_for_testing<SUI>(10_000_000_000_000, test.ctx());
+        champ_market::cpmm::share_pool(coin_x, coin_y, test.ctx());
+    };
+
+    // === Step 1: BOB does swap_y_to_x ===
+    test.next_tx(BOB);
+    {
+        let mut pool = test.take_shared<champ_market::cpmm::Pool<SUI, SUI>>();
+        let coin_in = coin::mint_for_testing<SUI>(10_000_000_000_000, test.ctx());
+        let coin_out = pool.swap_y_to_x(coin_in, test.ctx());
+        assert!(coin_out.value() > 0, 1);
+
+        transfer::public_transfer(coin_out, BOB);
+        test::return_shared(pool);
+    };
+
+    scenario.end();
+}

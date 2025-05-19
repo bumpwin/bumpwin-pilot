@@ -21,7 +21,7 @@ import { String as String1 } from '../../0x1/ascii/structs';
 import { Option } from '../../0x1/option/structs';
 import { String } from '../../0x1/string/structs';
 import { Balance, Supply } from '../balance/structs';
-import { PKG_V30 } from '../index';
+import { PKG_V30 } from '../constants';
 import { ID, UID } from '../object/structs';
 import { Url } from '../url/structs';
 import { bcs } from '@mysten/sui/bcs';
