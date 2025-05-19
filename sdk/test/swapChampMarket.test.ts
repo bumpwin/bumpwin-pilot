@@ -2,7 +2,7 @@ import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
-import { champ_market, mockcoins } from '@/suigen';
+import { champMarket, mockcoins } from '@/suigen';
 import { CHAMP_MARKET_OBJECT_IDS, MOCKCOINS_OBJECT_IDS } from '@/objectIds';
 
 describe('Champ Market Tests', () => {
@@ -20,8 +20,7 @@ describe('Champ Market Tests', () => {
       u64: 10_000n * 1_000_000_000n,
     });
 
-
-    const coinOut = champ_market.cpmm.swapYToX(tx, [mockcoins.red.RED.$typeName, mockcoins.wsui.WSUI.$typeName], {
+    const coinOut = champMarket.cpmm.swapYToX(tx, [mockcoins.red.RED.$typeName, mockcoins.wsui.WSUI.$typeName], {
       pool: CHAMP_MARKET_OBJECT_IDS.POOLS.RED_WSUI,
       coin: coinIn,
     });
