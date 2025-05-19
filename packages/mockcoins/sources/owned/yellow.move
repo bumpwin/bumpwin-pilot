@@ -29,4 +29,4 @@ public fun mint(cap: &mut TreasuryCap<YELLOW>, amount: u64, ctx: &mut TxContext)
 #[test_only]
 public fun init_for_testing(ctx: &mut TxContext) {
     init(YELLOW {}, ctx);
-} 
+}

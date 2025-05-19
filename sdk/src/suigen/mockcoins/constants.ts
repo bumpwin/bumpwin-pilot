@@ -1,3 +1,3 @@
-export const PACKAGE_ID = '0xd8aa123529475b8bd51712972d49215a4bc75edc4bc15484ee5a019adbd27af8';
-export const PUBLISHED_AT = '0xd8aa123529475b8bd51712972d49215a4bc75edc4bc15484ee5a019adbd27af8';
-export const PKG_V1 = '0xd8aa123529475b8bd51712972d49215a4bc75edc4bc15484ee5a019adbd27af8';
+export const PACKAGE_ID = '0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e';
+export const PUBLISHED_AT = '0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e';
+export const PKG_V1 = '0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e';

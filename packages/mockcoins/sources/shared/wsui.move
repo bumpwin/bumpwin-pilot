@@ -16,8 +16,8 @@ fun init(witness: WSUI, ctx: &mut TxContext) {
         ctx,
     );
 
-    transfer::public_transfer(treasury_cap, ctx.sender());
-    transfer::public_transfer(metadata, ctx.sender());
+    transfer::public_share_object(treasury_cap);
+    transfer::public_share_object(metadata);
 }
 
 public fun mint(cap: &mut TreasuryCap<WSUI>, amount: u64, ctx: &mut TxContext): Coin<WSUI> {
