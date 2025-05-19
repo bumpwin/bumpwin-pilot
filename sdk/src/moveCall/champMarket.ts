@@ -19,8 +19,8 @@ export class ChampMarket {
 
   public createPool = (
     tx: Transaction,
-    typeArgs: [string, string],
     args: { coin1: TransactionObjectInput; coin2: TransactionObjectInput },
+    typeArgs: [string, string],
   ): TransactionResult => {
     return createPool(tx, typeArgs, {
       root: this.rootId,
