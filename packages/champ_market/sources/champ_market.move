@@ -1,5 +1,6 @@
 module champ_market::cpmm;
 
+use std::uq64_64;
 use sui::balance::Balance;
 use sui::coin::Coin;
 use sui::event;
@@ -46,10 +47,12 @@ fun compute_swap_amount<In, Out>(
     reserve_out: &Balance<Out>,
     amount_in: u64,
 ): u64 {
-    let k = reserve_in.value() * reserve_out.value();
     let new_reserve_in = reserve_in.value() + amount_in;
-    let new_reserve_out = k / new_reserve_in;
-    let amount_out = reserve_out.value() - new_reserve_out;
+    let new_reserve_out = uq64_64::from_quotient(
+        reserve_in.value() as u128,
+        new_reserve_in as u128,
+    ).mul(uq64_64::from_int(reserve_out.value()));
+    let amount_out = uq64_64::from_int(reserve_out.value()).sub(new_reserve_out).to_int();
     assert!(amount_out > 0, EZeroOutput);
     amount_out
 }

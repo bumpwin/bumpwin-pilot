@@ -1,48 +1,29 @@
-export const OBJECT_IDS = {
-  // Package ID
-  PACKAGE_ID: '0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e',
+export const PACKAGE_ID = '0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e';
+export const UPGRADE_CAP = '0xe727b72eca7ca4cab14581e204272f67ccab64c27166972da20455f85395fc7b';
 
-  // Treasury Caps
-  TREASURY_CAPS: {
-    GREEN: '0x0fcc34e6f7cc5af271d4a670d4736d1033de3caa662dc1029c1ee0051a5c4e06',
-    WSUI: '0x11e8e0d1e845eeee6da1c724ba4445a405c2a0b542e942c660fc9ef11c7538eb',
-    WHITE: '0x12718a90b92f6fe31fdcecb3cb5a1cb546c965c6010dfa3d1a5a91d6174c3b31',
-    BLUE: '0x3c55fd0ca79cb160954ba792e5749c1e7666077afaee82e646166776c3f6fc8e',
-    RED: '0x498b097382f08614aadb4379d30c8fbf93348adb37da49bda819570c3236e91c',
-    YELLOW: '0xaba6fd78729aaa147dddee4954576b72c6d6c4d50a48eae13d3c409b904f93b1',
-    BROWN: '0xc54c474e26796d584f55e0771cda307a822bbba8e50e943d43bdb4b81d23d221',
-    BLACK: '0xd010e8de5a2e72bd0a6167eac71c3c7b0981adc405fcf7d1e9dcfc8adc07b3b2',
-    CYAN: '0x4a7393e37eb0ce40f71c800dbfe551b514d1663577ccdd51da1fb9c2297314b6',
-    PINK: '0x70b0c14be2469dec08a3f11fc2ea23f361d1d9bb15b93fe3ab636babe00be3f5',
-  },
-
-  // Coin Metadata
-  COIN_METADATA: {
-    WHITE: '0x25dd10eae425fdd39bcf3aaf1fec4441eca59ff51a6c78f9492a4a86bb276c82',
-    BLUE: '0x30e7cdee8cf9e80b805a51aa385f5b5263146b1b2ae88e53abe66cb5f24a8a3b',
-    BLACK: '0x4879b714b3ee0d3020428e0bb0b199a49881c3ccfd074c51497d6931ac5e45d3',
-    RED: '0x991d173a32cdf090b7c0fd77a554605367c19d5bb230516b9893bc510a578b1f',
-    BROWN: '0xc8b27b40947304ae51dc2a59826a72d33aef645d2442df0ce8ebca1c8c293be5',
-    WSUI: '0xc67892e6fd451b4587f58648baa372a4eb558565055c95137076b0d5f147d623',
-    YELLOW: '0xdeda1e2ac4ee0c2aa113a09c3602ddb2f5f939d9fad6924276e0460b0f52ea86',
-    GREEN: '0xf5a2039f04c316e844fc8132fc638dc6a8b2ae5959021eef5cc6faed72707c26',
-    PINK: '0xf5c2e789e1f6f83e895ac43f8b2bd07dce29bb79928c4eda295c94ef915e284b',
-    CYAN: '0x6a37c3596037b675277e7b919d07d16bdf70096d1c8d9a121d351b692892be81',
-  },
-
-  // Other Objects
-  UPGRADE_CAP: '0xe727b72eca7ca4cab14581e204272f67ccab64c27166972da20455f85395fc7b',
+// Treasury Caps
+export const TREASURY_CAPS = {
+  GREEN: '0x0fcc34e6f7cc5af271d4a670d4736d1033de3caa662dc1029c1ee0051a5c4e06',
+  WSUI: '0x11e8e0d1e845eeee6da1c724ba4445a405c2a0b542e942c660fc9ef11c7538eb',
+  WHITE: '0x12718a90b92f6fe31fdcecb3cb5a1cb546c965c6010dfa3d1a5a91d6174c3b31',
+  BLUE: '0x3c55fd0ca79cb160954ba792e5749c1e7666077afaee82e646166776c3f6fc8e',
+  RED: '0x498b097382f08614aadb4379d30c8fbf93348adb37da49bda819570c3236e91c',
+  YELLOW: '0xaba6fd78729aaa147dddee4954576b72c6d6c4d50a48eae13d3c409b904f93b1',
+  BROWN: '0xc54c474e26796d584f55e0771cda307a822bbba8e50e943d43bdb4b81d23d221',
+  BLACK: '0xd010e8de5a2e72bd0a6167eac71c3c7b0981adc405fcf7d1e9dcfc8adc07b3b2',
+  CYAN: '0x4a7393e37eb0ce40f71c800dbfe551b514d1663577ccdd51da1fb9c2297314b6',
+  PINK: '0x70b0c14be2469dec08a3f11fc2ea23f361d1d9bb15b93fe3ab636babe00be3f5',
 } as const;
 
-// Type for the coin colors
-export type CoinColor = keyof typeof OBJECT_IDS.TREASURY_CAPS;
-
-// Helper function to get treasury cap ID for a coin
-export const getTreasuryCapId = (color: CoinColor): string => {
-  return OBJECT_IDS.TREASURY_CAPS[color];
-};
-
-// Helper function to get coin metadata ID for a coin
-export const getCoinMetadataId = (color: CoinColor): string => {
-  return OBJECT_IDS.COIN_METADATA[color];
-};
+export const COIN_METADATA = {
+  WHITE: '0x25dd10eae425fdd39bcf3aaf1fec4441eca59ff51a6c78f9492a4a86bb276c82',
+  BLUE: '0x30e7cdee8cf9e80b805a51aa385f5b5263146b1b2ae88e53abe66cb5f24a8a3b',
+  BLACK: '0x4879b714b3ee0d3020428e0bb0b199a49881c3ccfd074c51497d6931ac5e45d3',
+  RED: '0x991d173a32cdf090b7c0fd77a554605367c19d5bb230516b9893bc510a578b1f',
+  BROWN: '0xc8b27b40947304ae51dc2a59826a72d33aef645d2442df0ce8ebca1c8c293be5',
+  WSUI: '0xc67892e6fd451b4587f58648baa372a4eb558565055c95137076b0d5f147d623',
+  YELLOW: '0xdeda1e2ac4ee0c2aa113a09c3602ddb2f5f939d9fad6924276e0460b0f52ea86',
+  GREEN: '0xf5a2039f04c316e844fc8132fc638dc6a8b2ae5959021eef5cc6faed72707c26',
+  PINK: '0xf5c2e789e1f6f83e895ac43f8b2bd07dce29bb79928c4eda295c94ef915e284b',
+  CYAN: '0x6a37c3596037b675277e7b919d07d16bdf70096d1c8d9a121d351b692892be81',
+} as const;

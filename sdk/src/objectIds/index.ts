@@ -1,2 +1,2 @@
-export * as mockcoins from './mockcoins';
-export * as champ_market from './champ_market';
+export * as MOCKCOINS_OBJECT_IDS from './mockcoins';
+export * as CHAMP_MARKET_OBJECT_IDS from './champ_market';

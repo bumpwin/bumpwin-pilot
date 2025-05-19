@@ -2,7 +2,7 @@ import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { getKeyInfoFromAlias } from '../test/keyInfo';
 import { mockcoins, champ_market } from '../src/suigen';
-import { objectIds } from '../src';
+import { CHAMP_MARKET_OBJECT_IDS, MOCKCOINS_OBJECT_IDS } from '../src';
 
 const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
 const alice = getKeyInfoFromAlias('alice')?.keypair;
@@ -14,49 +14,49 @@ tx.setGasBudget(100_000_000);
 
 // Mint tokens and get their transaction results
 const redCoin = mockcoins.red.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.RED,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.RED,
   u64: 500_000_000n * 1_000_000n,
 });
 
 const wsuiCoin1 = mockcoins.wsui.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.WSUI,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.WSUI,
   u64: 10_000n * 1_000_000_000n,
 });
 
 champ_market.root.createPool(tx, [mockcoins.red.RED.$typeName, mockcoins.wsui.WSUI.$typeName], {
-  root: objectIds.champ_market.OBJECT_IDS.CHAMP_MARKET_ROOT,
+  root: CHAMP_MARKET_OBJECT_IDS.ROOT,
   coin1: redCoin,
   coin2: wsuiCoin1,
 });
 
 const blueCoin = mockcoins.blue.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.BLUE,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.BLUE,
   u64: 500_000_000n * 1_000_000n,
 });
 
 const wsuiCoin2 = mockcoins.wsui.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.WSUI,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.WSUI,
   u64: 10_000n * 1_000_000_000n,
 });
 
 champ_market.root.createPool(tx, [mockcoins.blue.BLUE.$typeName, mockcoins.wsui.WSUI.$typeName], {
-  root: objectIds.champ_market.OBJECT_IDS.CHAMP_MARKET_ROOT,
+  root: CHAMP_MARKET_OBJECT_IDS.ROOT,
   coin1: blueCoin,
   coin2: wsuiCoin2,
 });
 
 const greenCoin = mockcoins.green.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.GREEN,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.GREEN,
   u64: 500_000_000n * 1_000_000n,
 });
 
 const wsuiCoin3 = mockcoins.wsui.mint(tx, {
-  treasuryCap: objectIds.mockcoins.OBJECT_IDS.TREASURY_CAPS.WSUI,
+  treasuryCap: MOCKCOINS_OBJECT_IDS.TREASURY_CAPS.WSUI,
   u64: 10_000n * 1_000_000_000n,
 });
 
 champ_market.root.createPool(tx, [mockcoins.green.GREEN.$typeName, mockcoins.wsui.WSUI.$typeName], {
-  root: objectIds.champ_market.OBJECT_IDS.CHAMP_MARKET_ROOT,
+  root: CHAMP_MARKET_OBJECT_IDS.ROOT,
   coin1: greenCoin,
   coin2: wsuiCoin3,
 });

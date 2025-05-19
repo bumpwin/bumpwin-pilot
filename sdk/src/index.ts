@@ -1,6 +1,3 @@
-// src/index.ts
-export const hello = () => 'Hello SDK world';
-
 export * from './events/justchat';
 export * as suigen from './suigen';
-export * as objectIds from './objectIds';
+export * from './objectIds';
