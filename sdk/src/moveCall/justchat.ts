@@ -1,4 +1,4 @@
-import { sendMessage } from '@/suigen/justchat/messaging/functions';
+import { sendMessage } from "@/suigen/Justchat/messaging";
 import type { Transaction } from '@mysten/sui/transactions';
 
 // Fee cap IDs for different networks

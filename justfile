@@ -56,7 +56,7 @@ sdk-format:
     cd sdk && bun run format
 
 build-move-famcoin:
-    cd contracts/bump_fam_coin && sui move build --dump-bytecode-as-base64
+    cd packages/bump_fam_coin && sui move build --dump-bytecode-as-base64
 
 
 # Install Dependencies

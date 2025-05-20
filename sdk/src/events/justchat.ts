@@ -1,6 +1,6 @@
 import { type EventId, SuiClient, type SuiEvent as SuiClientEvent, getFullnodeUrl } from '@mysten/sui/client';
-import { PACKAGE_ID } from '../suigen/justchat/index';
-import { type MessageReceivedEventFields, isMessageReceivedEvent } from '../suigen/justchat/messaging/structs';
+import { PACKAGE_ID } from '@/suigen/Justchat';
+import { type MessageReceivedEventFields, isMessageReceivedEvent } from '@/suigen/Justchat/messaging/structs';
 
 export type Network = 'testnet' | 'devnet' | 'mainnet';
 
