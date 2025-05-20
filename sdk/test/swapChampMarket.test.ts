@@ -28,14 +28,9 @@ describe('Champ Market Tests', () => {
     tx.transferObjects([coinOut], alice.toSuiAddress());
 
     const txBytes = await tx.build({ client: suiClient });
-    const signature = await alice.signTransaction(txBytes);
-    const result = await suiClient.executeTransactionBlock({
+    const dryRunResult = await suiClient.dryRunTransactionBlock({
       transactionBlock: txBytes,
-      signature: signature.signature,
-      options: { showEffects: true, showObjectChanges: true },
     });
-    console.log(result);
-
-    expect(result.effects?.status.status).toBe('success');
+    expect(dryRunResult.effects.status.status).toBe('success');
   });
 });

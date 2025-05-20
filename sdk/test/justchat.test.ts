@@ -4,9 +4,10 @@ import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
+import { sui } from '@/suigen';
 
 describe('Justchat Tests', () => {
-  const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+  const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
   const aliceKeyInfo = getKeyInfoFromAlias('alice');
   if (!aliceKeyInfo) throw new Error('Alice key info not found');
   const keypair = Ed25519Keypair.fromSecretKey(Buffer.from(aliceKeyInfo.privateKey, 'base64').slice(1));
@@ -25,14 +26,10 @@ describe('Justchat Tests', () => {
       sender: address,
     });
 
-    const txBytes = await tx.build({ client });
-    const signature = await keypair.signTransaction(txBytes);
-    const result = await client.executeTransactionBlock({
+    const txBytes = await tx.build({ client: suiClient });
+    const dryRunResult = await suiClient.dryRunTransactionBlock({
       transactionBlock: txBytes,
-      signature: signature.signature,
-      options: { showEffects: true, showObjectChanges: true },
     });
-
-    expect(result.effects?.status.status).toBe('success');
+    expect(dryRunResult.effects.status.status).toBe('success');
   });
 });
