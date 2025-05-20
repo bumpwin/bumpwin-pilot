@@ -20,6 +20,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./suigen": {
+      "types": "./dist/suigen/index.d.ts",
+      "import": "./dist/suigen/index.js",
+      "require": "./dist/suigen/index.cjs"
     }
   },
   "sideEffects": false,
