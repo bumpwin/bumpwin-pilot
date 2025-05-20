@@ -1,0 +1,7 @@
+{
+  "name": "import-test",
+  "type": "module",
+  "dependencies": {
+    "bumpwin": "link:bumpwin"
+  }
+}
