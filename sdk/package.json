@@ -15,14 +15,14 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./suigen": {
+      "types": "./dist/suigen/index.d.ts",
       "import": "./dist/esm/suigen/index.js",
-      "require": "./dist/cjs/suigen/index.js",
-      "types": "./dist/suigen/index.d.ts"
+      "require": "./dist/cjs/suigen/index.js"
     }
   },
   "sideEffects": false,
