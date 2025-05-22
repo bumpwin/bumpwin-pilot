@@ -11,31 +11,30 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "type": "commonjs",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./suigen": {
-      "types": "./dist/suigen/index.d.ts",
       "import": "./dist/esm/suigen/index.js",
-      "require": "./dist/cjs/suigen/index.js"
+      "require": "./dist/cjs/suigen/index.js",
+      "types": "./dist/suigen/index.d.ts"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest",
-    "prepare": "bunx tsup",
+    "prepare": "bun run build",
     "prepublishOnly": "npm run build",
     "suigen:devnet": "rm -rf src/suigen && suigen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
     "suigen:testnet": "rm -rf src/suigen && suigen -m ../suigen-configs/testnet.toml -o src/suigen && bun format",

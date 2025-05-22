@@ -3,6 +3,7 @@
     "mysten.move",
     "mysten.prettier-move",
     "mysten.move-trace-debug",
-    "gruntfuggly.todo-tree"
+    "gruntfuggly.todo-tree",
+    "waderyan.gitblame"
   ]
 }
