@@ -1,19 +1,9 @@
-import { PUBLISHED_AT } from '..';
-import { obj, pure } from '../../_framework/util';
-import { Transaction, TransactionArgument, TransactionObjectInput } from '@mysten/sui/transactions';
+import {PUBLISHED_AT} from "..";
+import {obj, pure} from "../../_framework/util";
+import {Transaction, TransactionArgument, TransactionObjectInput} from "@mysten/sui/transactions";
 
-export function init(tx: Transaction, white: TransactionObjectInput) {
-  return tx.moveCall({ target: `${PUBLISHED_AT}::white::init`, arguments: [obj(tx, white)] });
-}
+export function init( tx: Transaction, white: TransactionObjectInput ) { return tx.moveCall({ target: `${PUBLISHED_AT}::white::init`, arguments: [ obj(tx, white) ], }) }
 
-export interface MintArgs {
-  treasuryCap: TransactionObjectInput;
-  u64: bigint | TransactionArgument;
-}
+export interface MintArgs { treasuryCap: TransactionObjectInput; u64: bigint | TransactionArgument }
 
-export function mint(tx: Transaction, args: MintArgs) {
-  return tx.moveCall({
-    target: `${PUBLISHED_AT}::white::mint`,
-    arguments: [obj(tx, args.treasuryCap), pure(tx, args.u64, `u64`)],
-  });
-}
+export function mint( tx: Transaction, args: MintArgs ) { return tx.moveCall({ target: `${PUBLISHED_AT}::white::mint`, arguments: [ obj(tx, args.treasuryCap), pure(tx, args.u64, `u64`) ], }) }

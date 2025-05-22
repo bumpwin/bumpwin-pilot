@@ -1,343 +1,143 @@
-import { UID } from '../../_dependencies/onchain/0x2/object/structs';
-import {
-  PhantomReified,
-  Reified,
-  StructClass,
-  ToField,
-  ToTypeStr,
-  decodeFromFields,
-  decodeFromFieldsWithTypes,
-  decodeFromJSONField,
-  phantom,
-} from '../../_framework/reified';
-import { FieldsWithTypes, composeSuiType, compressSuiType } from '../../_framework/util';
-import { PKG_V1 } from '../constants';
-import { bcs } from '@mysten/sui/bcs';
-import { SuiClient, SuiObjectData, SuiParsedData } from '@mysten/sui/client';
-import { fromB64, fromHEX, toHEX } from '@mysten/sui/utils';
+import {UID} from "../../_dependencies/onchain/0x2/object/structs";
+import {PhantomReified, Reified, StructClass, ToField, ToTypeStr, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, phantom} from "../../_framework/reified";
+import {FieldsWithTypes, composeSuiType, compressSuiType} from "../../_framework/util";
+import {PKG_V1} from "../constants";
+import {bcs} from "@mysten/sui/bcs";
+import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
+import {fromB64, fromHEX, toHEX} from "@mysten/sui/utils";
 
 /* ============================== MessageFeeCap =============================== */
 
-export function isMessageFeeCap(type: string): boolean {
-  type = compressSuiType(type);
-  return type === `${PKG_V1}::cap::MessageFeeCap`;
-}
+export function isMessageFeeCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::cap::MessageFeeCap`; }
 
-export interface MessageFeeCapFields {
-  id: ToField<UID>;
-  messageFee: ToField<'u64'>;
-  recipient: ToField<'address'>;
-}
+export interface MessageFeeCapFields { id: ToField<UID>; messageFee: ToField<"u64">; recipient: ToField<"address"> }
 
-export type MessageFeeCapReified = Reified<MessageFeeCap, MessageFeeCapFields>;
+export type MessageFeeCapReified = Reified< MessageFeeCap, MessageFeeCapFields >;
 
-export class MessageFeeCap implements StructClass {
-  __StructClass = true as const;
+export class MessageFeeCap implements StructClass { __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V1}::cap::MessageFeeCap`;
-  static readonly $numTypeParams = 0;
-  static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::cap::MessageFeeCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
-  readonly $typeName = MessageFeeCap.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V1}::cap::MessageFeeCap`;
-  readonly $typeArgs: [];
-  readonly $isPhantom = MessageFeeCap.$isPhantom;
+ readonly $typeName = MessageFeeCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::cap::MessageFeeCap`; readonly $typeArgs: []; readonly $isPhantom = MessageFeeCap.$isPhantom;
 
-  readonly id: ToField<UID>;
-  readonly messageFee: ToField<'u64'>;
-  readonly recipient: ToField<'address'>;
+ readonly id: ToField<UID>; readonly messageFee: ToField<"u64">; readonly recipient: ToField<"address">
 
-  private constructor(typeArgs: [], fields: MessageFeeCapFields) {
-    this.$fullTypeName = composeSuiType(MessageFeeCap.$typeName, ...typeArgs) as `${typeof PKG_V1}::cap::MessageFeeCap`;
-    this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: MessageFeeCapFields, ) { this.$fullTypeName = composeSuiType( MessageFeeCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::cap::MessageFeeCap`; this.$typeArgs = typeArgs;
 
-    this.id = fields.id;
-    this.messageFee = fields.messageFee;
-    this.recipient = fields.recipient;
-  }
+ this.id = fields.id;; this.messageFee = fields.messageFee;; this.recipient = fields.recipient; }
 
-  static reified(): MessageFeeCapReified {
-    return {
-      typeName: MessageFeeCap.$typeName,
-      fullTypeName: composeSuiType(MessageFeeCap.$typeName, ...[]) as `${typeof PKG_V1}::cap::MessageFeeCap`,
-      typeArgs: [] as [],
-      isPhantom: MessageFeeCap.$isPhantom,
-      reifiedTypeArgs: [],
-      fromFields: (fields: Record<string, any>) => MessageFeeCap.fromFields(fields),
-      fromFieldsWithTypes: (item: FieldsWithTypes) => MessageFeeCap.fromFieldsWithTypes(item),
-      fromBcs: (data: Uint8Array) => MessageFeeCap.fromBcs(data),
-      bcs: MessageFeeCap.bcs,
-      fromJSONField: (field: any) => MessageFeeCap.fromJSONField(field),
-      fromJSON: (json: Record<string, any>) => MessageFeeCap.fromJSON(json),
-      fromSuiParsedData: (content: SuiParsedData) => MessageFeeCap.fromSuiParsedData(content),
-      fromSuiObjectData: (content: SuiObjectData) => MessageFeeCap.fromSuiObjectData(content),
-      fetch: async (client: SuiClient, id: string) => MessageFeeCap.fetch(client, id),
-      new: (fields: MessageFeeCapFields) => {
-        return new MessageFeeCap([], fields);
-      },
-      kind: 'StructClassReified',
-    };
-  }
+ static reified( ): MessageFeeCapReified { return { typeName: MessageFeeCap.$typeName, fullTypeName: composeSuiType( MessageFeeCap.$typeName, ...[] ) as `${typeof PKG_V1}::cap::MessageFeeCap`, typeArgs: [ ] as [], isPhantom: MessageFeeCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => MessageFeeCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => MessageFeeCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => MessageFeeCap.fromBcs( data, ), bcs: MessageFeeCap.bcs, fromJSONField: (field: any) => MessageFeeCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => MessageFeeCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => MessageFeeCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => MessageFeeCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => MessageFeeCap.fetch( client, id, ), new: ( fields: MessageFeeCapFields, ) => { return new MessageFeeCap( [], fields ) }, kind: "StructClassReified", } }
 
-  static get r() {
-    return MessageFeeCap.reified();
-  }
+ static get r() { return MessageFeeCap.reified() }
 
-  static phantom(): PhantomReified<ToTypeStr<MessageFeeCap>> {
-    return phantom(MessageFeeCap.reified());
-  }
-  static get p() {
-    return MessageFeeCap.phantom();
-  }
+ static phantom( ): PhantomReified<ToTypeStr<MessageFeeCap>> { return phantom(MessageFeeCap.reified( )); } static get p() { return MessageFeeCap.phantom() }
 
-  static get bcs() {
-    return bcs.struct('MessageFeeCap', {
-      id: UID.bcs,
-      message_fee: bcs.u64(),
-      recipient: bcs
-        .bytes(32)
-        .transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val) }),
-    });
-  }
+ static get bcs() { return bcs.struct("MessageFeeCap", {
 
-  static fromFields(fields: Record<string, any>): MessageFeeCap {
-    return MessageFeeCap.reified().new({
-      id: decodeFromFields(UID.reified(), fields.id),
-      messageFee: decodeFromFields('u64', fields.message_fee),
-      recipient: decodeFromFields('address', fields.recipient),
-    });
-  }
+ id: UID.bcs, message_fee: bcs.u64(), recipient: bcs.bytes(32).transform({ input: (val: string) => fromHEX(val), output: (val: Uint8Array) => toHEX(val), })
 
-  static fromFieldsWithTypes(item: FieldsWithTypes): MessageFeeCap {
-    if (!isMessageFeeCap(item.type)) {
-      throw new Error('not a MessageFeeCap type');
-    }
+}) };
 
-    return MessageFeeCap.reified().new({
-      id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id),
-      messageFee: decodeFromFieldsWithTypes('u64', item.fields.message_fee),
-      recipient: decodeFromFieldsWithTypes('address', item.fields.recipient),
-    });
-  }
+ static fromFields( fields: Record<string, any> ): MessageFeeCap { return MessageFeeCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id), messageFee: decodeFromFields("u64", fields.message_fee), recipient: decodeFromFields("address", fields.recipient) } ) }
 
-  static fromBcs(data: Uint8Array): MessageFeeCap {
-    return MessageFeeCap.fromFields(MessageFeeCap.bcs.parse(data));
-  }
+ static fromFieldsWithTypes( item: FieldsWithTypes ): MessageFeeCap { if (!isMessageFeeCap(item.type)) { throw new Error("not a MessageFeeCap type");
 
-  toJSONField() {
-    return {
-      id: this.id,
-      messageFee: this.messageFee.toString(),
-      recipient: this.recipient,
-    };
-  }
+ }
 
-  toJSON() {
-    return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
-  }
+ return MessageFeeCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id), messageFee: decodeFromFieldsWithTypes("u64", item.fields.message_fee), recipient: decodeFromFieldsWithTypes("address", item.fields.recipient) } ) }
 
-  static fromJSONField(field: any): MessageFeeCap {
-    return MessageFeeCap.reified().new({
-      id: decodeFromJSONField(UID.reified(), field.id),
-      messageFee: decodeFromJSONField('u64', field.messageFee),
-      recipient: decodeFromJSONField('address', field.recipient),
-    });
-  }
+ static fromBcs( data: Uint8Array ): MessageFeeCap { return MessageFeeCap.fromFields( MessageFeeCap.bcs.parse(data) ) }
 
-  static fromJSON(json: Record<string, any>): MessageFeeCap {
-    if (json.$typeName !== MessageFeeCap.$typeName) {
-      throw new Error('not a WithTwoGenerics json object');
-    }
+ toJSONField() { return {
 
-    return MessageFeeCap.fromJSONField(json);
-  }
+ id: this.id,messageFee: this.messageFee.toString(),recipient: this.recipient,
 
-  static fromSuiParsedData(content: SuiParsedData): MessageFeeCap {
-    if (content.dataType !== 'moveObject') {
-      throw new Error('not an object');
-    }
-    if (!isMessageFeeCap(content.type)) {
-      throw new Error(`object at ${(content.fields as any).id} is not a MessageFeeCap object`);
-    }
-    return MessageFeeCap.fromFieldsWithTypes(content);
-  }
+} }
 
-  static fromSuiObjectData(data: SuiObjectData): MessageFeeCap {
-    if (data.bcs) {
-      if (data.bcs.dataType !== 'moveObject' || !isMessageFeeCap(data.bcs.type)) {
-        throw new Error(`object at is not a MessageFeeCap object`);
-      }
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
-      return MessageFeeCap.fromBcs(fromB64(data.bcs.bcsBytes));
-    }
-    if (data.content) {
-      return MessageFeeCap.fromSuiParsedData(data.content);
-    }
-    throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
-    );
-  }
+ static fromJSONField( field: any ): MessageFeeCap { return MessageFeeCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id), messageFee: decodeFromJSONField("u64", field.messageFee), recipient: decodeFromJSONField("address", field.recipient) } ) }
 
-  static async fetch(client: SuiClient, id: string): Promise<MessageFeeCap> {
-    const res = await client.getObject({ id, options: { showBcs: true } });
-    if (res.error) {
-      throw new Error(`error fetching MessageFeeCap object at id ${id}: ${res.error.code}`);
-    }
-    if (res.data?.bcs?.dataType !== 'moveObject' || !isMessageFeeCap(res.data.bcs.type)) {
-      throw new Error(`object at id ${id} is not a MessageFeeCap object`);
-    }
+ static fromJSON( json: Record<string, any> ): MessageFeeCap { if (json.$typeName !== MessageFeeCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
-    return MessageFeeCap.fromSuiObjectData(res.data);
-  }
-}
+ return MessageFeeCap.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): MessageFeeCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isMessageFeeCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a MessageFeeCap object`); } return MessageFeeCap.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): MessageFeeCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isMessageFeeCap(data.bcs.type)) { throw new Error(`object at is not a MessageFeeCap object`); }
+
+ return MessageFeeCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return MessageFeeCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<MessageFeeCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching MessageFeeCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isMessageFeeCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a MessageFeeCap object`); }
+
+ return MessageFeeCap.fromSuiObjectData( res.data ); }
+
+ }
 
 /* ============================== AdminCap =============================== */
 
-export function isAdminCap(type: string): boolean {
-  type = compressSuiType(type);
-  return type === `${PKG_V1}::cap::AdminCap`;
-}
+export function isAdminCap(type: string): boolean { type = compressSuiType(type); return type === `${PKG_V1}::cap::AdminCap`; }
 
-export interface AdminCapFields {
-  id: ToField<UID>;
-}
+export interface AdminCapFields { id: ToField<UID> }
 
-export type AdminCapReified = Reified<AdminCap, AdminCapFields>;
+export type AdminCapReified = Reified< AdminCap, AdminCapFields >;
 
-export class AdminCap implements StructClass {
-  __StructClass = true as const;
+export class AdminCap implements StructClass { __StructClass = true as const;
 
-  static readonly $typeName = `${PKG_V1}::cap::AdminCap`;
-  static readonly $numTypeParams = 0;
-  static readonly $isPhantom = [] as const;
+ static readonly $typeName = `${PKG_V1}::cap::AdminCap`; static readonly $numTypeParams = 0; static readonly $isPhantom = [] as const;
 
-  readonly $typeName = AdminCap.$typeName;
-  readonly $fullTypeName: `${typeof PKG_V1}::cap::AdminCap`;
-  readonly $typeArgs: [];
-  readonly $isPhantom = AdminCap.$isPhantom;
+ readonly $typeName = AdminCap.$typeName; readonly $fullTypeName: `${typeof PKG_V1}::cap::AdminCap`; readonly $typeArgs: []; readonly $isPhantom = AdminCap.$isPhantom;
 
-  readonly id: ToField<UID>;
+ readonly id: ToField<UID>
 
-  private constructor(typeArgs: [], fields: AdminCapFields) {
-    this.$fullTypeName = composeSuiType(AdminCap.$typeName, ...typeArgs) as `${typeof PKG_V1}::cap::AdminCap`;
-    this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [], fields: AdminCapFields, ) { this.$fullTypeName = composeSuiType( AdminCap.$typeName, ...typeArgs ) as `${typeof PKG_V1}::cap::AdminCap`; this.$typeArgs = typeArgs;
 
-    this.id = fields.id;
-  }
+ this.id = fields.id; }
 
-  static reified(): AdminCapReified {
-    return {
-      typeName: AdminCap.$typeName,
-      fullTypeName: composeSuiType(AdminCap.$typeName, ...[]) as `${typeof PKG_V1}::cap::AdminCap`,
-      typeArgs: [] as [],
-      isPhantom: AdminCap.$isPhantom,
-      reifiedTypeArgs: [],
-      fromFields: (fields: Record<string, any>) => AdminCap.fromFields(fields),
-      fromFieldsWithTypes: (item: FieldsWithTypes) => AdminCap.fromFieldsWithTypes(item),
-      fromBcs: (data: Uint8Array) => AdminCap.fromBcs(data),
-      bcs: AdminCap.bcs,
-      fromJSONField: (field: any) => AdminCap.fromJSONField(field),
-      fromJSON: (json: Record<string, any>) => AdminCap.fromJSON(json),
-      fromSuiParsedData: (content: SuiParsedData) => AdminCap.fromSuiParsedData(content),
-      fromSuiObjectData: (content: SuiObjectData) => AdminCap.fromSuiObjectData(content),
-      fetch: async (client: SuiClient, id: string) => AdminCap.fetch(client, id),
-      new: (fields: AdminCapFields) => {
-        return new AdminCap([], fields);
-      },
-      kind: 'StructClassReified',
-    };
-  }
+ static reified( ): AdminCapReified { return { typeName: AdminCap.$typeName, fullTypeName: composeSuiType( AdminCap.$typeName, ...[] ) as `${typeof PKG_V1}::cap::AdminCap`, typeArgs: [ ] as [], isPhantom: AdminCap.$isPhantom, reifiedTypeArgs: [], fromFields: (fields: Record<string, any>) => AdminCap.fromFields( fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => AdminCap.fromFieldsWithTypes( item, ), fromBcs: (data: Uint8Array) => AdminCap.fromBcs( data, ), bcs: AdminCap.bcs, fromJSONField: (field: any) => AdminCap.fromJSONField( field, ), fromJSON: (json: Record<string, any>) => AdminCap.fromJSON( json, ), fromSuiParsedData: (content: SuiParsedData) => AdminCap.fromSuiParsedData( content, ), fromSuiObjectData: (content: SuiObjectData) => AdminCap.fromSuiObjectData( content, ), fetch: async (client: SuiClient, id: string) => AdminCap.fetch( client, id, ), new: ( fields: AdminCapFields, ) => { return new AdminCap( [], fields ) }, kind: "StructClassReified", } }
 
-  static get r() {
-    return AdminCap.reified();
-  }
+ static get r() { return AdminCap.reified() }
 
-  static phantom(): PhantomReified<ToTypeStr<AdminCap>> {
-    return phantom(AdminCap.reified());
-  }
-  static get p() {
-    return AdminCap.phantom();
-  }
+ static phantom( ): PhantomReified<ToTypeStr<AdminCap>> { return phantom(AdminCap.reified( )); } static get p() { return AdminCap.phantom() }
 
-  static get bcs() {
-    return bcs.struct('AdminCap', {
-      id: UID.bcs,
-    });
-  }
+ static get bcs() { return bcs.struct("AdminCap", {
 
-  static fromFields(fields: Record<string, any>): AdminCap {
-    return AdminCap.reified().new({ id: decodeFromFields(UID.reified(), fields.id) });
-  }
+ id: UID.bcs
 
-  static fromFieldsWithTypes(item: FieldsWithTypes): AdminCap {
-    if (!isAdminCap(item.type)) {
-      throw new Error('not a AdminCap type');
-    }
+}) };
 
-    return AdminCap.reified().new({ id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) });
-  }
+ static fromFields( fields: Record<string, any> ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromFields(UID.reified(), fields.id) } ) }
 
-  static fromBcs(data: Uint8Array): AdminCap {
-    return AdminCap.fromFields(AdminCap.bcs.parse(data));
-  }
+ static fromFieldsWithTypes( item: FieldsWithTypes ): AdminCap { if (!isAdminCap(item.type)) { throw new Error("not a AdminCap type");
 
-  toJSONField() {
-    return {
-      id: this.id,
-    };
-  }
+ }
 
-  toJSON() {
-    return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() };
-  }
+ return AdminCap.reified( ).new( { id: decodeFromFieldsWithTypes(UID.reified(), item.fields.id) } ) }
 
-  static fromJSONField(field: any): AdminCap {
-    return AdminCap.reified().new({ id: decodeFromJSONField(UID.reified(), field.id) });
-  }
+ static fromBcs( data: Uint8Array ): AdminCap { return AdminCap.fromFields( AdminCap.bcs.parse(data) ) }
 
-  static fromJSON(json: Record<string, any>): AdminCap {
-    if (json.$typeName !== AdminCap.$typeName) {
-      throw new Error('not a WithTwoGenerics json object');
-    }
+ toJSONField() { return {
 
-    return AdminCap.fromJSONField(json);
-  }
+ id: this.id,
 
-  static fromSuiParsedData(content: SuiParsedData): AdminCap {
-    if (content.dataType !== 'moveObject') {
-      throw new Error('not an object');
-    }
-    if (!isAdminCap(content.type)) {
-      throw new Error(`object at ${(content.fields as any).id} is not a AdminCap object`);
-    }
-    return AdminCap.fromFieldsWithTypes(content);
-  }
+} }
 
-  static fromSuiObjectData(data: SuiObjectData): AdminCap {
-    if (data.bcs) {
-      if (data.bcs.dataType !== 'moveObject' || !isAdminCap(data.bcs.type)) {
-        throw new Error(`object at is not a AdminCap object`);
-      }
+ toJSON() { return { $typeName: this.$typeName, $typeArgs: this.$typeArgs, ...this.toJSONField() } }
 
-      return AdminCap.fromBcs(fromB64(data.bcs.bcsBytes));
-    }
-    if (data.content) {
-      return AdminCap.fromSuiParsedData(data.content);
-    }
-    throw new Error(
-      'Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request.',
-    );
-  }
+ static fromJSONField( field: any ): AdminCap { return AdminCap.reified( ).new( { id: decodeFromJSONField(UID.reified(), field.id) } ) }
 
-  static async fetch(client: SuiClient, id: string): Promise<AdminCap> {
-    const res = await client.getObject({ id, options: { showBcs: true } });
-    if (res.error) {
-      throw new Error(`error fetching AdminCap object at id ${id}: ${res.error.code}`);
-    }
-    if (res.data?.bcs?.dataType !== 'moveObject' || !isAdminCap(res.data.bcs.type)) {
-      throw new Error(`object at id ${id} is not a AdminCap object`);
-    }
+ static fromJSON( json: Record<string, any> ): AdminCap { if (json.$typeName !== AdminCap.$typeName) { throw new Error("not a WithTwoGenerics json object") };
 
-    return AdminCap.fromSuiObjectData(res.data);
-  }
-}
+ return AdminCap.fromJSONField( json, ) }
+
+ static fromSuiParsedData( content: SuiParsedData ): AdminCap { if (content.dataType !== "moveObject") { throw new Error("not an object"); } if (!isAdminCap(content.type)) { throw new Error(`object at ${(content.fields as any).id} is not a AdminCap object`); } return AdminCap.fromFieldsWithTypes( content ); }
+
+ static fromSuiObjectData( data: SuiObjectData ): AdminCap { if (data.bcs) { if (data.bcs.dataType !== "moveObject" || !isAdminCap(data.bcs.type)) { throw new Error(`object at is not a AdminCap object`); }
+
+ return AdminCap.fromBcs( fromB64(data.bcs.bcsBytes) ); } if (data.content) { return AdminCap.fromSuiParsedData( data.content ) } throw new Error( "Both `bcs` and `content` fields are missing from the data. Include `showBcs` or `showContent` in the request." ); }
+
+ static async fetch( client: SuiClient, id: string ): Promise<AdminCap> { const res = await client.getObject({ id, options: { showBcs: true, }, }); if (res.error) { throw new Error(`error fetching AdminCap object at id ${id}: ${res.error.code}`); } if (res.data?.bcs?.dataType !== "moveObject" || !isAdminCap(res.data.bcs.type)) { throw new Error(`object at id ${id} is not a AdminCap object`); }
+
+ return AdminCap.fromSuiObjectData( res.data ); }
+
+ }
