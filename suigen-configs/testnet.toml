@@ -2,8 +2,6 @@
 rpc = "https://fullnode.testnet.sui.io:443"
 
 [packages]
-Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
-# bump_fam_factory = { id = "0xcdba49a915244851254c8bb702cee967efd55a80f36fb384a9576788c9186058" }
 justchat = { id = "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3" }
 
 counter = { id = "0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38" }

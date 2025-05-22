@@ -2,6 +2,7 @@
   <p>Bump. Survive. Win.</p>
 </div>
 
+![npm](https://img.shields.io/npm/v/bumpwin)
 
 ## 🚀 Overview
 
@@ -26,17 +27,20 @@ Bump Fam is a revolutionary gaming platform built on the Sui blockchain, where p
 ## 📦 Installation
 
 1. Clone the repository with submodules:
+
 ```bash
 git clone --recurse-submodules https://github.com/fuyutarow/bumpwin-pilot.git
 cd bumpwin-pilot
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Build the project:
+
 ```bash
 npm run build
 ```
@@ -44,11 +48,13 @@ npm run build
 ## 🧪 Development
 
 ### Running Tests
+
 ```bash
 npm test
 ```
 
 ### Building
+
 ```bash
 npm run build
 ```
@@ -71,6 +77,7 @@ bumpwin-pilot/
 We welcome contributions! Here's how you can help:
 
 1. Make sure submodules are up to date:
+
 ```bash
 git submodule update --remote
 ```
