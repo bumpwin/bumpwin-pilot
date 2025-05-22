@@ -1,9 +1,9 @@
+import { CHAMP_MARKET_OBJECT_IDS, MOCKCOINS_OBJECT_IDS } from '@/objectIds';
+import { champMarket, mockcoins } from '@/suigen';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
-import { champMarket, mockcoins } from '@/suigen';
-import { CHAMP_MARKET_OBJECT_IDS, MOCKCOINS_OBJECT_IDS } from '@/objectIds';
 
 describe('Champ Market Tests', () => {
   const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });

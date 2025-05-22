@@ -1,6 +1,6 @@
 import process from 'node:process';
-import type { EventId } from '@mysten/sui/client';
 import { EventFetcher } from '../src/events/justchat';
+import type { EventId } from '@mysten/sui/client';
 
 async function main() {
   try {

@@ -1,9 +1,9 @@
+import { MOCKCOINS_OBJECT_IDS } from '@/objectIds';
+import { mockcoins } from '@/suigen';
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
-import { mockcoins } from '@/suigen';
-import { MOCKCOINS_OBJECT_IDS } from '@/objectIds';
 
 describe('Mock Coins Tests', () => {
   const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
