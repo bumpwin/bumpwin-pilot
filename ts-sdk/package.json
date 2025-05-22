@@ -17,19 +17,16 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist/cjs/index.cjs"
     },
     "./suigen": {
       "types": "./dist/suigen/index.d.ts",
       "import": "./dist/esm/suigen/index.js",
-      "require": "./dist/cjs/suigen/index.js"
+      "require": "./dist/cjs/suigen/index.cjs"
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -60,9 +57,5 @@
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ]
+  "keywords": ["sui", "sdk", "typescript"]
 }
