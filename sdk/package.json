@@ -11,20 +11,20 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "type": "commonjs",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./suigen": {
       "types": "./dist/suigen/index.d.ts",
-      "import": "./dist/suigen/index.js",
-      "require": "./dist/suigen/index.cjs"
+      "import": "./dist/esm/suigen/index.js",
+      "require": "./dist/cjs/suigen/index.js"
     }
   },
   "sideEffects": false,
@@ -34,6 +34,7 @@
     "dev": "tsup --watch",
     "test": "vitest",
     "prepare": "bunx tsup",
+    "prepublishOnly": "npm run build",
     "suigen:devnet": "rm -rf src/suigen && suigen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
     "suigen:testnet": "rm -rf src/suigen && suigen -m ../suigen-configs/testnet.toml -o src/suigen && bun format",
     "lint": "biome check --fix .",
@@ -49,8 +50,8 @@
     "pretty-bytes": "^7.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "latest",
-    "@types/bun": "latest",
+    "@biomejs/biome": "^1.9.0",
+    "@types/bun": "^1.1.0",
     "@types/node": "^22.15.21",
     "tsup": "^8.5.0",
     "vitest": "^3.1.4"
