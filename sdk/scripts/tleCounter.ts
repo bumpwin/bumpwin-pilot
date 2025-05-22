@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer';
+import { Buffer } from 'node:buffer';
 import { bcs } from '@mysten/bcs';
 import { fromHex } from '@mysten/bcs';
 import { SealClient, SessionKey, getAllowlistedKeyServers } from '@mysten/seal';

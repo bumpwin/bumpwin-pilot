@@ -28,9 +28,7 @@
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -38,13 +36,14 @@
     "prepare": "bunx tsup",
     "suigen:devnet": "rm -rf src/suigen && suigen -m ../suigen-configs/devnet.toml -o src/suigen && bun format",
     "suigen:testnet": "rm -rf src/suigen && suigen -m ../suigen-configs/testnet.toml -o src/suigen && bun format",
-    "lint": "bunx @biomejs/biome check --fix .",
-    "format": "bunx @biomejs/biome format --write ."
+    "lint": "biome check --fix .",
+    "format": "biome format --write .",
+    "fmt": "bun run format && bun run lint"
   },
   "dependencies": {
     "@mysten/bcs": "^1.6.1",
-    "@mysten/seal": "^0.4.3",
-    "@mysten/sui": "^1.29.1",
+    "@mysten/seal": "^0.4.4",
+    "@mysten/sui": "^1.30.0",
     "@mysten/walrus": "^0.0.21",
     "neverthrow": "^8.2.0",
     "pretty-bytes": "^7.0.0"
@@ -52,16 +51,12 @@
   "devDependencies": {
     "@biomejs/biome": "latest",
     "@types/bun": "latest",
-    "@types/node": "^22.15.18",
-    "tsup": "^8.4.0",
-    "vitest": "^3.1.2"
+    "@types/node": "^22.15.21",
+    "tsup": "^8.5.0",
+    "vitest": "^3.1.4"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ]
+  "keywords": ["sui", "sdk", "typescript"]
 }

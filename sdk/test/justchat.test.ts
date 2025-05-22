@@ -4,7 +4,6 @@ import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
 import { describe, expect, it } from 'vitest';
 import { getKeyInfoFromAlias } from './keyInfo';
-import { sui } from '@/suigen';
 
 describe('Justchat Tests', () => {
   const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });

@@ -1,8 +1,8 @@
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
 import { Transaction } from '@mysten/sui/transactions';
-import { getKeyInfoFromAlias } from '../test/keyInfo';
-import { mockcoins, champ_market } from '../src/suigen';
 import { CHAMP_MARKET_OBJECT_IDS, MOCKCOINS_OBJECT_IDS } from '../src';
+import { champ_market, mockcoins } from '../src';
+import { getKeyInfoFromAlias } from '../test';
 
 const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
 const alice = getKeyInfoFromAlias('alice')?.keypair;
