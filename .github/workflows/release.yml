@@ -31,26 +31,34 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        working-directory: ./sdk
+        working-directory: ./ts-sdk
         run: bun install
 
       - name: Increment patch version
-        working-directory: ./sdk
+        working-directory: ./ts-sdk
         run: |
           VERSION=$(node -p "require('./package.json').version")
           NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
           npm version $NEW_VERSION --no-git-tag-version
 
+      - name: Build SDK
+        working-directory: ./ts-sdk
+        run: |
+          bun run build || {
+            echo "Build failed"
+            exit 1
+          }
+
       - name: Commit version bump
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add sdk/package.json
+          git add ts-sdk/package.json
           git commit -m "chore: bump version [skip ci]"
           git push || exit 1
 
       - name: Publish to npm
-        working-directory: ./sdk
+        working-directory: ./ts-sdk
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
           echo "registry=https://registry.npmjs.org/" >> .npmrc
