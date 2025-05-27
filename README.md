@@ -1,107 +1,128 @@
-# BUMPWIN - Next-Gen Prediction Market on Sui
+# BUMP.WIN - Squid Game for Meme Coins
 
-> Bump. Survive. Win.
+> Bump. Survive. Win. Only the strongest meme survives.
 
 ![npm](https://img.shields.io/npm/v/bumpwin)
 
-## Overview
+## Squid Game–style Meme Launchpad
 
-BUMPWIN is a sophisticated DeFi protocol suite on Sui blockchain, featuring advanced prediction markets and token swap capabilities. Built with cutting-edge market maker algorithms and comprehensive safety features.
+🏆 Winner-takes-all meme coin battle royale
+📈 The one with the highest market cap wins.
+💰 The champion takes all the liquidity and gets launched.
+🔥 The other memes? Mercilessly burned.
 
-## Key Features
+---
 
-### 🎯 Battle Market - Advanced Prediction Market
-- **Brier Score Dual SCPM**: Sophisticated scoring rule market maker for multi-outcome predictions
-- **Price Normalization**: All outcome prices automatically sum to 1
-- **Bounded Loss Guarantee**: Market maker's maximum loss is predictable and controlled
-- **Multi-outcome Support**: Trade on multiple mutually exclusive outcomes simultaneously
+🧠 Top 8 finalists selected via Decision Market (price = win probability)
+🔐 Final winner determined in a Sealed Batch Auction, secured by Sui TLE (Time Locked Encryption)
+💬 Shape outcomes with on-chain Chat
+🌅 Sunrise Settlement: Winner emerges, new round begins
 
-### 💱 Champ Market - Efficient Token Swaps
-- **Constant Product AMM**: Classic x*y=k formula for reliable price discovery
-- **Low Slippage Trading**: Optimized for efficient token swaps
-- **Event-driven Architecture**: Real-time swap tracking and analytics
-- **Composable Liquidity**: Seamlessly integrate with other DeFi protocols
+## Game Cycles
 
-### 💬 On-chain Chat System
-- **Decentralized Messaging**: Fully on-chain chat with Walrus integration
-- **Event Emissions**: Real-time updates for seamless UX
-- **Modular Architecture**: Easy integration with existing dApps
+```mermaid
+gantt
+    title BUMP.WIN Protocol Cycles
+    dateFormat YYYY-MM-DD
 
-### 🛡️ Safety First
-- **SafeMath Library**: Comprehensive overflow/underflow protection with i32 support
-- **Capability-based Access Control**: Secure admin functions
-- **Battle-tested**: Extensive test coverage across all modules
+    section Round
+    Registration (3 days)    :done, reg, 2024-01-01, 3d
+    24h Daytime Trading     :active, day, 2024-01-04, 1d
+    1h Darknight Auction    :crit, night, after day, 1h
+    Sunrise Settlement      :milestone, after night
+```
 
-## Technical Architecture
+## Cash Flow
+
+```mermaid
+flowchart LR
+    %% Meme Creators
+    subgraph Creators
+        C1["👷 Creator 1"]
+        C2["👷 Creator 2"]
+    end
+
+    %% Traders
+    subgraph Traders
+        T1["🧑‍💻 Trader X"]
+        T2["🧑‍💻 Trader Y"]
+        T3["🧑‍💻 Trader Z"]
+    end
+
+    %% Champion Market
+    subgraph Champion_Market["🏆 Champion Market"]
+        WIN(["🥇Champion Meme A"])
+    end
+
+    %% Battle Market
+    subgraph Battle_Market["🏟️ Battle Market"]
+        M1([🪙 Meme Coin A])
+        M2([🪙 Meme Coin B])
+        M3([🪙 Meme Coin C])
+    end
+
+    %% Burned Coins
+    subgraph Burned["🔥 Burned"]
+        BURN2(["Dead Meme B"])
+        BURN3(["Dead Meme C"])
+    end
+
+    %% LOSER Pool
+    subgraph LOSER_POOL["🪦 Loser Staking"]
+        LOSER(["💀 LOSER Coin"])
+    end
+
+    %% Creator → Meme
+    C1 -.->|🛠️ create| M1
+    C2 -.->|🛠️ create| M2
+
+    %% Trader → Stake
+    T1 ==💧 stake SUI==> M1
+    T2 ==💧 stake SUI==> M2
+    T3 ==💧 stake SUI==> M1
+
+    %% Winner Flow
+    M1 -.->|"🏆 selected winner"| WIN
+    Battle_Market ==💧💧💧 All Liquidity==> Champion_Market
+
+    %% Burn Flow
+    M2 -.->|"🔥 eliminated"| BURN2
+    M3 -.->|"🔥 eliminated"| BURN3
+
+    %% Conversion to LOSER Coin
+    BURN2 -.->|"turned into"| LOSER
+    BURN3 -.->|"turned into"| LOSER
+
+    %% Trading Fee Flow (solid line)
+    Battle_Market -->|💸 trading fee| LOSER_POOL
+    Champion_Market -->|💸 trading fee| LOSER_POOL
+```
+
+## Technical Innovation
+
+- **Brier Score Dual SCPM**: Multi-outcome prediction market where prices always sum to 100%
+- **Time-Locked Encryption**: Sui's Seal prevents manipulation during final auction
+- **LOSER Tokenomics**: Protocol fees distributed to losers
+
+## What's Built
 
 ```
 packages/
-├── battle_market/     # Core prediction market AMM
-├── champ_market/      # NFT-based champion trading
-├── justchat/          # Decentralized chat system
-├── mockcoins/         # Test token framework
-└── safemath/          # Safe arithmetic operations
-
-ts-sdk/                # TypeScript SDK for seamless integration
+├── battle_market/    # Brier Score Dual SCPM implementation
+├── champ_market/     # CPMM (x*y=k) for winner's pool
+├── justchat/         # Messaging with SUI payments
+├── safemath/         # Safe arithmetic (u64, u128, i32)
+└── mockcoins/        # Test tokens
 ```
 
 ## Quick Start
 
 ```bash
-# Install SDK
-npm add bumpwin
-
-# Example usage
-import { battleMarket, champMarket } from 'bumpwin';
-
-// Trade on prediction markets
-const tx = await battleMarket.buyShares({
-  marketId: "0x123...",
-  outcomeIndex: 0,  // Buy shares for outcome 0
-  amount: 1000000   // 1 SUI
-});
-
-// Swap tokens via Champ Market
-await champMarket.swapXtoY({
-  poolId: "0x456...",
-  amountIn: 5000000  // 5 tokens
-});
+npm install bumpwin
 ```
 
-## Live on Testnet
-
-- Battle Market: `0x80ded5c56a6375c887fd4357487bd7d725712694b3b4b994d224b1ff23565364`
-- Champ Market: `0x271c2fd30fd48ed9cf5b9bb903ccfbe19398becb2cab3c65026149a6a4a956b4`
-- JustChat: `0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3`
-
-## Why BUMPWIN?
-
-- **Sui-Native**: Built from ground up for Sui's object-centric model
-- **Modular Design**: Each component works independently or together
-- **Developer Friendly**: Comprehensive TypeScript SDK with type safety
-- **Production Ready**: Deployed and tested on testnet
-
-## Roadmap
-
-- [x] Core AMM implementation
-- [x] On-chain chat system
-- [x] TypeScript SDK
-- [x] Testnet deployment
-- [ ] Mainnet launch
-- [ ] Mobile app
-- [ ] Cross-chain bridges
-
-## Contributing
-
-We welcome contributions! Check out our packages for areas to contribute:
-- Smart contract development (Move)
-- SDK improvements (TypeScript)
-- Documentation and examples
-
-## License
-
-MIT
+See `suigen-configs/testnet.toml` for deployment addresses.
 
 ---
 
-Built with ❤️ for the Sui ecosystem
+*In the attention economy, only the strongest meme survives.*
