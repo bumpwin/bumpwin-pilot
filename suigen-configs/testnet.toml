@@ -2,10 +2,14 @@
 rpc = "https://fullnode.testnet.sui.io:443"
 
 [packages]
+battle_market = { id = "0x80ded5c56a6375c887fd4357487bd7d725712694b3b4b994d224b1ff23565364" }
+
 justchat = { id = "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3" }
+
+champ_market = { id = "0x271c2fd30fd48ed9cf5b9bb903ccfbe19398becb2cab3c65026149a6a4a956b4" } # https://testnet.suivision.xyz/txblock/BbJSH4mkK1gyQW6FoA7DBAivYPqqWc8MxKRAPs6NtViu
+
+# safemath = { id = "0xf0f47c13aaa1b5ff53e4d44df713049d85515cf1c1884704b805d4523a23daec" }
 
 counter = { id = "0x1d58d7a49fafb509aef183464eaa4c5d1c2f26a56f4a7eb78ddbcd3c83713a38" }
 
 mockcoins = { id = "0x90ef72a68ca6bef409448bb474bb949d4b244baa8e2c4198bb9ec83c3dabf40e" } # https://testnet.suivision.xyz/txblock/2kDJoo6KVwWTfreW1DawehYb2bUf5WE6zRAfBqxPxRmN
-
-champ_market = { id = "0x271c2fd30fd48ed9cf5b9bb903ccfbe19398becb2cab3c65026149a6a4a956b4" } # https://testnet.suivision.xyz/txblock/BbJSH4mkK1gyQW6FoA7DBAivYPqqWc8MxKRAPs6NtViu

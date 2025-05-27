@@ -2,14 +2,14 @@ import * as reified from "../../../../_framework/reified";
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, fieldToJSON, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../../../_framework/util";
 import {Vector} from "../../../../_framework/vector";
-import {PKG_V30} from "../constants";
+import {PKG_V31} from "../constants";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
 import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== Element =============================== */
 
-export function isElement(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V30}::group_ops::Element` + '<'); }
+export function isElement(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V31}::group_ops::Element` + '<'); }
 
 export interface ElementFields<T0 extends PhantomTypeArgument> { bytes: ToField<Vector<"u8">> }
 
@@ -17,17 +17,17 @@ export type ElementReified<T0 extends PhantomTypeArgument> = Reified< Element<T0
 
 export class Element<T0 extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V30}::group_ops::Element`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V31}::group_ops::Element`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = Element.$typeName; readonly $fullTypeName: `${typeof PKG_V30}::group_ops::Element<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = Element.$isPhantom;
+ readonly $typeName = Element.$typeName; readonly $fullTypeName: `${typeof PKG_V31}::group_ops::Element<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = Element.$isPhantom;
 
  readonly bytes: ToField<Vector<"u8">>
 
- private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ElementFields<T0>, ) { this.$fullTypeName = composeSuiType( Element.$typeName, ...typeArgs ) as `${typeof PKG_V30}::group_ops::Element<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: ElementFields<T0>, ) { this.$fullTypeName = composeSuiType( Element.$typeName, ...typeArgs ) as `${typeof PKG_V31}::group_ops::Element<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
 
  this.bytes = fields.bytes; }
 
- static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): ElementReified<ToPhantomTypeArgument<T0>> { return { typeName: Element.$typeName, fullTypeName: composeSuiType( Element.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V30}::group_ops::Element<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: Element.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => Element.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Element.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => Element.fromBcs( T0, data, ), bcs: Element.bcs, fromJSONField: (field: any) => Element.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => Element.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => Element.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => Element.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => Element.fetch( client, T0, id, ), new: ( fields: ElementFields<ToPhantomTypeArgument<T0>>, ) => { return new Element( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
+ static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): ElementReified<ToPhantomTypeArgument<T0>> { return { typeName: Element.$typeName, fullTypeName: composeSuiType( Element.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V31}::group_ops::Element<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: Element.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => Element.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Element.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => Element.fromBcs( T0, data, ), bcs: Element.bcs, fromJSONField: (field: any) => Element.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => Element.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => Element.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => Element.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => Element.fetch( client, T0, id, ), new: ( fields: ElementFields<ToPhantomTypeArgument<T0>>, ) => { return new Element( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Element.reified }
 

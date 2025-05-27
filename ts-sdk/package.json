@@ -26,10 +26,7 @@
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -60,9 +57,5 @@
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
-  "keywords": [
-    "sui",
-    "sdk",
-    "typescript"
-  ]
+  "keywords": ["sui", "sdk", "typescript"]
 }

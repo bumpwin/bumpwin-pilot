@@ -19,6 +19,9 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
+safemath = "0xf0f47c13aaa1b5ff53e4d44df713049d85515cf1c1884704b805d4523a23daec"
+
+[dev-addresses]
 safemath = "0x0"
 
 # Named addresses will be accessible in Move as `@name`. They're also exported:
@@ -30,7 +33,3 @@ safemath = "0x0"
 # `--dev` modes. You can introduce test-only dependencies here.
 # Local = { local = "../path/to/dev-build" }
 
-[dev-addresses]
-# The dev-addresses section allows overwriting named addresses for the `--test`
-# and `--dev` modes.
-# alice = "0xB0B"
