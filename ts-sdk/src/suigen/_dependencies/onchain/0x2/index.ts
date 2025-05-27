@@ -35,6 +35,7 @@ export * as object from './object';
 export * as objectBag from './object_bag';
 export * as objectTable from './object_table';
 export * as package_mod from './package';
+export * as party from './party';
 export * as pay from './pay';
 export * as poseidon from './poseidon';
 export * as priorityQueue from './priority_queue';

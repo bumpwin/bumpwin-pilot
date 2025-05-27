@@ -1,6 +1,6 @@
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../../../_framework/util";
-import {PKG_V30} from "../constants";
+import {PKG_V31} from "../constants";
 import {UID} from "../object/structs";
 import {bcs} from "@mysten/sui/bcs";
 import {SuiClient, SuiObjectData, SuiParsedData} from "@mysten/sui/client";
@@ -8,7 +8,7 @@ import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== Table =============================== */
 
-export function isTable(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V30}::table::Table` + '<'); }
+export function isTable(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V31}::table::Table` + '<'); }
 
 export interface TableFields<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgument> { id: ToField<UID>; size: ToField<"u64"> }
 
@@ -16,17 +16,17 @@ export type TableReified<T0 extends PhantomTypeArgument, T1 extends PhantomTypeA
 
 export class Table<T0 extends PhantomTypeArgument, T1 extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V30}::table::Table`; static readonly $numTypeParams = 2; static readonly $isPhantom = [true,true,] as const;
+ static readonly $typeName = `${PKG_V31}::table::Table`; static readonly $numTypeParams = 2; static readonly $isPhantom = [true,true,] as const;
 
- readonly $typeName = Table.$typeName; readonly $fullTypeName: `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>, PhantomToTypeStr<T1>]; readonly $isPhantom = Table.$isPhantom;
+ readonly $typeName = Table.$typeName; readonly $fullTypeName: `${typeof PKG_V31}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>, PhantomToTypeStr<T1>]; readonly $isPhantom = Table.$isPhantom;
 
  readonly id: ToField<UID>; readonly size: ToField<"u64">
 
- private constructor(typeArgs: [PhantomToTypeStr<T0>, PhantomToTypeStr<T1>], fields: TableFields<T0, T1>, ) { this.$fullTypeName = composeSuiType( Table.$typeName, ...typeArgs ) as `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<T0>, PhantomToTypeStr<T1>], fields: TableFields<T0, T1>, ) { this.$fullTypeName = composeSuiType( Table.$typeName, ...typeArgs ) as `${typeof PKG_V31}::table::Table<${PhantomToTypeStr<T0>}, ${PhantomToTypeStr<T1>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.size = fields.size; }
 
- static reified<T0 extends PhantomReified<PhantomTypeArgument>, T1 extends PhantomReified<PhantomTypeArgument>>( T0: T0, T1: T1 ): TableReified<ToPhantomTypeArgument<T0>, ToPhantomTypeArgument<T1>> { return { typeName: Table.$typeName, fullTypeName: composeSuiType( Table.$typeName, ...[extractType(T0), extractType(T1)] ) as `${typeof PKG_V30}::table::Table<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<T1>>}>`, typeArgs: [ extractType(T0), extractType(T1) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>, PhantomToTypeStr<ToPhantomTypeArgument<T1>>], isPhantom: Table.$isPhantom, reifiedTypeArgs: [T0, T1], fromFields: (fields: Record<string, any>) => Table.fromFields( [T0, T1], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Table.fromFieldsWithTypes( [T0, T1], item, ), fromBcs: (data: Uint8Array) => Table.fromBcs( [T0, T1], data, ), bcs: Table.bcs, fromJSONField: (field: any) => Table.fromJSONField( [T0, T1], field, ), fromJSON: (json: Record<string, any>) => Table.fromJSON( [T0, T1], json, ), fromSuiParsedData: (content: SuiParsedData) => Table.fromSuiParsedData( [T0, T1], content, ), fromSuiObjectData: (content: SuiObjectData) => Table.fromSuiObjectData( [T0, T1], content, ), fetch: async (client: SuiClient, id: string) => Table.fetch( client, [T0, T1], id, ), new: ( fields: TableFields<ToPhantomTypeArgument<T0>, ToPhantomTypeArgument<T1>>, ) => { return new Table( [extractType(T0), extractType(T1)], fields ) }, kind: "StructClassReified", } }
+ static reified<T0 extends PhantomReified<PhantomTypeArgument>, T1 extends PhantomReified<PhantomTypeArgument>>( T0: T0, T1: T1 ): TableReified<ToPhantomTypeArgument<T0>, ToPhantomTypeArgument<T1>> { return { typeName: Table.$typeName, fullTypeName: composeSuiType( Table.$typeName, ...[extractType(T0), extractType(T1)] ) as `${typeof PKG_V31}::table::Table<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}, ${PhantomToTypeStr<ToPhantomTypeArgument<T1>>}>`, typeArgs: [ extractType(T0), extractType(T1) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>, PhantomToTypeStr<ToPhantomTypeArgument<T1>>], isPhantom: Table.$isPhantom, reifiedTypeArgs: [T0, T1], fromFields: (fields: Record<string, any>) => Table.fromFields( [T0, T1], fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Table.fromFieldsWithTypes( [T0, T1], item, ), fromBcs: (data: Uint8Array) => Table.fromBcs( [T0, T1], data, ), bcs: Table.bcs, fromJSONField: (field: any) => Table.fromJSONField( [T0, T1], field, ), fromJSON: (json: Record<string, any>) => Table.fromJSON( [T0, T1], json, ), fromSuiParsedData: (content: SuiParsedData) => Table.fromSuiParsedData( [T0, T1], content, ), fromSuiObjectData: (content: SuiObjectData) => Table.fromSuiObjectData( [T0, T1], content, ), fetch: async (client: SuiClient, id: string) => Table.fetch( client, [T0, T1], id, ), new: ( fields: TableFields<ToPhantomTypeArgument<T0>, ToPhantomTypeArgument<T1>>, ) => { return new Table( [extractType(T0), extractType(T1)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Table.reified }
 

@@ -1,7 +1,7 @@
 import {PhantomReified, PhantomToTypeStr, PhantomTypeArgument, Reified, StructClass, ToField, ToPhantomTypeArgument, ToTypeStr, assertFieldsWithTypesArgsMatch, assertReifiedTypeArgsMatch, decodeFromFields, decodeFromFieldsWithTypes, decodeFromJSONField, extractType, phantom} from "../../../../_framework/reified";
 import {FieldsWithTypes, composeSuiType, compressSuiType, parseTypeName} from "../../../../_framework/util";
 import {String} from "../../0x1/string/structs";
-import {PKG_V30} from "../constants";
+import {PKG_V31} from "../constants";
 import {ID, UID} from "../object/structs";
 import {VecMap} from "../vec_map/structs";
 import {bcs} from "@mysten/sui/bcs";
@@ -10,7 +10,7 @@ import {fromB64} from "@mysten/sui/utils";
 
 /* ============================== Display =============================== */
 
-export function isDisplay(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V30}::display::Display` + '<'); }
+export function isDisplay(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V31}::display::Display` + '<'); }
 
 export interface DisplayFields<T0 extends PhantomTypeArgument> { id: ToField<UID>; fields: ToField<VecMap<String, String>>; version: ToField<"u16"> }
 
@@ -18,17 +18,17 @@ export type DisplayReified<T0 extends PhantomTypeArgument> = Reified< Display<T0
 
 export class Display<T0 extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V30}::display::Display`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V31}::display::Display`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = Display.$typeName; readonly $fullTypeName: `${typeof PKG_V30}::display::Display<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = Display.$isPhantom;
+ readonly $typeName = Display.$typeName; readonly $fullTypeName: `${typeof PKG_V31}::display::Display<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = Display.$isPhantom;
 
  readonly id: ToField<UID>; readonly fields: ToField<VecMap<String, String>>; readonly version: ToField<"u16">
 
- private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: DisplayFields<T0>, ) { this.$fullTypeName = composeSuiType( Display.$typeName, ...typeArgs ) as `${typeof PKG_V30}::display::Display<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: DisplayFields<T0>, ) { this.$fullTypeName = composeSuiType( Display.$typeName, ...typeArgs ) as `${typeof PKG_V31}::display::Display<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.fields = fields.fields;; this.version = fields.version; }
 
- static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): DisplayReified<ToPhantomTypeArgument<T0>> { return { typeName: Display.$typeName, fullTypeName: composeSuiType( Display.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V30}::display::Display<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: Display.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => Display.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Display.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => Display.fromBcs( T0, data, ), bcs: Display.bcs, fromJSONField: (field: any) => Display.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => Display.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => Display.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => Display.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => Display.fetch( client, T0, id, ), new: ( fields: DisplayFields<ToPhantomTypeArgument<T0>>, ) => { return new Display( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
+ static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): DisplayReified<ToPhantomTypeArgument<T0>> { return { typeName: Display.$typeName, fullTypeName: composeSuiType( Display.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V31}::display::Display<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: Display.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => Display.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => Display.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => Display.fromBcs( T0, data, ), bcs: Display.bcs, fromJSONField: (field: any) => Display.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => Display.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => Display.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => Display.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => Display.fetch( client, T0, id, ), new: ( fields: DisplayFields<ToPhantomTypeArgument<T0>>, ) => { return new Display( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return Display.reified }
 
@@ -80,7 +80,7 @@ export class Display<T0 extends PhantomTypeArgument> implements StructClass { __
 
 /* ============================== DisplayCreated =============================== */
 
-export function isDisplayCreated(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V30}::display::DisplayCreated` + '<'); }
+export function isDisplayCreated(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V31}::display::DisplayCreated` + '<'); }
 
 export interface DisplayCreatedFields<T0 extends PhantomTypeArgument> { id: ToField<ID> }
 
@@ -88,17 +88,17 @@ export type DisplayCreatedReified<T0 extends PhantomTypeArgument> = Reified< Dis
 
 export class DisplayCreated<T0 extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V30}::display::DisplayCreated`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V31}::display::DisplayCreated`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = DisplayCreated.$typeName; readonly $fullTypeName: `${typeof PKG_V30}::display::DisplayCreated<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = DisplayCreated.$isPhantom;
+ readonly $typeName = DisplayCreated.$typeName; readonly $fullTypeName: `${typeof PKG_V31}::display::DisplayCreated<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = DisplayCreated.$isPhantom;
 
  readonly id: ToField<ID>
 
- private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: DisplayCreatedFields<T0>, ) { this.$fullTypeName = composeSuiType( DisplayCreated.$typeName, ...typeArgs ) as `${typeof PKG_V30}::display::DisplayCreated<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: DisplayCreatedFields<T0>, ) { this.$fullTypeName = composeSuiType( DisplayCreated.$typeName, ...typeArgs ) as `${typeof PKG_V31}::display::DisplayCreated<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id; }
 
- static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): DisplayCreatedReified<ToPhantomTypeArgument<T0>> { return { typeName: DisplayCreated.$typeName, fullTypeName: composeSuiType( DisplayCreated.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V30}::display::DisplayCreated<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: DisplayCreated.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => DisplayCreated.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DisplayCreated.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => DisplayCreated.fromBcs( T0, data, ), bcs: DisplayCreated.bcs, fromJSONField: (field: any) => DisplayCreated.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => DisplayCreated.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => DisplayCreated.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => DisplayCreated.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => DisplayCreated.fetch( client, T0, id, ), new: ( fields: DisplayCreatedFields<ToPhantomTypeArgument<T0>>, ) => { return new DisplayCreated( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
+ static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): DisplayCreatedReified<ToPhantomTypeArgument<T0>> { return { typeName: DisplayCreated.$typeName, fullTypeName: composeSuiType( DisplayCreated.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V31}::display::DisplayCreated<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: DisplayCreated.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => DisplayCreated.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => DisplayCreated.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => DisplayCreated.fromBcs( T0, data, ), bcs: DisplayCreated.bcs, fromJSONField: (field: any) => DisplayCreated.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => DisplayCreated.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => DisplayCreated.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => DisplayCreated.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => DisplayCreated.fetch( client, T0, id, ), new: ( fields: DisplayCreatedFields<ToPhantomTypeArgument<T0>>, ) => { return new DisplayCreated( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return DisplayCreated.reified }
 
@@ -150,7 +150,7 @@ export class DisplayCreated<T0 extends PhantomTypeArgument> implements StructCla
 
 /* ============================== VersionUpdated =============================== */
 
-export function isVersionUpdated(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V30}::display::VersionUpdated` + '<'); }
+export function isVersionUpdated(type: string): boolean { type = compressSuiType(type); return type.startsWith(`${PKG_V31}::display::VersionUpdated` + '<'); }
 
 export interface VersionUpdatedFields<T0 extends PhantomTypeArgument> { id: ToField<ID>; version: ToField<"u16">; fields: ToField<VecMap<String, String>> }
 
@@ -158,17 +158,17 @@ export type VersionUpdatedReified<T0 extends PhantomTypeArgument> = Reified< Ver
 
 export class VersionUpdated<T0 extends PhantomTypeArgument> implements StructClass { __StructClass = true as const;
 
- static readonly $typeName = `${PKG_V30}::display::VersionUpdated`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
+ static readonly $typeName = `${PKG_V31}::display::VersionUpdated`; static readonly $numTypeParams = 1; static readonly $isPhantom = [true,] as const;
 
- readonly $typeName = VersionUpdated.$typeName; readonly $fullTypeName: `${typeof PKG_V30}::display::VersionUpdated<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = VersionUpdated.$isPhantom;
+ readonly $typeName = VersionUpdated.$typeName; readonly $fullTypeName: `${typeof PKG_V31}::display::VersionUpdated<${PhantomToTypeStr<T0>}>`; readonly $typeArgs: [PhantomToTypeStr<T0>]; readonly $isPhantom = VersionUpdated.$isPhantom;
 
  readonly id: ToField<ID>; readonly version: ToField<"u16">; readonly fields: ToField<VecMap<String, String>>
 
- private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: VersionUpdatedFields<T0>, ) { this.$fullTypeName = composeSuiType( VersionUpdated.$typeName, ...typeArgs ) as `${typeof PKG_V30}::display::VersionUpdated<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
+ private constructor(typeArgs: [PhantomToTypeStr<T0>], fields: VersionUpdatedFields<T0>, ) { this.$fullTypeName = composeSuiType( VersionUpdated.$typeName, ...typeArgs ) as `${typeof PKG_V31}::display::VersionUpdated<${PhantomToTypeStr<T0>}>`; this.$typeArgs = typeArgs;
 
  this.id = fields.id;; this.version = fields.version;; this.fields = fields.fields; }
 
- static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): VersionUpdatedReified<ToPhantomTypeArgument<T0>> { return { typeName: VersionUpdated.$typeName, fullTypeName: composeSuiType( VersionUpdated.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V30}::display::VersionUpdated<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: VersionUpdated.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => VersionUpdated.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VersionUpdated.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => VersionUpdated.fromBcs( T0, data, ), bcs: VersionUpdated.bcs, fromJSONField: (field: any) => VersionUpdated.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => VersionUpdated.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => VersionUpdated.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => VersionUpdated.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => VersionUpdated.fetch( client, T0, id, ), new: ( fields: VersionUpdatedFields<ToPhantomTypeArgument<T0>>, ) => { return new VersionUpdated( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
+ static reified<T0 extends PhantomReified<PhantomTypeArgument>>( T0: T0 ): VersionUpdatedReified<ToPhantomTypeArgument<T0>> { return { typeName: VersionUpdated.$typeName, fullTypeName: composeSuiType( VersionUpdated.$typeName, ...[extractType(T0)] ) as `${typeof PKG_V31}::display::VersionUpdated<${PhantomToTypeStr<ToPhantomTypeArgument<T0>>}>`, typeArgs: [ extractType(T0) ] as [PhantomToTypeStr<ToPhantomTypeArgument<T0>>], isPhantom: VersionUpdated.$isPhantom, reifiedTypeArgs: [T0], fromFields: (fields: Record<string, any>) => VersionUpdated.fromFields( T0, fields, ), fromFieldsWithTypes: (item: FieldsWithTypes) => VersionUpdated.fromFieldsWithTypes( T0, item, ), fromBcs: (data: Uint8Array) => VersionUpdated.fromBcs( T0, data, ), bcs: VersionUpdated.bcs, fromJSONField: (field: any) => VersionUpdated.fromJSONField( T0, field, ), fromJSON: (json: Record<string, any>) => VersionUpdated.fromJSON( T0, json, ), fromSuiParsedData: (content: SuiParsedData) => VersionUpdated.fromSuiParsedData( T0, content, ), fromSuiObjectData: (content: SuiObjectData) => VersionUpdated.fromSuiObjectData( T0, content, ), fetch: async (client: SuiClient, id: string) => VersionUpdated.fetch( client, T0, id, ), new: ( fields: VersionUpdatedFields<ToPhantomTypeArgument<T0>>, ) => { return new VersionUpdated( [extractType(T0)], fields ) }, kind: "StructClassReified", } }
 
  static get r() { return VersionUpdated.reified }
 
