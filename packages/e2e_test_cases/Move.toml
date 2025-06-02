@@ -6,7 +6,7 @@ edition = "2024.beta"   # edition = "legacy" to use legacy (pre-2024) Move
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet", override = true }
-battle_market = { local = "../battle_market" }
+battle_market_legacy = { local = "../battle_market_legacy" }
 msr_amm = { local = "../msr_amm" }
 bump_fam_factory = { local = "../bump_fam_factory" }
 bump_fam_coin = { local = "../bump_fam_coin" }
