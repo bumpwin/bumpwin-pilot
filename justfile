@@ -7,9 +7,6 @@ install-cli:
     curl -sSf https://docs.wal.app/setup/walrus-install.sh | sh -s -- -n testnet
 
     # Install sui-client-gen
-    cargo install --locked --git https://github.com/kunalabs-io/sui-client-gen.git
-
-install-suigen:
     cargo install --locked --git https://github.com/fuyutarow/suigen
 
 

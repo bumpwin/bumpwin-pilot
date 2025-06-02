@@ -2,7 +2,7 @@
 rpc = "https://fullnode.testnet.sui.io:443"
 
 [packages]
-battle_market = { id = "0x80ded5c56a6375c887fd4357487bd7d725712694b3b4b994d224b1ff23565364" }
+battle_market_legacy = { id = "0x80ded5c56a6375c887fd4357487bd7d725712694b3b4b994d224b1ff23565364" }
 
 justchat = { id = "0x366ffbcaf9c51db02857ff81141702f114f3b5675dd960be74f3c5f34e2ba3c3" }
 
