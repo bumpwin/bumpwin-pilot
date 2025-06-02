@@ -4,6 +4,7 @@
     "mysten.prettier-move",
     "mysten.move-trace-debug",
     "gruntfuggly.todo-tree",
-    "waderyan.gitblame"
+    "waderyan.gitblame",
+    "bierner.markdown-mermaid"
   ]
 }
