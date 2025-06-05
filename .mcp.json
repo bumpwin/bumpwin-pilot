@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "bunx",
+      "args": [
+        "@upstash/context7-mcp@latest"
+      ],
+      "description": "Upstash Contextコンテキスト管理"
+    },
+    "memory": {
+      "command": "bunx",
+      "args": [
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "開発中の記憶とコンテキスト管理"
+    },
+    "sequential-thinking": {
+      "command": "bunx",
+      "args": [
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "description": "複雑な問題解決と段階的思考サポート"
+    },
+    "everything": {
+      "command": "bunx",
+      "args": [
+        "@modelcontextprotocol/server-everything"
+      ],
+      "description": "包括的なMCP機能（テスト・デモ用）"
+    },
+    "playwright": {
+      "command": "bunx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "description": "ブラウザ自動化とE2Eテスト"
+    }
+  }
+}

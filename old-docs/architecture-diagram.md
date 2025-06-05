@@ -26,7 +26,7 @@ classDiagram
         +address owner
         +u64 round_id
         +Balance~WSUI~ wsui_balance
-        +Table~TypeName, Balance~BattleToken~~ share_coins
+        +Table~TypeName, Balance~Share T~~ share_balances
         +Option~SealedTransaction~ pending_sealed_tx
         +u8 current_batch
         +u64 batch_start_ms
@@ -43,9 +43,9 @@ classDiagram
         +u64 round_id
     }
 
-    class TokenSupply {
+    class TokenSupply~T~ {
         +UID id
-        +Supply~BattleToken~ supply
+        +Supply~Share T~ supply
     }
 
     class Investment {
@@ -198,7 +198,7 @@ stateDiagram-v2
 
 2. **BattleAccount** が個人資産を管理
    - WSUI残高（SBA期間のみ、全額消費必須）
-   - Share実体（BattleTokenのBalance）
+   - Share実体（Share<T>のBalance）
    - Sealed取引
 
 3. **BattleVault** が市場メカニズムを実装
